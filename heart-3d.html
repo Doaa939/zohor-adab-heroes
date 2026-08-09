@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>قلب الإنسان ثلاثي الأبعاد | نموذج تفاعلي متحرّك</title>
+<meta name="description" content="نموذج تفاعلي متحرّك بتأثير ثلاثي الأبعاد لقلب الإنسان: نبض حي، جريان دم متحرّك، وأجزاء قابلة للنقر تدور." />
+<style>
+  :root{
+    --bg:#070a17;
+    --panel:rgba(255,255,255,.06);
+    --panel2:rgba(255,255,255,.10);
+    --text:#f6f8ff;
+    --muted:rgba(246,248,255,.75);
+    --oxy:#ff3b52;
+    --oxy-deep:#8f0f22;
+    --deoxy:#3b82f6;
+    --deoxy-deep:#12336e;
+    --gold:#fbbf24;
+    --shadow:0 26px 70px rgba(0,0,0,.55);
+    --radius:20px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;color:var(--text);min-height:100vh;line-height:1.7;
+    font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
+    background:
+      radial-gradient(1200px 800px at 20% 8%, rgba(255,59,82,.16), transparent 55%),
+      radial-gradient(900px 600px at 85% 4%, rgba(59,130,246,.16), transparent 55%),
+      radial-gradient(700px 500px at 50% 100%, rgba(251,191,36,.08), transparent 60%),
+      var(--bg);
+  }
+  a{color:#60a5fa;text-decoration:none}
+  .wrap{max-width:1160px;margin:0 auto;padding:18px}
+
+  header{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:14px 18px;border:1px solid rgba(255,255,255,.10);border-radius:var(--radius);
+    background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.04));
+    box-shadow:var(--shadow);position:sticky;top:12px;z-index:50;backdrop-filter:blur(10px);flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;font-size:26px;
+    background:radial-gradient(circle at 32% 28%, #ff5a6e, #8f0f22 72%);
+    box-shadow:0 10px 26px rgba(255,59,82,.5);animation:beat 1s ease-in-out infinite}
+  @keyframes beat{0%,100%{transform:scale(1)}14%{transform:scale(1.2)}28%{transform:scale(1)}42%{transform:scale(1.12)}56%{transform:scale(1)}}
+  .brand h1{font-size:1.15rem;margin:0}
+  .brand p{margin:0;color:var(--muted);font-size:.82rem}
+
+  .hero{text-align:center;padding:26px 16px 6px}
+  .hero h2{font-size:2rem;margin:.2em 0;
+    background:linear-gradient(90deg,#ff6b81,#ffd36b);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{color:var(--muted);max-width:640px;margin:.4em auto}
+
+  .stage-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:22px;margin-top:18px}
+  @media(max-width:900px){.stage-grid{grid-template-columns:1fr}}
+
+  .card{background:var(--panel);border:1px solid rgba(255,255,255,.09);border-radius:var(--radius);
+    padding:18px;box-shadow:var(--shadow)}
+
+  /* ===== المسرح ثلاثي الأبعاد ===== */
+  .scene{
+    perspective:1100px;position:relative;height:520px;display:grid;place-items:center;overflow:hidden;
+    border-radius:16px;background:
+      radial-gradient(600px 400px at 50% 40%, rgba(255,59,82,.10), transparent 70%);
+  }
+  .heart3d{
+    position:relative;width:320px;height:360px;transform-style:preserve-3d;
+    animation:spin 16s linear infinite, bob 5s ease-in-out infinite;
+    transition:transform .1s linear;
+  }
+  .scene.paused .heart3d{animation-play-state:paused}
+  @keyframes spin{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
+  @keyframes bob{0%,100%{margin-top:0}50%{margin-top:-14px}}
+
+  /* طبقات متعددة توهم بالعمق ثلاثي الأبعاد */
+  .heart3d svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+  .depth{opacity:.5}
+
+  .pulse-core{
+    position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;
+    transform:translateZ(1px);animation:beatScale 1s ease-in-out infinite}
+  @keyframes beatScale{0%,100%{transform:scale(1)}14%{transform:scale(1.06)}28%{transform:scale(1)}42%{transform:scale(1.035)}56%{transform:scale(1)}}
+
+  .part{cursor:pointer;transition:filter .2s, opacity .2s}
+  .part:hover{filter:brightness(1.18) drop-shadow(0 0 10px rgba(255,255,255,.4))}
+  .part.dim{opacity:.28}
+  .part.active{filter:drop-shadow(0 0 14px var(--gold)) brightness(1.15)}
+
+  .glow{filter:drop-shadow(0 0 22px rgba(255,59,82,.35))}
+
+  /* أزرار التحكم */
+  .controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+  .btn{padding:9px 15px;border-radius:12px;cursor:pointer;font-size:.9rem;color:var(--text);
+    background:var(--panel);border:1px solid rgba(255,255,255,.12)}
+  .btn:hover{background:var(--panel2)}
+  .btn.on{background:linear-gradient(135deg,#ff3b52,#fb7185);border-color:transparent}
+  .hint{color:var(--muted);font-size:.82rem;text-align:center;margin-top:8px}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:10px;font-size:.85rem;color:var(--muted)}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:13px;height:13px;border-radius:50%;display:inline-block;flex:none}
+
+  /* لوحة المعلومات */
+  #info h3{display:flex;align-items:center;gap:10px;margin:0 0 6px;font-size:1.25rem}
+  #info .meta{color:var(--muted);font-size:.9rem;margin-bottom:10px}
+  .tag{display:inline-block;padding:3px 10px;border-radius:999px;font-size:.78rem;
+    background:var(--panel2);border:1px solid rgba(255,255,255,.12);margin:3px 3px 0 0}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .chip{padding:8px 12px;border-radius:12px;cursor:pointer;font-size:.86rem;
+    background:var(--panel);border:1px solid rgba(255,255,255,.1)}
+  .chip:hover{background:var(--panel2)}
+  .chip .dot{margin-left:6px;vertical-align:middle}
+
+  section.block{margin-top:34px}
+  section.block>h3{font-size:1.35rem;margin-bottom:14px;border-right:4px solid var(--oxy);padding-right:12px}
+  .steps{display:grid;gap:12px}
+  .step{display:flex;gap:14px;background:var(--panel);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:14px}
+  .step .n{flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:800;
+    background:linear-gradient(135deg,#fb7185,#ff3b52)}
+  footer{margin:40px 0 10px;text-align:center;color:var(--muted);font-size:.84rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo">🫀</div>
+      <div><h1>قلب الإنسان — نموذج ثلاثي الأبعاد</h1><p>متحرّك · تفاعلي · يدور</p></div>
+    </div>
+    <div class="controls" style="margin:0">
+      <button class="btn on" id="btnSpin">⟳ الدوران</button>
+      <button class="btn on" id="btnFlow">🩸 جريان الدم</button>
+      <button class="btn" id="btnDrag">🖐️ تدوير يدوي</button>
+    </div>
+  </header>
+
+  <div class="hero">
+    <h2>قلب ينبض أمام عينيك</h2>
+    <p>نموذج بتأثير ثلاثي الأبعاد ينبض ويدور، مع جريان دم متحرّك. مرّر فوق أي جزء أو اضغط عليه لتراه مضيئاً مع شرحه.</p>
+  </div>
+
+  <div class="stage-grid">
+    <!-- المسرح -->
+    <div class="card">
+      <div class="scene" id="scene">
+        <div class="heart3d" id="heart3d">
+          <!-- طبقة خلفية للعمق -->
+          <svg class="depth" viewBox="0 0 320 360" style="transform:translateZ(-26px) scale(1.04)">
+            <use href="#heartShape"/>
+          </svg>
+          <svg class="depth" viewBox="0 0 320 360" style="transform:translateZ(-16px) scale(1.02)">
+            <use href="#heartShape"/>
+          </svg>
+
+          <!-- الطبقة الرئيسية التفاعلية -->
+          <svg viewBox="0 0 320 360" class="glow" style="transform:translateZ(6px)">
+            <defs>
+              <radialGradient id="gRV" cx="38%" cy="32%" r="80%">
+                <stop offset="0%" stop-color="#7ab0ff"/><stop offset="60%" stop-color="var(--deoxy)"/><stop offset="100%" stop-color="var(--deoxy-deep)"/>
+              </radialGradient>
+              <radialGradient id="gLV" cx="62%" cy="32%" r="80%">
+                <stop offset="0%" stop-color="#ff7a8c"/><stop offset="60%" stop-color="var(--oxy)"/><stop offset="100%" stop-color="var(--oxy-deep)"/>
+              </radialGradient>
+              <radialGradient id="gRA" cx="40%" cy="35%" r="85%">
+                <stop offset="0%" stop-color="#9cc4ff"/><stop offset="70%" stop-color="#4f8bf0"/><stop offset="100%" stop-color="#1e4fa0"/>
+              </radialGradient>
+              <radialGradient id="gLA" cx="60%" cy="35%" r="85%">
+                <stop offset="0%" stop-color="#ff9aa8"/><stop offset="70%" stop-color="#f0475c"/><stop offset="100%" stop-color="#a01427"/>
+              </radialGradient>
+              <linearGradient id="gAorta" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0%" stop-color="var(--oxy)"/><stop offset="100%" stop-color="#ff9aa8"/>
+              </linearGradient>
+              <linearGradient id="gPulm" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0%" stop-color="var(--deoxy)"/><stop offset="100%" stop-color="#9cc4ff"/>
+              </linearGradient>
+              <!-- شكل القلب المرجعي للطبقات الخلفية -->
+              <path id="heartShape" d="M160 340 C60 265 40 175 62 120 C82 70 150 66 160 120 C170 66 238 70 258 120 C280 175 260 265 160 340 Z" fill="#5b1020"/>
+            </defs>
+
+            <!-- الأوعية الكبرى -->
+            <path class="part" data-id="aorta" d="M150 74 C150 30 205 26 214 66 L214 128 L188 128 L188 84 C188 62 168 64 168 96 L168 128 L150 128 Z" fill="url(#gAorta)"/>
+            <path class="part" data-id="pulmonary" d="M136 70 C118 36 86 50 96 88 L118 140 L140 140 L140 92 Z" fill="url(#gPulm)"/>
+            <rect class="part" data-id="venacava" x="92" y="70" width="26" height="70" rx="11" fill="#1e50a8"/>
+
+            <!-- الأذينان -->
+            <path class="part" data-id="ra" d="M120 120 C78 118 66 176 108 196 L156 200 L156 120 Z" fill="url(#gRA)"/>
+            <path class="part" data-id="la" d="M200 120 C242 118 254 176 212 196 L164 200 L164 120 Z" fill="url(#gLA)"/>
+
+            <!-- البطينان (جسم القلب) -->
+            <path class="part" data-id="rv" d="M108 196 C70 250 96 320 158 344 L158 206 L108 196 Z" fill="url(#gRV)"/>
+            <path class="part" data-id="lv" d="M212 196 C250 250 224 320 162 344 L162 206 L212 196 Z" fill="url(#gLV)"/>
+
+            <!-- الحاجز -->
+            <rect class="part" data-id="septum" x="157" y="200" width="6" height="146" rx="3" fill="#ffd9df" opacity=".85"/>
+
+            <!-- الصمّامات -->
+            <path class="part" data-id="valves" d="M112 202 Q158 214 158 208" fill="none" stroke="var(--gold)" stroke-width="5" stroke-linecap="round"/>
+            <path class="part" data-id="valves" d="M208 202 Q162 214 162 208" fill="none" stroke="var(--gold)" stroke-width="5" stroke-linecap="round"/>
+
+            <!-- مسارات جريان الدم -->
+            <g id="flowLayer" fill="none" stroke-linecap="round"></g>
+          </svg>
+
+          <!-- توهّج النبض -->
+          <div class="pulse-core"></div>
+        </div>
+      </div>
+
+      <div class="hint" id="dragHint">اسحب داخل المشهد لتدوير القلب يدوياً · اضغط أي جزء لعرض شرحه</div>
+      <div class="legend">
+        <span><span class="dot" style="background:var(--oxy)"></span> دم مؤكسج</span>
+        <span><span class="dot" style="background:var(--deoxy)"></span> دم غير مؤكسج</span>
+        <span><span class="dot" style="background:var(--gold)"></span> صمّامات</span>
+      </div>
+    </div>
+
+    <!-- المعلومات -->
+    <div class="card" id="info">
+      <h3><span class="dot" id="idot" style="background:var(--oxy)"></span> <span id="ititle">اختر جزءاً من القلب</span></h3>
+      <div class="meta" id="imeta">مرّر فوق الرسم أو اضغط أحد الأزرار بالأسفل.</div>
+      <div id="ibody"><p>القلب مقسوم إلى أربع حُجرات: أذينان علويان وبطينان سفليان، تفصلها صمّامات تسمح بمرور الدم في اتجاه واحد فقط.</p></div>
+      <div id="itags"></div>
+      <div class="chips" id="chips"></div>
+    </div>
+  </div>
+
+  <section class="block">
+    <h3>مسار الدورة الدموية</h3>
+    <div class="steps">
+      <div class="step"><div class="n">١</div><div>يعود الدم <b>غير المؤكسج</b> من الجسم عبر <b>الوريد الأجوف</b> إلى <b>الأذين الأيمن</b>.</div></div>
+      <div class="step"><div class="n">٢</div><div>ينزل إلى <b>البطين الأيمن</b> فيضخّه عبر <b>الشريان الرئوي</b> إلى الرئتين ليأخذ الأكسجين.</div></div>
+      <div class="step"><div class="n">٣</div><div>يعود <b>المؤكسج</b> من الرئتين إلى <b>الأذين الأيسر</b> عبر الأوردة الرئوية.</div></div>
+      <div class="step"><div class="n">٤</div><div>ينزل إلى <b>البطين الأيسر</b> الأقوى، فيدفعه عبر <b>الأبهر</b> إلى كل الجسم.</div></div>
+    </div>
+  </section>
+
+  <footer>نموذج تعليمي مبسّط بتأثير ثلاثي الأبعاد · لأغراض تعليمية فقط.</footer>
+</div>
+
+<script>
+  const DATA={
+    ra:{t:"الأذين الأيمن",c:"var(--deoxy)",m:"حجرة علوية يمنى",b:"يستقبل الدم غير المؤكسج العائد من الجسم عبر الوريد الأجوف، ثم يدفعه إلى البطين الأيمن.",g:["حجرة علوية","دم غير مؤكسج"]},
+    la:{t:"الأذين الأيسر",c:"var(--oxy)",m:"حجرة علوية يسرى",b:"يستقبل الدم المؤكسج القادم من الرئتين عبر الأوردة الرئوية، ثم يدفعه إلى البطين الأيسر.",g:["حجرة علوية","دم مؤكسج"]},
+    rv:{t:"البطين الأيمن",c:"var(--deoxy)",m:"حجرة سفلية يمنى",b:"يضخّ الدم غير المؤكسج عبر الشريان الرئوي إلى الرئتين ليتخلّص من ثاني أكسيد الكربون ويأخذ الأكسجين.",g:["حجرة سفلية","نحو الرئتين"]},
+    lv:{t:"البطين الأيسر",c:"var(--oxy)",m:"حجرة سفلية يسرى — الأقوى",b:"أقوى حجرات القلب وجداره الأسمك؛ يضخّ الدم المؤكسج عبر الأبهر إلى جميع أنحاء الجسم.",g:["حجرة سفلية","الأقوى"]},
+    septum:{t:"الحاجز القلبي",c:"#ffd9df",m:"جدار فاصل",b:"جدار عضلي يفصل الجانب الأيمن عن الأيسر ويمنع اختلاط الدم المؤكسج بغير المؤكسج.",g:["جدار عضلي","فاصل"]},
+    valves:{t:"الصمّامات",c:"var(--gold)",m:"بوّابات باتجاه واحد",b:"تسمح للدم بالمرور في اتجاه واحد وتمنع رجوعه: ثلاثي الشُّرَف، الميترالي، الأبهري، الرئوي. صوت «لَب-دَب» ناتج عن إغلاقها.",g:["ثلاثي الشرف","ميترالي","أبهري","رئوي"]},
+    aorta:{t:"الشريان الأبهر",c:"var(--oxy)",m:"أكبر شريان في الجسم",b:"ينقل الدم المؤكسج من البطين الأيسر إلى كامل الجسم عبر فروعه.",g:["أكبر شريان","دم مؤكسج"]},
+    pulmonary:{t:"الشريان الرئوي",c:"var(--deoxy)",m:"نحو الرئتين",b:"ينقل الدم غير المؤكسج من البطين الأيمن إلى الرئتين. الشريان الوحيد الذي يحمل دماً غير مؤكسج.",g:["نحو الرئتين","دم غير مؤكسج"]},
+    venacava:{t:"الوريد الأجوف",c:"#1e50a8",m:"أكبر أوردة الجسم",b:"يجمع الدم غير المؤكسج من الجسم ويعيده إلى الأذين الأيمن.",g:["وريد كبير","عائد للقلب"]},
+  };
+
+  const $=s=>document.querySelector(s);
+  const parts=document.querySelectorAll('.part');
+  const ititle=$('#ititle'),imeta=$('#imeta'),ibody=$('#ibody'),itags=$('#itags'),idot=$('#idot');
+
+  function show(id){
+    const d=DATA[id];if(!d)return;
+    ititle.textContent=d.t;imeta.textContent=d.m;ibody.innerHTML="<p>"+d.b+"</p>";
+    idot.style.background=d.c;itags.innerHTML=d.g.map(x=>'<span class="tag">'+x+'</span>').join('');
+    parts.forEach(p=>{p.classList.toggle('active',p.dataset.id===id);p.classList.toggle('dim',p.dataset.id!==id);});
+  }
+  function clearSel(){parts.forEach(p=>p.classList.remove('active','dim'));}
+
+  parts.forEach(p=>{
+    p.addEventListener('click',e=>{e.stopPropagation();show(p.dataset.id);});
+  });
+  $('#scene').addEventListener('click',clearSel);
+
+  // أزرار الأجزاء
+  const chips=$('#chips');
+  Object.keys(DATA).forEach(id=>{
+    const d=DATA[id],b=document.createElement('div');
+    b.className='chip';b.innerHTML='<span class="dot" style="background:'+d.c+'"></span>'+d.t;
+    b.addEventListener('click',()=>show(id));chips.appendChild(b);
+  });
+
+  // ===== جريان الدم المتحرّك =====
+  const flowLayer=$('#flowLayer');
+  const flows=[
+    {d:"M105 100 C95 130 120 150 132 168",col:"var(--deoxy)"},   // وريد أجوف -> أذين أيمن
+    {d:"M120 180 C110 220 120 280 140 320",col:"var(--deoxy)"},  // بطين أيمن
+    {d:"M120 130 C110 90 116 70 118 60",col:"var(--deoxy)"},     // -> شريان رئوي
+    {d:"M200 180 C210 220 200 280 180 320",col:"var(--oxy)"},    // بطين أيسر
+    {d:"M195 130 C200 90 196 70 190 58",col:"var(--oxy)"},       // -> أبهر
+  ];
+  function buildFlow(){
+    flowLayer.innerHTML="";
+    flows.forEach((f,i)=>{
+      for(let k=0;k<3;k++){
+        const c=document.createElementNS("http://www.w3.org/2000/svg","circle");
+        c.setAttribute("r","4.2");c.setAttribute("fill",f.col);c.setAttribute("opacity",".95");
+        const am=document.createElementNS("http://www.w3.org/2000/svg","animateMotion");
+        am.setAttribute("dur",(2.4)+"s");am.setAttribute("repeatCount","indefinite");
+        am.setAttribute("begin",(i*0.2+k*0.8)+"s");am.setAttribute("path",f.d);
+        c.appendChild(am);flowLayer.appendChild(c);
+      }
+    });
+  }
+  buildFlow();
+
+  // ===== أزرار التحكم =====
+  const heart=$('#heart3d'),scene=$('#scene');
+  let spin=true,flow=true,drag=false;
+  const btnSpin=$('#btnSpin'),btnFlow=$('#btnFlow'),btnDrag=$('#btnDrag');
+
+  btnSpin.onclick=()=>{spin=!spin;btnSpin.classList.toggle('on',spin);scene.classList.toggle('paused',!spin);};
+  btnFlow.onclick=()=>{flow=!flow;btnFlow.classList.toggle('on',flow);flowLayer.style.display=flow?'':'none';};
+
+  // تدوير يدوي بالسحب
+  let curX=0,curY=-6,downX=0,downY=0,startX=0,startY=0,dragging=false;
+  function applyManual(){
+    heart.style.animation='none';
+    heart.style.transform=`rotateY(${curX}deg) rotateX(${curY}deg)`;
+  }
+  function enableDrag(on){
+    drag=on;btnDrag.classList.toggle('on',on);
+    $('#dragHint').textContent=on?"اسحب داخل المشهد لتدوير القلب · اضغط جزءاً لعرض شرحه"
+      :"القلب يدور تلقائياً · فعّل «تدوير يدوي» للتحكم بنفسك";
+    if(on){applyManual();}
+    else{heart.style.transform='';heart.style.animation='';scene.classList.toggle('paused',!spin);}
+  }
+  btnDrag.onclick=()=>enableDrag(!drag);
+
+  scene.addEventListener('pointerdown',e=>{
+    if(!drag)return;dragging=true;startX=e.clientX;startY=e.clientY;downX=curX;downY=curY;
+    scene.setPointerCapture(e.pointerId);
+  });
+  scene.addEventListener('pointermove',e=>{
+    if(!drag||!dragging)return;
+    curX=downX+(e.clientX-startX)*.6;
+    curY=Math.max(-40,Math.min(40,downY-(e.clientY-startY)*.4));
+    applyManual();
+  });
+  scene.addEventListener('pointerup',()=>dragging=false);
+</script>
+</body>
+</html>
