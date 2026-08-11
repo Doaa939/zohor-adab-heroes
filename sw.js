@@ -20,7 +20,7 @@
  */
 "use strict";
 
-var CACHE_VERSION = "v3.2.0-adventure-2026-08-11";
+var CACHE_VERSION = "v3.3.0-adventure-scenes-2026-08-11";
 var SHELL = "waha-shell-" + CACHE_VERSION;
 var RUNTIME = "waha-runtime-" + CACHE_VERSION;
 
@@ -49,7 +49,9 @@ var SHELL_PRECACHE = [
   "./grade4/index.html",
   /* طبقة المغامرة الاختيارية — أصول الهيكل المشتركة (لا تمسّ محتوى الدروس) */
   "./adventure/core.css",
+  "./adventure/scene.css",
   "./adventure/engine.js",
+  "./adventure/progress.js",
   "./adventure/gate.css",
   "./adventure/gate.js",
   "./adventure/worlds/worlds.css",

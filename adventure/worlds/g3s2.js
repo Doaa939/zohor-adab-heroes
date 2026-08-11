@@ -1,12 +1,14 @@
 /*!
  * adventure/worlds/g3s2.js — «مدينة الروبوتات»
- * Grade 3 · Semester 2. Lessons/ids/units mirror MNARA.curriculumS2.
- * Completion read: progress[id].done (blob may live under a *.settings.v1 key —
- * the engine scans the whole waha:g3s2:* namespace). Presentation only.
+ * Grade 3 · Semester 2. A future city: each mission is a lab or a robot;
+ * completing it powers the building and wakes the robot. Lesson data mirrors
+ * MNARA.curriculumS2; completion read progress[id].done.
  */
 (function () {
   "use strict";
   if (!window.ADV) return;
+  var S = ADV._svg;
+  function p(d, a) { a = a || {}; a.d = d; return S("path", a); }
   var DISTRICT = { 1: "الحي الأول", 2: "الحي الثاني" };
   var L = [
     ["s2-l1-1","1.1","التعامل مع الخوارزميات",1],["s2-l1-2","1.2","البرمجة في Scratch",1],
@@ -18,41 +20,45 @@
     ["s2-l2-3","2.3","لنتدرب على الكائنات ثلاثية الأبعاد",2],["s2-l2-4","2.4","الرسم الحر ثلاثي الأبعاد",2]
   ].map(function (r) { return { id: r[0], no: r[1], ar: r[2], unit: r[3] }; });
 
+  function lab() {
+    return S("svg", { viewBox: "0 0 150 140" }, [
+      S("ellipse", { cx: "75", cy: "132", rx: "48", ry: "6", fill: "rgba(0,0,0,.4)" }),
+      S("rect", { x: "38", y: "40", width: "74", height: "90", rx: "4", fill: "#122036", stroke: "#2ee6c6", "stroke-width": "1.5" }),
+      S("rect", { x: "50", y: "54", width: "50", height: "30", rx: "2", fill: "#0a1526" }),
+      S("circle", { cx: "75", cy: "69", r: "9", class: "rc-core" }),
+      S("g", { class: "rc-win" }, [S("rect", { x: "50", y: "94", width: "12", height: "12" }), S("rect", { x: "69", y: "94", width: "12", height: "12" }), S("rect", { x: "88", y: "94", width: "12", height: "12" })])
+    ]);
+  }
+  function robot() {
+    return S("svg", { viewBox: "0 0 150 140" }, [
+      S("ellipse", { cx: "75", cy: "134", rx: "40", ry: "6", fill: "rgba(0,0,0,.4)" }),
+      S("rect", { x: "50", y: "58", width: "50", height: "48", rx: "8", fill: "#1b2b44", stroke: "#a98bff", "stroke-width": "2" }),
+      S("rect", { x: "60", y: "34", width: "30", height: "24", rx: "6", fill: "#20304c", stroke: "#a98bff", "stroke-width": "2" }),
+      S("circle", { cx: "68", cy: "46", r: "4", class: "rc-eye" }), S("circle", { cx: "82", cy: "46", r: "4", class: "rc-eye" }),
+      p("M75 34 V24", { stroke: "#a98bff", "stroke-width": "2" }), S("circle", { cx: "75", cy: "22", r: "3", class: "rc-core" }),
+      S("rect", { x: "44", y: "106", width: "14", height: "22", rx: "3", fill: "#1b2b44" }), S("rect", { x: "92", y: "106", width: "14", height: "22", rx: "3", fill: "#1b2b44" })
+    ]);
+  }
+  function marker(art, ctx) { art.appendChild(ctx.index % 2 ? robot() : lab()); }
+
   ADV.register({
     code: "g3s2", storageKey: "waha:g3s2:wahat.g3.s2.v1",
     title: "مدينة الروبوتات", subtitle: "الصف الثالث · الفصل الثاني",
-    tagline: "أعِد الطاقة إلى المدينة المستقبلية؛ كل مهمة تُشغّل مختبرًا وتُنير مسارات الطاقة.",
-    intro: "مدينة الروبوتات نائمة بلا طاقة. مع كل مهمة تُنجزها يُضيء مبنى وتدبّ الحركة في مختبراته، حتى تعمل المدينة بأكملها.",
-    lessons: L,
-    regionOf: function (l) { return { key: "u" + l.unit, kind: "حي", label: DISTRICT[l.unit] }; },
+    lessons: L, unitOf: function (l) { return DISTRICT[l.unit]; },
+    intro: "مدينة الروبوتات نائمة بلا طاقة. مع كل مهمة يُضيء مبنى وتستيقظ روبوتاته، حتى تعمل المدينة بأكملها.",
     msgStart: "جاهز؟ أول مختبر في المدينة ينتظر طاقتك.",
     msgLocked: "أكمل المختبر السابق أولًا لتصل الطاقة.",
-    msgDone: "أحسنت! شُغِّل مختبر جديد في المدينة.",
+    msgDone: "أحسنت! شُغِّل مبنى واستيقظ روبوت جديد.",
     completeTitle: "أحسنت! أكملت رحلة الفصل الدراسي.",
     completeText: "عادت الطاقة إلى المدينة كلها، وبدأت روبوتاتها بالعمل.",
-    backdrop: function (c, eng, kit) {
-      var e = kit.el, s = kit.svg;
-      c.appendChild(e("div", { class: "adv-grid-floor" }));
-      var far = e("div", { class: "adv-far" });
-      far.appendChild(s("svg", { viewBox: "0 0 1200 460", preserveAspectRatio: "xMidYMax slice" }, [
-        s("g", { fill: "#0e1a2a" }, [
-          s("rect", { x: "80", y: "150", width: "90", height: "310" }),
-          s("rect", { x: "220", y: "220", width: "70", height: "240" }),
-          s("rect", { x: "1000", y: "120", width: "100", height: "340" }),
-          s("rect", { x: "860", y: "240", width: "70", height: "220" })
-        ]),
-        s("g", { fill: "#1de1c6", opacity: ".5" }, [
-          s("rect", { x: "100", y: "170", width: "12", height: "12" }), s("rect", { x: "130", y: "200", width: "12", height: "12" }),
-          s("rect", { x: "1020", y: "150", width: "12", height: "12" }), s("rect", { x: "1055", y: "190", width: "12", height: "12" })
-        ])
-      ]));
-      c.appendChild(far);
-      c.appendChild(e("div", { class: "adv-haze-bottom" }));
+    scene: {
+      laneH: 236, maxW: 980, mw: 160, marker: marker, pathDash: "1 6",
+      xAt: function (i) { return 50 + Math.sin(i * 1.2) * 22; },
+      path: function (pts) { if (!pts.length) return ""; var d = "M" + pts[0].x + " " + pts[0].y;
+        for (var i = 1; i < pts.length; i++) { var a = pts[i - 1], b = pts[i]; d += " L" + a.x + " " + ((a.y + b.y) / 2) + " L" + b.x + " " + ((a.y + b.y) / 2) + " L" + b.x + " " + b.y; } return d; },
+      background: function (e, bg, kit) { bg.appendChild(kit.el("div", { class: "rc-grid" })); }
     },
-    place: function (art, ctx, kit) {
-      art.appendChild(kit.el("div", { class: "adv-energy", "aria-hidden": "true" }));
-      art.appendChild(kit.el("div", { class: "adv-neon" }));
-    },
+    backdrop: function (c, e, kit) { c.appendChild(kit.el("div", { class: "rc-sky" })); },
     onMissionDone: function (st) { st.setAttribute("data-state", "done"); },
     onWorldComplete: function (eng) { eng.root.classList.add("is-worlddone"); }
   });

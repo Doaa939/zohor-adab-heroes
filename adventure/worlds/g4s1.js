@@ -1,11 +1,14 @@
 /*!
  * adventure/worlds/g4s1.js — «استوديو الإنتاج الرقمي»
- * Grade 4 · Semester 1. Lessons/ids/units mirror G4_CURRICULUM (worlds/lessons).
- * Completion read: progress[id].done (G4.store). Presentation only.
+ * Grade 4 · Semester 1. A production campus: each mission is a studio/facility;
+ * completing it turns on its ON-AIR sign and screens. Lesson data mirrors
+ * G4_CURRICULUM; completion read progress[id].done.
  */
 (function () {
   "use strict";
   if (!window.ADV) return;
+  var S = ADV._svg;
+  function p(d, a) { a = a || {}; a.d = d; return S("path", a); }
   var WING = { 1: "حاسوبي", 2: "لنعرض أفكارنا", 3: "عالمي المتصل" };
   var L = [
     ["l1-1","1.1","كيفية عمل جهاز الحاسوب",1],["l1-2","1.2","التعامل مع الوسائط المتعددة",1],
@@ -18,38 +21,48 @@
     ["l3-1","3.1","البريد الإلكتروني",3],["l3-2","3.2","التواصل عبر البريد الإلكتروني",3]
   ].map(function (r) { return { id: r[0], no: r[1], ar: r[2], unit: r[3] }; });
 
+  function studio() {
+    return S("svg", { viewBox: "0 0 150 140" }, [
+      S("ellipse", { cx: "75", cy: "132", rx: "48", ry: "6", fill: "rgba(0,0,0,.4)" }),
+      S("rect", { x: "34", y: "44", width: "82", height: "86", rx: "4", fill: "#1c1230", stroke: "#ff6fae", "stroke-width": "1.5" }),
+      /* ON AIR plate */
+      S("rect", { x: "50", y: "52", width: "50", height: "16", rx: "3", class: "st-onair" }),
+      S("text", { x: "75", y: "64", "text-anchor": "middle", "font-size": "9", "font-weight": "800", fill: "#0b0510", class: "st-onair-t" }, [document.createTextNode("ON AIR")]),
+      /* screen */
+      S("rect", { x: "48", y: "78", width: "54", height: "34", rx: "2", class: "st-screen", stroke: "#3a2440", "stroke-width": "2" })
+    ]);
+  }
+  function camera() {
+    return S("svg", { viewBox: "0 0 150 140" }, [
+      S("ellipse", { cx: "75", cy: "134", rx: "40", ry: "6", fill: "rgba(0,0,0,.4)" }),
+      S("rect", { x: "44", y: "60", width: "56", height: "40", rx: "6", fill: "#241640", stroke: "#4fd0e0", "stroke-width": "2" }),
+      S("circle", { cx: "66", cy: "80", r: "12", fill: "#0a0716", stroke: "#4fd0e0", "stroke-width": "2" }),
+      S("circle", { cx: "66", cy: "80", r: "5", class: "st-lens" }),
+      p("M100 70 l16 -8 v36 l-16 -8 Z", { fill: "#2a1a4a", stroke: "#4fd0e0", "stroke-width": "1.5" }),
+      S("rect", { x: "58", y: "100", width: "6", height: "24", fill: "#241640" }), S("rect", { x: "40", y: "122", width: "44", height: "6", rx: "2", fill: "#241640" })
+    ]);
+  }
+  function marker(art, ctx) { art.appendChild(ctx.index % 2 ? camera() : studio()); }
+
   ADV.register({
     code: "g4s1", storageKey: "waha:g4s1:waha:g4s1:progress",
     title: "استوديو الإنتاج الرقمي", subtitle: "الصف الرابع · الفصل الأول",
-    tagline: "شغّل مرافق الاستوديو مرفقًا بعد مرفق؛ كل مهمة تُضيء لوحة «على الهواء» وتفتح قاعة إنتاج.",
-    intro: "مجمّع إنتاج رقمي احترافي بانتظار فريقه. مع كل مهمة تُضيء لوحة «على الهواء» في أحد الاستوديوهات، حتى تُفتح قاعة العرض الكبرى في النهاية.",
-    lessons: L,
-    regionOf: function (l) { return { key: "u" + l.unit, kind: "جناح", label: WING[l.unit] }; },
-    unitOf: function (l) { return WING[l.unit]; },
+    lessons: L, unitOf: function (l) { return WING[l.unit]; },
+    intro: "مجمّع إنتاج رقمي احترافي بانتظار فريقه. مع كل مهمة تُضيء لوحة «على الهواء» في استوديو وتعمل شاشاته، حتى تُفتح قاعة العرض الكبرى.",
     msgStart: "جاهز؟ أول استوديو ينتظر إشارتك.",
     msgLocked: "أكمل الاستوديو السابق أولًا ليُفتح التالي.",
     msgDone: "أحسنت! أُضيئت لوحة «على الهواء» في استوديو جديد.",
     completeTitle: "أحسنت! أكملت رحلة الفصل الدراسي.",
     completeText: "شغّلتَ كل مرافق الاستوديو، وفُتحت قاعة العرض الكبرى.",
-    backdrop: function (c, eng, kit) {
-      var e = kit.el, s = kit.svg;
-      c.appendChild(e("div", { class: "adv-studio-glow" }));
-      var far = e("div", { class: "adv-far" });
-      far.appendChild(s("svg", { viewBox: "0 0 1200 460", preserveAspectRatio: "xMidYMax slice" }, [
-        s("rect", { x: "0", y: "60", width: "1200", height: "10", fill: "#171326" }),
-        /* studio spotlights */
-        s("g", { fill: "#1a1530" }, [
-          s("path", { d: "M180 60 l70 40 l-70 40 z" }), s("path", { d: "M520 60 l70 40 l-70 40 z" }),
-          s("path", { d: "M860 60 l70 40 l-70 40 z" })
-        ]),
-        s("rect", { x: "0", y: "404", width: "1200", height: "56", fill: "#120f22" })
-      ]));
-      c.appendChild(far);
-      c.appendChild(e("div", { class: "adv-haze-bottom" }));
+    scene: {
+      laneH: 236, maxW: 980, mw: 162, marker: marker, pathDash: "2 5",
+      xAt: function (i) { return 50 + Math.sin(i * 1.0) * 20; },
+      path: function (pts) { if (!pts.length) return ""; var d = "M" + pts[0].x + " " + pts[0].y;
+        for (var i = 1; i < pts.length; i++) { var a = pts[i - 1], b = pts[i], my = (a.y + b.y) / 2;
+          d += " C" + a.x + " " + my + " " + b.x + " " + my + " " + b.x + " " + b.y; } return d; },
+      background: function (e, bg, kit) { bg.appendChild(kit.el("div", { class: "st-floor" })); }
     },
-    place: function (art, ctx, kit) {
-      art.appendChild(kit.el("div", { class: "adv-onair", "aria-hidden": "true" }, [kit.el("span", { text: "ON AIR" })]));
-    },
+    backdrop: function (c, e, kit) { c.appendChild(kit.el("div", { class: "st-sky" })); },
     onMissionDone: function (st) { st.setAttribute("data-state", "done"); },
     onWorldComplete: function (eng) { eng.root.classList.add("is-worlddone"); }
   });
