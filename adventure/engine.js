@@ -202,8 +202,14 @@
     header.appendChild(this.buildTopbar());
     header.appendChild(this.buildMissionBar());
     wrap.appendChild(header);
-    wrap.appendChild(this.buildHead());
-    wrap.appendChild(this.buildTrail());
+    if (this.world.scene) {
+      /* illustrated world stage — the world dominates; no big heading block */
+      this._narrow = (global.innerWidth <= 640);
+      wrap.appendChild(this.buildMissions());
+    } else {
+      wrap.appendChild(this.buildHead());
+      wrap.appendChild(this.buildTrail());
+    }
     scene.appendChild(wrap);
     rootEl.appendChild(scene);
 
@@ -212,7 +218,29 @@
 
     this.updateProgressMeter();
     this.wireReturnDetection();
+    this.wireResize();
     this.maybeIntro();
+  };
+
+  /* Re-render when crossing the phone breakpoint → true reflow (not scale). */
+  Engine.prototype.wireResize = function () {
+    if (this._resizeWired) return;
+    this._resizeWired = true;
+    var self = this, t;
+    global.addEventListener("resize", function () {
+      clearTimeout(t);
+      t = setTimeout(function () {
+        if (!self.world.scene) return;
+        var narrow = global.innerWidth <= 640;
+        if (narrow !== self._narrow) { self._narrow = narrow; self.rerender(); }
+      }, 180);
+    });
+  };
+  Engine.prototype.rerender = function () {
+    var y = global.scrollY, parent = this.root;
+    parent.textContent = ""; parent.removeAttribute("data-world");
+    this.mount(parent);
+    global.scrollTo(0, y);
   };
 
   Engine.prototype.buildTopbar = function () {
@@ -300,6 +328,137 @@
     });
     this.trailEl = trail;
     return trail;
+  };
+
+  /* ============================================================ scene renderer */
+  /* Missions as illustrated scene objects on a large themed world (not cards).
+     Desktop: absolute markers down a tall scrollable stage, joined by a themed
+     path. Phone: a re-composed vertical journey. Collision-free by construction
+     (each marker owns a lane / stacks). */
+  Engine.prototype.buildMissions = function () {
+    return this._narrow ? this.buildJourney() : this.buildStage();
+  };
+
+  Engine.prototype._stateLabel = function (state) {
+    return state === "done" ? "مكتملة" : state === "current" ? "المهمة الحالية" : "مقفلة — أكمل ما قبلها";
+  };
+  Engine.prototype._markerChip = function (state) {
+    if (state === "done") return el("span", { class: "adv-marker__chip adv-marker__chip--done" },
+      [icon(["M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"]), el("span", { text: "أُنجزت" })]);
+    if (state === "current") return el("span", { class: "adv-marker__chip adv-marker__chip--current" },
+      [icon(["M8 5v14l11-7z"]), el("span", { text: "ابدأ الآن" })]);
+    return el("span", { class: "adv-marker__chip adv-marker__chip--locked" },
+      [icon(["M6 10V8a6 6 0 0 1 12 0v2h1.4v11H4.6V10H6z"]), el("span", { text: "قريبًا" })]);
+  };
+  Engine.prototype._buildSign = function (row) {
+    var l = row.lesson;
+    return el("div", { class: "adv-marker__sign" }, [
+      el("div", { class: "adv-marker__top" }, [
+        el("span", { class: "adv-marker__no", text: l.no }),
+        this.world.unitOf ? el("span", { class: "adv-marker__unit", text: this.world.unitOf(l) }) : null
+      ]),
+      el("h2", { class: "adv-marker__name", text: l.ar }),
+      this._markerChip(row.state)
+    ]);
+  };
+  Engine.prototype._buildArt = function (row, idx, cls) {
+    var art = el("div", { class: cls, "aria-hidden": "true" });
+    if (this.world.scene.marker) {
+      try { this.world.scene.marker(art, { row: row, index: idx, lesson: row.lesson, state: row.state }, { el: el, svg: svg, icon: icon }); }
+      catch (e) {}
+    }
+    return art;
+  };
+  Engine.prototype._buildHit = function (row) {
+    var self = this, l = row.lesson;
+    var hit = el("button", { type: "button", class: "adv-marker__hit", "data-lesson": l.id,
+      "aria-label": "المهمة " + l.no + " — " + l.ar + " — " + this._stateLabel(row.state) });
+    hit.addEventListener("click", function () {
+      if (row.state === "locked" && !row.open) { self.hudhud(self.world.msgLocked || "أكمل المهمة السابقة أولًا."); Sfx.tap(); return; }
+      self.enterLesson(l);
+    });
+    return hit;
+  };
+
+  Engine.prototype.buildStage = function () {
+    var self = this, sc = this.world.scene;
+    var visible = this.rows.filter(function (r) { return !r.allDone; });
+    var n = visible.length;
+    var laneH = sc.laneH || 196, topPad = 96, botPad = 150;
+    var stageH = topPad + n * laneH + botPad;
+    var maxW = sc.maxW || 1040;
+
+    var stage = el("div", { class: "adv-stage", id: "adv-missions", role: "list",
+      "aria-label": "مهمات " + this.world.title });
+    stage.style.height = stageH + "px";
+    stage.style.maxWidth = maxW + "px";
+
+    var bg = el("div", { class: "adv-stage__bg", "aria-hidden": "true" });
+    if (sc.background) { try { sc.background(this, bg, { el: el, svg: svg, icon: icon, stageH: stageH, n: n }); } catch (e) {} }
+    stage.appendChild(bg);
+
+    /* positions: x% across, y px down its lane */
+    var pts = visible.map(function (row, i) {
+      var y = topPad + laneH / 2 + i * laneH;
+      var x = sc.xAt ? sc.xAt(i, n) : (50 + (i % 2 ? 1 : -1) * 22);
+      return { x: x, y: y, yp: (y / stageH) * 100, row: row };
+    });
+
+    /* themed connecting path (base + lit-to-current) */
+    if (sc.path) {
+      var d = sc.path(pts.map(function (p) { return { x: p.x, y: p.yp }; }));
+      var doneCount = this.doneCount;
+      var pathSvg = svg("svg", { class: "adv-stage__path", viewBox: "0 0 100 100", preserveAspectRatio: "none" }, [
+        svg("path", { d: d, stroke: "var(--path-c, rgba(255,255,255,.16))", "stroke-width": "0.5", "stroke-linecap": "round", "vector-effect": "non-scaling-stroke", "stroke-dasharray": sc.pathDash || "0" })
+      ]);
+      /* a lit overlay path up to the furthest done marker */
+      if (doneCount > 0) {
+        var litPts = pts.slice(0, Math.min(doneCount + 1, pts.length)).map(function (p) { return { x: p.x, y: p.yp }; });
+        if (litPts.length > 1) pathSvg.appendChild(svg("path", { d: sc.path(litPts),
+          stroke: "var(--adv-accent)", "stroke-width": "1", "stroke-linecap": "round", "vector-effect": "non-scaling-stroke",
+          style: "filter:drop-shadow(0 0 4px var(--adv-glow))" }));
+      }
+      stage.appendChild(pathSvg);
+    }
+
+    pts.forEach(function (p, idx) {
+      var row = p.row;
+      var m = el("div", { class: "adv-marker", "data-state": row.state, "data-lesson": row.lesson.id, role: "listitem" });
+      m.style.left = p.x + "%"; m.style.top = p.y + "px";
+      if (sc.mw) m.style.setProperty("--mw", sc.mw + "px");
+      var wrap = el("div", { class: "adv-marker__wrap" }, [
+        self._buildArt(row, idx, "adv-marker__art"),
+        self._buildSign(row)
+      ]);
+      m.appendChild(self._buildHit(row));
+      m.appendChild(wrap);
+      if (row.state === "current") m.appendChild(el("div", { class: "adv-beacon", "aria-hidden": "true" }));
+      if (row.state === "locked") m.appendChild(el("div", { class: "adv-lockdot", "aria-hidden": "true" },
+        [icon(["M6 10V8a6 6 0 0 1 12 0v2h1.4v11H4.6V10H6zm2 0h8V8a4 4 0 0 0-8 0v2z"])]));
+      stage.appendChild(m);
+    });
+    this.trailEl = stage;
+    return stage;
+  };
+
+  Engine.prototype.buildJourney = function () {
+    var self = this;
+    var wrap = el("div", { class: "adv-journey", id: "adv-missions", role: "list",
+      "aria-label": "مهمات " + this.world.title });
+    this.rows.forEach(function (row, idx) {
+      if (row.allDone) return;
+      var leg = el("div", { class: "adv-leg", "data-state": row.state, "data-lesson": row.lesson.id, role: "listitem" });
+      var legWrap = el("div", { class: "adv-leg__wrap" }, [
+        self._buildArt(row, idx, "adv-leg__art"),
+        self._buildSign(row)
+      ]);
+      leg.appendChild(self._buildHit(row));
+      leg.appendChild(legWrap);
+      if (row.state === "current") legWrap.insertBefore(el("div", { class: "adv-beacon", "aria-hidden": "true" }), legWrap.firstChild);
+      wrap.appendChild(leg);
+    });
+    this.trailEl = wrap;
+    return wrap;
   };
 
   Engine.prototype.buildStation = function (row, idx) {
