@@ -1,0 +1,123 @@
+/* ==========================================================================
+   visual-polish.css — تحسين بصري معزول لواجهات التنقّل فقط
+   Premium visual polish · navigation surfaces only.
+
+   إعداد وتنفيذ الأستاذة دعاء الجرواني · © 2026
+
+   نطاق التطبيق: البوابة · صفحات الصفوف (اختيار الفصل) · صفحة التعريف · 404.
+   لا يُربط بأي منصّة فصل، فلا يمسّ درسًا ولا محاكيًا ولا نشاطًا ولا نقطة تفاعل.
+
+   قواعد صارمة التزم بها هذا الملف:
+   • لا يغيّر أي خاصية تخطيط (width · height · margin · padding · position · gap).
+   • يحرّك فقط: opacity · transform · box-shadow — وكلها لا تسبّب إعادة تخطيط.
+   • لا حلقات دائمة · لا تحويلات مستمرة · لا مرشّحات ثقيلة · لا ضباب.
+   • الحالة النهائية لكل عنصر مطابقة تمامًا للحالة قبل التحسين.
+   • يحترم prefers-reduced-motion فيُعطّل كل شيء.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+
+  /* ---------- 1 · دخول البطاقات: تلاشٍ مع صعود 10 بكسل ---------- */
+  @keyframes wahaRise {
+    from { opacity: 0; transform: translate3d(0, 10px, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+
+  .arches > .arch,
+  .duo > *,
+  .feature,
+  .credit__card,
+  .disclaimer,
+  .about-card {
+    animation: wahaRise 220ms cubic-bezier(.22, .61, .36, 1) both;
+  }
+
+  /* تتابع خفيف — لا يتجاوز 4 عناصر حتى لا يتأخّر الإدراك */
+  .arches > .arch:nth-child(1) { animation-delay: 0ms; }
+  .arches > .arch:nth-child(2) { animation-delay: 55ms; }
+  .arches > .arch:nth-child(3) { animation-delay: 110ms; }
+  .arches > .arch:nth-child(4) { animation-delay: 165ms; }
+
+  /* ---------- 2 · التمرير: تكبير 1.02 وظلّ أنعم ---------- */
+  .arch {
+    transition: transform 200ms cubic-bezier(.22, .61, .36, 1),
+                box-shadow 200ms cubic-bezier(.22, .61, .36, 1);
+    will-change: transform;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .arch:hover {
+      transform: scale(1.02);
+      box-shadow: 0 10px 26px rgba(6, 16, 26, .30);
+    }
+  }
+
+  /* ---------- 3 · اللمس والضغط: تصغير 0.98 بلا ارتداد ---------- */
+  .arch:active { transform: scale(.98); transition-duration: 110ms; }
+
+  /* ---------- 4 · الأزرار والروابط: ارتفاع ناعم بلا إزاحة ---------- */
+  .arch__go,
+  .crumb a,
+  .foot__line a,
+  .about-links a {
+    transition: box-shadow 180ms ease-out, opacity 180ms ease-out;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .arch__go:hover,
+    .crumb a:hover,
+    .foot__line a:hover,
+    .about-links a:hover { box-shadow: 0 4px 14px rgba(6, 16, 26, .22); }
+  }
+
+  /* ---------- 5 · نوافذ الحوار: تلاشٍ مع تكبير 0.96 ← 1.00 ---------- */
+  @keyframes wahaDialogIn {
+    from { opacity: 0; transform: scale(.96); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  @keyframes wahaScrimIn { from { opacity: 0; } to { opacity: 1; } }
+
+  dialog[open], .modal, .dlg { animation: wahaDialogIn 200ms cubic-bezier(.22, .61, .36, 1) both; }
+  dialog[open]::backdrop { animation: wahaScrimIn 200ms ease-out both; }
+
+  /* ---------- 6 · الخريطة والشاشات الافتتاحية: تلاشٍ ناعم فقط ---------- */
+  @keyframes wahaFade { from { opacity: 0; } to { opacity: 1; } }
+  .hero, .gate, .ministry { animation: wahaFade 260ms ease-out both; }
+
+  /* ---------- 7 · رسالة النجاح: علامة صغيرة هادئة ---------- */
+  @keyframes wahaTick {
+    0%   { opacity: 0; transform: scale(.86); }
+    60%  { opacity: 1; transform: scale(1.04); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  .is-success, .ok-mark { animation: wahaTick 220ms cubic-bezier(.22, .61, .36, 1) both; }
+
+  /* ---------- 8 · حلقة التركيز: ظهور ناعم دون إزاحة ---------- */
+  .arch:focus-visible,
+  .arch__go:focus-visible,
+  .crumb a:focus-visible { transition: outline-color 140ms ease-out, box-shadow 140ms ease-out; }
+}
+
+/* ==========================================================================
+   احترام تفضيل تقليل الحركة: تعطيل كامل
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .arches > .arch,
+  .duo > *,
+  .feature,
+  .credit__card,
+  .disclaimer,
+  .about-card,
+  .hero, .gate, .ministry,
+  dialog[open], .modal, .dlg,
+  .is-success, .ok-mark {
+    animation: none !important;
+  }
+  .arch, .arch__go, .crumb a, .foot__line a, .about-links a {
+    transition: none !important;
+  }
+  .arch:hover, .arch:active { transform: none !important; }
+}
+
+/* الطباعة: بلا حركة */
+@media print {
+  * { animation: none !important; transition: none !important; }
+}

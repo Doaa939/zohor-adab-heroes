@@ -1,0 +1,89 @@
+{
+  "name": "منصة واحة التقنية",
+  "nameEn": "Wahat Al-Taqnia Interactive ICT Platform",
+  "version": "1.0.0-integrated",
+  "release": "public-release-integrated",
+  "buildDate": "2026-08-11",
+  "serviceWorkerCache": "v3.1.0-integrated-2026-08-11",
+  "author": "الأستاذة دعاء الجرواني",
+  "authorEn": "Ustatha Doaa Al-Jarwani",
+  "copyright": "© 2026 الأستاذة دعاء الجرواني — جميع الحقوق محفوظة",
+  "license": "All Rights Reserved — see LICENSE_AR.md / LICENSE_EN.md",
+  "curriculumReference": "وزارة التعليم — سلطنة عُمان · منهج تقنية المعلومات",
+  "language": {
+    "primary": "ar",
+    "direction": "rtl",
+    "secondary": "en"
+  },
+  "platform": {
+    "type": "static",
+    "hosting": "Cloudflare Pages",
+    "serverRuntime": "none",
+    "buildCommand": "none",
+    "outputDirectory": "/"
+  },
+  "offlineSupport": {
+    "portal": true,
+    "gradePages": true,
+    "semesterPlatforms": false,
+    "note": "الهيكل الرئيسي يعمل دون اتصال بعد أول زيارة. مواضع الفصول المحجوزة مستثناة من الـcache تمامًا."
+  },
+  "compatibility": {
+    "browsers": [
+      "Chrome/Edge 90+",
+      "Firefox 90+",
+      "Safari 15+"
+    ],
+    "desktop": [
+      "1366x768",
+      "1920x1080",
+      "1024x768"
+    ],
+    "tablet": [
+      "768x1024",
+      "820x1180"
+    ],
+    "mobile": [
+      "360x800",
+      "375x812",
+      "390x844",
+      "412x915"
+    ],
+    "input": [
+      "mouse",
+      "keyboard",
+      "touch"
+    ],
+    "targetEnvironment": "أجهزة مدرسية بنظام Windows 10"
+  },
+  "coverage": {
+    "grades": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "semesters": [
+      1,
+      2
+    ],
+    "routes": 8,
+    "routesInstalled": 8
+  },
+  "privacy": {
+    "accounts": false,
+    "personalData": false,
+    "analytics": false,
+    "thirdPartyRequests": false,
+    "progressStorage": "localStorage, namespaced per grade/semester: waha:g{G}s{S}:"
+  },
+  "note": "هذا الملف لأغراض الصيانة فقط ولا يُستخدم في وقت التشغيل.",
+  "build": {
+    "kind": "PUBLIC RELEASE — INTEGRATED",
+    "contains": "البوابة · صفحات الصفوف الأربعة · المنصات الثماني · About · الأصول المشتركة · طبقة التكامل",
+    "legacySemesterContent": 0,
+    "semesterSlots": 8,
+    "semesterPlatformsInstalled": 8,
+    "note": "مواضع الفصول الثمانية مركَّبة بالمنصات النهائية. لا صفحات محجوزة ولا محتوى فصل قديم."
+  }
+}
