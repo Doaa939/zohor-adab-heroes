@@ -1,0 +1,164 @@
+/*!
+ * adventure/worlds/worlds.css — palettes, backdrops & station art for the seven
+ * worlds other than g2s2 (which ships its own file). Presentation only; each
+ * world has a distinct palette, backdrop, station metaphor and unlock reaction.
+ */
+
+/* ============================ shared station-art bases ============================ */
+.adv-place__art > div{ position:absolute }
+/* falaj / rail ribbon along the bottom (reused) */
+.adv-falaj,.adv-rail,.adv-datastream,.adv-neon{
+  left:0; right:0; bottom:0; height:9px; overflow:hidden; z-index:2;
+}
+.adv-falaj::before,.adv-rail::before,.adv-datastream::before,.adv-neon::before{
+  content:""; position:absolute; inset:0; transform:translateX(-100%);
+}
+.adv-station[data-state="done"] .adv-falaj::before,
+.adv-station[data-state="done"] .adv-rail::before,
+.adv-station[data-state="done"] .adv-datastream::before,
+.adv-station[data-state="done"] .adv-neon::before{ animation:adv-ribbon 2.6s linear infinite }
+@keyframes adv-ribbon{ from{transform:translateX(-100%)} to{transform:translateX(100%)} }
+@media (prefers-reduced-motion:reduce){
+  .adv-station .adv-falaj::before,.adv-station .adv-rail::before,
+  .adv-station .adv-datastream::before,.adv-station .adv-neon::before{ animation:none!important; transform:none; opacity:.4 }
+}
+
+/* generic "light source" markers (window/lamp/torch/exhibit/energy/onair/module) */
+.adv-window,.adv-lamp,.adv-torch,.adv-exhibit,.adv-energy,.adv-module{
+  inset-block-start:14px; inset-inline-end:14px; width:30px; height:30px; border-radius:7px;
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14);
+  transition:background .4s,box-shadow .4s,border-color .4s; z-index:3;
+}
+.adv-station[data-state="current"] .adv-window,.adv-station[data-state="current"] .adv-lamp,
+.adv-station[data-state="current"] .adv-torch,.adv-station[data-state="current"] .adv-exhibit,
+.adv-station[data-state="current"] .adv-energy,.adv-station[data-state="current"] .adv-module{
+  border-color:var(--adv-accent-2);
+}
+.adv-onair{
+  inset-block-start:12px; inset-inline-end:12px; padding:3px 8px; border-radius:6px; z-index:3;
+  font-size:10px; font-weight:800; letter-spacing:.5px; color:rgba(255,255,255,.35);
+  background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.14); transition:.4s;
+}
+.adv-door{ inset-block-end:9px; inset-inline-start:14px; width:26px; height:38px; z-index:3;
+  border-radius:13px 13px 3px 3px; background:rgba(0,0,0,.28); border:1px solid rgba(255,255,255,.12); transition:.4s }
+
+/* ============================ g1s1 · village ============================ */
+.adv-world[data-world="g1s1"]{ --adv-bg-0:#0e1518; --adv-accent:#4ec9b0; --adv-accent-2:#ffb765;
+  --adv-glow:rgba(78,201,176,.5); --adv-panel:rgba(16,26,26,.74); --adv-ink:#f4efe4 }
+.adv-world[data-world="g1s1"] .adv-backdrop{
+  background:radial-gradient(120% 80% at 80% -10%,rgba(255,183,101,.2),transparent 46%),
+    linear-gradient(180deg,#0c1416,#122021 60%,#16292a) }
+.adv-world[data-world="g1s1"] .adv-place{ background:linear-gradient(180deg,#26332f,#182422) }
+.adv-world[data-world="g1s1"] .adv-station[data-state="done"] .adv-window{
+  background:radial-gradient(circle,#ffe0a0,#ffb765); box-shadow:0 0 16px rgba(255,183,101,.9); border-color:#ffb765 }
+.adv-world[data-world="g1s1"] .adv-falaj{ background:linear-gradient(90deg,rgba(78,201,176,.12),transparent) }
+.adv-world[data-world="g1s1"] .adv-falaj::before{ background:linear-gradient(90deg,transparent,rgba(120,240,220,.6),transparent) }
+
+/* ============================ g1s2 · train ============================ */
+.adv-world[data-world="g1s2"]{ --adv-bg-0:#0a121e; --adv-accent:#5cc7ff; --adv-accent-2:#ffcf7a;
+  --adv-glow:rgba(92,199,255,.5); --adv-panel:rgba(12,22,34,.76); --adv-ink:#eef4ff }
+.adv-world[data-world="g1s2"] .adv-backdrop{
+  background:radial-gradient(120% 80% at 20% -8%,rgba(92,199,255,.16),transparent 48%),
+    linear-gradient(180deg,#08101c,#0e1c2c 60%,#12283a) }
+.adv-world[data-world="g1s2"] .adv-place{ background:linear-gradient(180deg,#1a2c3e,#132234) }
+.adv-world[data-world="g1s2"] .adv-lamp{ border-radius:50%;
+  background:radial-gradient(circle,#6b7480,#3a4652) }
+.adv-world[data-world="g1s2"] .adv-station[data-state="done"] .adv-lamp{
+  background:radial-gradient(circle,#fff1c8,#ffcf7a); box-shadow:0 0 18px rgba(255,207,122,.9); border-color:#ffcf7a }
+.adv-world[data-world="g1s2"] .adv-rail{ background:linear-gradient(90deg,rgba(92,199,255,.14),transparent) }
+.adv-world[data-world="g1s2"] .adv-rail::before{ background:linear-gradient(90deg,transparent,rgba(150,220,255,.7),transparent) }
+.adv-world[data-world="g1s2"] .adv-region__k{ background:#12283a }
+
+/* ============================ g2s1 · museum ============================ */
+.adv-world[data-world="g2s1"]{ --adv-bg-0:#0b1020; --adv-accent:#c9a24b; --adv-accent-2:#ffd77a;
+  --adv-glow:rgba(201,162,75,.5); --adv-panel:rgba(12,16,32,.78); --adv-ink:#f3eede }
+.adv-world[data-world="g2s1"] .adv-backdrop{
+  background:radial-gradient(90% 60% at 50% -6%,rgba(255,215,122,.16),transparent 46%),
+    linear-gradient(180deg,#080b18,#0d1224 60%,#12162a) }
+.adv-world[data-world="g2s1"] .adv-museum-spot{ inset:0;
+  background:radial-gradient(50% 42% at 50% 8%,rgba(255,215,122,.14),transparent 60%) }
+.adv-world[data-world="g2s1"] .adv-place{ background:linear-gradient(180deg,#1a2036,#12162a) }
+.adv-world[data-world="g2s1"] .adv-exhibit{ width:38px; height:26px; border-radius:5px;
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(0,0,0,.2)) }
+.adv-world[data-world="g2s1"] .adv-station[data-state="done"] .adv-exhibit{
+  background:radial-gradient(circle at 50% 40%,#ffe9b0,#c9a24b); box-shadow:0 0 20px rgba(255,215,122,.85) }
+.adv-world[data-world="g2s1"] .adv-region__k{ background:#12162a; color:var(--adv-accent-2) }
+
+/* ============================ g3s1 · castle ============================ */
+.adv-world[data-world="g3s1"]{ --adv-bg-0:#12100c; --adv-accent:#e2b25a; --adv-accent-2:#ff9d4d;
+  --adv-glow:rgba(226,178,90,.5); --adv-panel:rgba(24,20,14,.78); --adv-ink:#f4ecdd }
+.adv-world[data-world="g3s1"] .adv-backdrop{
+  background:radial-gradient(120% 80% at 50% -10%,rgba(255,157,77,.18),transparent 46%),
+    linear-gradient(180deg,#0e0c08,#181410 60%,#211a12) }
+.adv-world[data-world="g3s1"] .adv-place{ background:linear-gradient(180deg,#2c2519,#1c1710);
+  border-color:rgba(226,178,90,.2) }
+.adv-world[data-world="g3s1"] .adv-torch{ width:16px; height:28px; border-radius:8px 8px 3px 3px;
+  background:linear-gradient(180deg,#6b5a3a,#3a301e); border-color:rgba(255,157,77,.2) }
+.adv-world[data-world="g3s1"] .adv-station[data-state="done"] .adv-torch{
+  background:radial-gradient(circle at 50% 25%,#ffe08a,#ff9d4d 60%,#6b5a3a);
+  box-shadow:0 0 20px rgba(255,157,77,.9) }
+.adv-world[data-world="g3s1"] .adv-station[data-state="done"] .adv-door{
+  background:linear-gradient(180deg,rgba(255,157,77,.4),rgba(255,157,77,.1)); border-color:#ff9d4d }
+.adv-world[data-world="g3s1"] .adv-region__k{ background:#1c1710 }
+
+/* ============================ g3s2 · robot city ============================ */
+.adv-world[data-world="g3s2"]{ --adv-bg-0:#070c18; --adv-accent:#2ee6c6; --adv-accent-2:#a98bff;
+  --adv-glow:rgba(46,230,198,.55); --adv-panel:rgba(10,16,30,.8); --adv-ink:#eaf3ff }
+.adv-world[data-world="g3s2"] .adv-backdrop{
+  background:radial-gradient(120% 80% at 80% -8%,rgba(169,139,255,.18),transparent 46%),
+    radial-gradient(120% 80% at 10% 0%,rgba(46,230,198,.14),transparent 50%),
+    linear-gradient(180deg,#050914,#0a1120 60%,#0d1526) }
+.adv-world[data-world="g3s2"] .adv-grid-floor{ inset:auto 0 0 0; height:46%;
+  background:linear-gradient(180deg,transparent,rgba(46,230,198,.06)),
+    repeating-linear-gradient(90deg,rgba(46,230,198,.10) 0 1px,transparent 1px 46px);
+  mask:linear-gradient(180deg,transparent,#000) }
+.adv-world[data-world="g3s2"] .adv-place{ background:linear-gradient(180deg,#111b30,#0c1424);
+  border-color:rgba(46,230,198,.18) }
+.adv-world[data-world="g3s2"] .adv-energy{ border-radius:50%;
+  background:rgba(46,230,198,.08); border-color:rgba(46,230,198,.3) }
+.adv-world[data-world="g3s2"] .adv-station[data-state="done"] .adv-energy{
+  background:radial-gradient(circle,#c8fff2,#2ee6c6); box-shadow:0 0 22px rgba(46,230,198,.95) }
+.adv-world[data-world="g3s2"] .adv-neon{ background:linear-gradient(90deg,rgba(169,139,255,.14),transparent) }
+.adv-world[data-world="g3s2"] .adv-neon::before{ background:linear-gradient(90deg,transparent,rgba(46,230,198,.9),transparent) }
+.adv-world[data-world="g3s2"] .adv-region__k{ background:#0c1424 }
+
+/* ============================ g4s1 · studio ============================ */
+.adv-world[data-world="g4s1"]{ --adv-bg-0:#120a18; --adv-accent:#ff6fae; --adv-accent-2:#4fd0e0;
+  --adv-glow:rgba(255,111,174,.5); --adv-panel:rgba(22,12,28,.8); --adv-ink:#f6eef6 }
+.adv-world[data-world="g4s1"] .adv-backdrop{
+  background:radial-gradient(120% 80% at 20% -8%,rgba(255,111,174,.2),transparent 46%),
+    radial-gradient(120% 80% at 85% 0%,rgba(79,208,224,.16),transparent 50%),
+    linear-gradient(180deg,#0d0714,#160c1f 60%,#1b1128) }
+.adv-world[data-world="g4s1"] .adv-studio-glow{ inset:0;
+  background:radial-gradient(50% 40% at 50% 0%,rgba(255,111,174,.16),transparent 62%) }
+.adv-world[data-world="g4s1"] .adv-place{ background:linear-gradient(180deg,#241533,#180f24) }
+.adv-world[data-world="g4s1"] .adv-station[data-state="done"] .adv-onair{
+  color:#fff; background:#e0356f; border-color:#ff6fae; box-shadow:0 0 18px rgba(255,111,174,.9) }
+.adv-world[data-world="g4s1"] .adv-region__k{ background:#180f24; color:var(--adv-accent) }
+
+/* ============================ g4s2 · data station ============================ */
+.adv-world[data-world="g4s2"]{ --adv-bg-0:#060b16; --adv-accent:#39c6ff; --adv-accent-2:#7ff0d0;
+  --adv-glow:rgba(57,198,255,.55); --adv-panel:rgba(9,16,28,.82); --adv-ink:#e9f4ff }
+.adv-world[data-world="g4s2"] .adv-backdrop{
+  background:radial-gradient(120% 90% at 50% -10%,rgba(57,198,255,.16),transparent 48%),
+    linear-gradient(180deg,#040810,#070f1c 60%,#0a1524) }
+.adv-world[data-world="g4s2"] .adv-stars{ inset:0;
+  background:radial-gradient(1.6px 1.6px at 18% 20%,rgba(255,255,255,.6),transparent 60%),
+    radial-gradient(1.6px 1.6px at 62% 12%,rgba(255,255,255,.5),transparent 60%),
+    radial-gradient(2px 2px at 82% 26%,rgba(255,255,255,.55),transparent 60%),
+    radial-gradient(1.4px 1.4px at 40% 8%,rgba(255,255,255,.5),transparent 60%) }
+.adv-world[data-world="g4s2"] .adv-datacore{ inset-block-start:6%; inset-inline-start:50%;
+  transform:translateX(-50%); width:150px; height:150px; border-radius:50%;
+  background:radial-gradient(circle,rgba(57,198,255,.28),transparent 66%); filter:blur(2px) }
+.adv-world[data-world="g4s2"] .adv-place{ background:linear-gradient(180deg,#0f1e30,#0a1524);
+  border-color:rgba(57,198,255,.2) }
+.adv-world[data-world="g4s2"] .adv-module{ border-radius:6px;
+  background:rgba(57,198,255,.06); border-color:rgba(57,198,255,.3) }
+.adv-world[data-world="g4s2"] .adv-station[data-state="done"] .adv-module{
+  background:radial-gradient(circle,#d4f6ff,#39c6ff); box-shadow:0 0 22px rgba(57,198,255,.95) }
+.adv-world[data-world="g4s2"] .adv-datastream{ background:linear-gradient(90deg,rgba(57,198,255,.14),transparent) }
+.adv-world[data-world="g4s2"] .adv-datastream::before{ background:linear-gradient(90deg,transparent,rgba(127,240,208,.9),transparent) }
+.adv-world[data-world="g4s2"] .adv-region__k{ background:#0a1524 }
+
+/* world-complete warm/energised wash (shared cue) */
+.adv-world.is-worlddone .adv-backdrop{ filter:saturate(1.12) brightness(1.06); transition:filter 1.2s ease }

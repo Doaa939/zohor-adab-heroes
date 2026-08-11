@@ -20,7 +20,7 @@
  */
 "use strict";
 
-var CACHE_VERSION = "v3.1.0-integrated-2026-08-11";
+var CACHE_VERSION = "v3.2.0-adventure-2026-08-11";
 var SHELL = "waha-shell-" + CACHE_VERSION;
 var RUNTIME = "waha-runtime-" + CACHE_VERSION;
 
@@ -46,7 +46,31 @@ var SHELL_PRECACHE = [
   "./grade1/index.html",
   "./grade2/index.html",
   "./grade3/index.html",
-  "./grade4/index.html"
+  "./grade4/index.html",
+  /* طبقة المغامرة الاختيارية — أصول الهيكل المشتركة (لا تمسّ محتوى الدروس) */
+  "./adventure/core.css",
+  "./adventure/engine.js",
+  "./adventure/gate.css",
+  "./adventure/gate.js",
+  "./adventure/worlds/worlds.css",
+  "./adventure/worlds/g2s2.css",
+  "./adventure/worlds/g1s1.js",
+  "./adventure/worlds/g1s2.js",
+  "./adventure/worlds/g2s1.js",
+  "./adventure/worlds/g2s2.js",
+  "./adventure/worlds/g3s1.js",
+  "./adventure/worlds/g3s2.js",
+  "./adventure/worlds/g4s1.js",
+  "./adventure/worlds/g4s2.js",
+  /* بوابات عوالم المغامرة (ملفات إقلاع خفيفة، منفصلة عن منصات الدروس) */
+  "./grade1/semester1/adventure.html",
+  "./grade1/semester2/adventure.html",
+  "./grade2/semester1/adventure.html",
+  "./grade2/semester2/adventure.html",
+  "./grade3/semester1/adventure.html",
+  "./grade3/semester2/adventure.html",
+  "./grade4/semester1/adventure.html",
+  "./grade4/semester2/adventure.html"
 ];
 
 /* مسارات منصات الفصول المركّبة. فارغة في الهيكل النظيف — تُملأ عند الدمج. */

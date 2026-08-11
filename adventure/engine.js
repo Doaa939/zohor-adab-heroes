@@ -79,24 +79,50 @@
   })();
 
   /* ---------------------------------------------------------- progress adapter */
-  /* Read the ORIGINAL platform's namespaced blob and return a Set of done ids.
-     Never writes. Default shape: parsed.progress[id].done === true. A world may
-     override with world.readDone(parsed, lesson) for a different platform. */
+  /* READ-ONLY. Completion comes from the ORIGINAL platform's own namespaced
+     localStorage blob(s). Never writes. The 8 platforms are heterogeneous, so
+     the reader scans every key under "waha:<code>:" and checks each lesson id
+     against the known completion shapes actually used by the platforms:
+       progress[id].done   · progress[id].mastered · progress[id].completed
+       progress.lessons[id].completed   · lessons[id].mastered
+     A world may override with world.readDone(parsed, lesson) for anything else. */
+  function entryDone(e) {
+    return !!(e && typeof e === "object" && (e.done === true || e.mastered === true || e.completed === true));
+  }
+  function defaultReadDone(parsed, lesson) {
+    if (!parsed || typeof parsed !== "object") return false;
+    var id = lesson.id, buckets = [];
+    if (parsed.progress && parsed.progress.lessons) buckets.push(parsed.progress.lessons);
+    if (parsed.progress && typeof parsed.progress === "object") buckets.push(parsed.progress);
+    if (parsed.lessons && typeof parsed.lessons === "object") buckets.push(parsed.lessons);
+    buckets.push(parsed);
+    for (var i = 0; i < buckets.length; i++) { if (entryDone(buckets[i][id])) return true; }
+    return false;
+  }
   function readState(world) {
-    var raw = null;
-    try { raw = global.localStorage.getItem(world.storageKey); } catch (e) { raw = null; }
-    var parsed = null;
-    if (raw) { try { parsed = JSON.parse(raw); } catch (e) { parsed = null; } }
-    var done = Object.create(null);
-    if (parsed) {
-      world.lessons.forEach(function (l) {
-        var ok;
-        if (typeof world.readDone === "function") { try { ok = world.readDone(parsed, l); } catch (e) { ok = false; } }
-        else { var p = parsed.progress && parsed.progress[l.id]; ok = !!(p && p.done); }
-        if (ok) done[l.id] = true;
-      });
+    var prefix = "waha:" + world.code + ":", blobs = [], i, k, raw;
+    try {
+      for (i = 0; i < global.localStorage.length; i++) {
+        k = global.localStorage.key(i);
+        if (k && k.indexOf(prefix) === 0) {
+          raw = global.localStorage.getItem(k);
+          if (raw) { try { blobs.push(JSON.parse(raw)); } catch (e) {} }
+        }
+      }
+    } catch (e) {}
+    /* fallback: an explicit storageKey hint (unshimmed) if prefix scan found nothing */
+    if (!blobs.length && world.storageKey) {
+      try { raw = global.localStorage.getItem(world.storageKey); if (raw) blobs.push(JSON.parse(raw)); } catch (e) {}
     }
-    return { parsed: parsed, done: done };
+    var reader = typeof world.readDone === "function" ? world.readDone : defaultReadDone;
+    var done = Object.create(null);
+    world.lessons.forEach(function (l) {
+      for (var b = 0; b < blobs.length; b++) {
+        var ok; try { ok = reader(blobs[b], l); } catch (e) { ok = false; }
+        if (ok) { done[l.id] = true; break; }
+      }
+    });
+    return { parsed: blobs[0] || null, blobs: blobs, done: done };
   }
 
   /* derive done / current / locked per lesson */
@@ -250,11 +276,23 @@
     var self = this;
     var trail = el("div", { class: "adv-trail", id: "adv-missions", role: "list",
       "aria-label": "مهمات " + this.world.title });
+    var lastRegion = null;
     this.rows.forEach(function (row, idx) {
       if (row.allDone) return;
+      /* region/section dividers (world wings / floors / districts / decks) */
+      if (self.world.regionOf) {
+        var reg = self.world.regionOf(row.lesson);
+        if (reg && reg.key !== lastRegion) {
+          lastRegion = reg.key;
+          trail.appendChild(el("div", { class: "adv-region", role: "presentation" }, [
+            reg.kind ? el("span", { class: "adv-region__k", text: reg.kind }) : null,
+            el("span", { class: "adv-region__t", text: reg.label })
+          ]));
+        }
+      }
       var station = self.buildStation(row, idx);
       trail.appendChild(station);
-      if (idx < self.world.lessons.length - 1) trail.appendChild(el("span", { class: "adv-link", "aria-hidden": "true" }));
+      if (idx < self.world.lessons.length - 1 && !self.world.regionOf) trail.appendChild(el("span", { class: "adv-link", "aria-hidden": "true" }));
     });
     this.trailEl = trail;
     return trail;

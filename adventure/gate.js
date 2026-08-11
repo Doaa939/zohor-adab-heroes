@@ -12,8 +12,9 @@
 (function () {
   "use strict";
 
-  /* Worlds that have an installed adventure.html. Extend as worlds ship. */
-  var ADV_WORLDS = { g2s2: true };
+  /* Worlds that have an installed adventure.html. */
+  var ADV_WORLDS = { g1s1: true, g1s2: true, g2s1: true, g2s2: true,
+                     g3s1: true, g3s2: true, g4s1: true, g4s2: true };
 
   var doc = document;
   function el(tag, attrs, kids) {

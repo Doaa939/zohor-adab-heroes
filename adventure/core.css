@@ -244,6 +244,19 @@ html{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
 .adv-link{ flex:0 0 auto; align-self:center; width:26px; height:3px; border-radius:2px;
   background:linear-gradient(90deg,var(--adv-line),transparent); opacity:.6 }
 
+/* region divider — a world wing / floor / district / deck header */
+.adv-region{
+  flex:1 1 100%; width:100%; display:flex; align-items:center; gap:12px;
+  margin:14px 2px 2px; padding:0;
+}
+.adv-region::before,.adv-region::after{ content:""; height:1px; flex:1 1 auto;
+  background:linear-gradient(90deg,transparent,var(--adv-line),transparent) }
+.adv-region__k{ font-size:12px; font-weight:800; color:var(--adv-accent);
+  padding:4px 10px; border:1px solid var(--adv-line); border-radius:99px; background:var(--adv-panel) }
+.adv-region__t{ font-size:clamp(15px,2.6vw,20px); font-weight:800; color:var(--adv-ink);
+  white-space:normal; text-align:center }
+.adv-region:first-child{ margin-top:2px }
+
 /* ---- states ---- */
 .adv-station[data-state="done"] .adv-place{ border-color:rgba(126,240,198,.5);
   box-shadow:0 16px 40px rgba(0,0,0,.4), 0 0 0 1px rgba(126,240,198,.25), 0 0 32px var(--adv-glow) }
