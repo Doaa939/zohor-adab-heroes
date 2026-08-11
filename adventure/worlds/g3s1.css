@@ -1,0 +1,42 @@
+/*!
+ * adventure/worlds/g3s1.css — «قلعة المعرفة الرقمية» castle skin.
+ * Carved stone tablets; torches and windows light and the door opens on
+ * completion; the summit tower raises its banner.
+ */
+.adv-root[data-world="g3s1"] { --node-w: 262px; --art-w: 202px; }
+.adv-root[data-world="g3s1"] .adv-node__art svg { width: 202px; }
+
+/* carved stone tablet */
+.ct-sign { display: flex; justify-content: center; }
+.ct-sign__stone {
+  position: relative; min-width: 154px; max-width: 248px; padding: 11px 15px 12px; border-radius: 8px;
+  background: linear-gradient(180deg, #8a745a, #5f4c36); border: 2px solid #3f3120;
+  box-shadow: inset 0 2px 0 rgba(255,240,210,.28), inset 0 -6px 10px rgba(30,20,10,.5), 0 12px 22px rgba(0,0,0,.5);
+}
+.ct-sign__no { position: absolute; top: -13px; inset-inline-start: -10px; width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; font-weight: 900; font-size: 14px; color: #2a1c0a; background: radial-gradient(circle at 40% 35%, #ffe6a6, var(--adv-accent, #e0a94e)); border: 3px solid #3f3120; box-shadow: 0 3px 7px rgba(0,0,0,.4); }
+.ct-sign__name { display: block; text-align: center; font-size: clamp(16px, 1.3vw, 18px); font-weight: 800; line-height: 1.4; color: #f4e6cf; word-break: break-word; text-shadow: 0 1px 2px rgba(0,0,0,.5); }
+.adv-node[data-state="current"] .ct-sign__stone { box-shadow: inset 0 2px 0 rgba(255,240,210,.3), 0 0 0 2px rgba(255,207,122,.6), 0 14px 26px rgba(0,0,0,.55); }
+.adv-node[data-state="done"] .ct-sign__no { background: radial-gradient(circle at 40% 35%, #bff0d8, var(--adv-done, #6fd0a0)); }
+.adv-node[data-state="locked"] .ct-sign__stone { filter: saturate(.5) brightness(.8); }
+.adv-node[data-state="locked"] .ct-sign__no { background: #7f7a8f; }
+
+/* torches dark until reached; window lights; door opens */
+.adv-root[data-world="g3s1"] .ct-flame { fill: #4a3826; transition: fill .4s; }
+.adv-root[data-world="g3s1"] .ct-glow { opacity: 0; transition: opacity .4s; }
+.adv-node[data-state="done"] .ct-flame, .adv-node[data-state="current"] .ct-flame { fill: #ffb648; }
+.adv-node[data-state="done"] .ct-glow, .adv-node[data-state="current"] .ct-glow { opacity: 1; }
+.adv-node[data-state="done"] .ct-flame, .adv-node[data-state="current"] .ct-flame { animation: ct-flick 2.2s ease-in-out infinite; transform-origin: center bottom; }
+@keyframes ct-flick { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(.86); } }
+.adv-root[data-world="g3s1"] .ct-onlit { opacity: .2; transition: opacity .5s; }
+.adv-node[data-state="done"] .ct-onlit, .adv-node[data-state="current"] .ct-onlit { opacity: 1; }
+.adv-node[data-state="done"] .ct-onlit rect { filter: drop-shadow(0 0 8px rgba(255,200,110,.85)); }
+.adv-root[data-world="g3s1"] .ct-door { transition: fill .4s; }
+.adv-node[data-state="done"] .ct-door { fill: #2a1c0a; }
+
+.ct-star { animation: ct-tw 4s ease-in-out infinite; }
+@keyframes ct-tw { 0%,100% { opacity: .5; } 50% { opacity: .12; } }
+.ct-flag, .ct-bannerflag, .ct-wallbanner { animation: ct-wave 3.4s ease-in-out infinite; transform-origin: left center; }
+@keyframes ct-wave { 0%,100% { transform: skewX(0deg); } 50% { transform: skewX(-6deg); } }
+.adv-node.is-justdone .adv-node__art { animation: ct-pop .7s ease-out; }
+@keyframes ct-pop { 0% { transform: scale(.9); } 55% { transform: scale(1.07); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .ct-star, .ct-flame, .ct-flag, .ct-bannerflag, .ct-wallbanner, .adv-node.is-justdone .adv-node__art { animation: none !important; } }

@@ -1,73 +1,80 @@
 /*!
- * adventure/worlds/g2s2.css — «وادي الشيفرات والكنز الرقمي»
- * Cinematic Omani wadi. Distinct palette, backdrop, marker art and unlocks.
+ * adventure/worlds/g2s2.css — «وادي الشيفرات والكنز الرقمي» treasure-hunt skin.
+ * Aged-wood trail markers, a shimmering falaj, and environmental state:
+ * a completed site lights its windows / water / flame; the treasure blazes.
  */
-.adv-world[data-world="g2s2"]{
-  --adv-bg-0:#0b1420; --adv-accent:#3fd1c7; --adv-accent-2:#ffca63; --adv-gold:#ffca63;
-  --adv-glow:rgba(63,209,199,.55); --adv-ink:#f6efe0; --adv-ink-soft:rgba(246,239,224,.82);
-  --adv-panel:rgba(14,26,38,.74); --path-c:rgba(63,209,199,.55);
-  --sign-1:rgba(24,20,12,.94); --sign-2:rgba(14,12,8,.98); --sign-br:rgba(255,202,99,.28);
+
+/* larger, illustrated places for this world */
+.adv-root[data-world="g2s2"] { --node-w: 268px; --art-w: 210px; }
+.adv-root[data-world="g2s2"] .adv-node__art svg { width: 210px; }
+
+/* ---- aged wooden trail marker (the treasure-map signage) ---- */
+.wd-sign { display: flex; justify-content: center; }
+.wd-sign__plank {
+  position: relative; min-width: 156px; max-width: 250px; padding: 11px 15px 12px;
+  border-radius: 8px;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.05) 0 2px, transparent 2px 12px),
+    linear-gradient(180deg, #b9895a, #9a6a3c);
+  border: 2px solid #6f4a26;
+  box-shadow: inset 0 2px 0 rgba(255,235,200,.35), inset 0 -6px 10px rgba(70,40,15,.4), 0 14px 26px rgba(0,0,0,.45);
 }
+.wd-sign__plank::before {
+  content: ""; position: absolute; inset: 4px; border: 1.5px dashed rgba(60,35,10,.5); border-radius: 6px; pointer-events: none;
+}
+.wd-sign__no {
+  position: absolute; top: -14px; inset-inline-start: -12px;
+  width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 900; font-size: 14px; color: #3a2408;
+  background: radial-gradient(circle at 40% 35%, #ffe6a6, #e0a445);
+  border: 3px solid #7a5024; box-shadow: 0 4px 8px rgba(0,0,0,.4);
+}
+.wd-sign__name {
+  display: block; text-align: center; font-size: clamp(16px, 1.35vw, 18px); font-weight: 800; line-height: 1.4;
+  color: #2c1a08; text-shadow: 0 1px 0 rgba(255,240,215,.4); word-break: break-word;
+}
+.adv-node[data-state="current"] .wd-sign__plank { border-color: var(--adv-accent-2, #ffd76a); box-shadow: inset 0 2px 0 rgba(255,235,200,.4), 0 0 0 2px rgba(255,215,106,.5), 0 16px 30px rgba(0,0,0,.5); }
+.adv-node[data-state="current"] .wd-sign__no { background: radial-gradient(circle at 40% 35%, #fff2c4, var(--adv-accent-2, #ffd76a)); }
+.adv-node[data-state="done"] .wd-sign__no { background: radial-gradient(circle at 40% 35%, #b6f2cf, var(--adv-done, #5fd39a)); border-color: #2f8a5f; }
+.adv-node[data-state="locked"] .wd-sign__plank { filter: saturate(.6) brightness(.82); }
+.adv-node[data-state="locked"] .wd-sign__no { background: radial-gradient(circle at 40% 35%, #cdbfa8, #8b7a63); border-color: #5a4b38; color: #2a2216; }
 
-/* fixed dusk sky */
-.adv-world[data-world="g2s2"] .wd-sky{ inset:0; width:100%; height:100%;
-  background:
-    radial-gradient(120% 70% at 78% 6%, rgba(255,202,99,.22), transparent 44%),
-    radial-gradient(140% 80% at 14% 0%, rgba(63,209,199,.12), transparent 46%),
-    linear-gradient(180deg,#0a1220 0%, #10202f 42%, #17293a 72%, #1d3040 100%); }
-.adv-world[data-world="g2s2"] .wd-sun{ top:5%; inset-inline-end:12%; width:120px; height:120px; border-radius:50%;
-  background:radial-gradient(circle,#ffe6a6,#ffb64d 58%,rgba(255,182,77,0) 72%); filter:blur(2px); opacity:.85; }
+/* ---- environmental state: lit windows / water / flame only when done ---- */
+.adv-root[data-world="g2s2"] .wd-onlit,
+.adv-root[data-world="g2s2"] .wd-onwater { opacity: .22; transition: opacity .5s; }
+.adv-node[data-state="done"] .wd-onlit,
+.adv-node[data-state="current"] .wd-onlit { opacity: 1; }
+.adv-node[data-state="done"] .wd-onlit rect,
+.adv-node[data-state="done"] .wd-onlit path,
+.adv-node[data-state="done"] .wd-onlit circle { filter: drop-shadow(0 0 8px rgba(255,200,110,.8)); }
+.adv-node[data-state="done"] .wd-onwater { opacity: 1; }
+.adv-node[data-state="done"] .wd-onwater ellipse { filter: drop-shadow(0 0 8px rgba(120,235,225,.8)); }
 
-/* scrolling wadi terrain — valley walls on the sides + a continuous rocky bed */
-.adv-world[data-world="g2s2"] .wd-dunes{ inset:0; width:100%; height:100%;
-  background:
-    /* left & right valley walls */
-    linear-gradient(90deg, rgba(46,34,22,.55) 0 6%, transparent 20%),
-    linear-gradient(270deg, rgba(46,34,22,.55) 0 6%, transparent 20%),
-    /* soft central falaj bed glow following the middle */
-    radial-gradient(28% 60% at 50% 30%, rgba(63,209,199,.06), transparent 70%),
-    /* rocky texture down the whole valley */
-    repeating-linear-gradient(115deg, rgba(90,70,45,.05) 0 10px, transparent 10px 34px),
-    repeating-linear-gradient(200deg, rgba(20,28,36,.18) 0 60px, transparent 60px 160px),
-    linear-gradient(180deg, rgba(16,26,38,0), rgba(16,26,38,.25) 60%, rgba(12,20,30,.5)); }
-.adv-world[data-world="g2s2"] .wd-stars{ inset:0; width:100%; height:34%;
-  background:
-    radial-gradient(2px 2px at 20% 8%, rgba(255,255,255,.5), transparent 60%),
-    radial-gradient(1.6px 1.6px at 64% 5%, rgba(255,255,255,.4), transparent 60%),
-    radial-gradient(1.6px 1.6px at 84% 12%, rgba(255,255,255,.35), transparent 60%),
-    radial-gradient(1.6px 1.6px at 40% 4%, rgba(255,255,255,.4), transparent 60%); opacity:.7; }
+.wd-lan .wd-flame, .wd-onlit .wd-flame { fill: #ffd27a; }
+.wd-lan.is-lit .wd-glow { animation: wd-flicker 2.4s ease-in-out infinite; }
+@keyframes wd-flicker { 0%,100% { opacity: .9; } 50% { opacity: .55; } }
 
-/* keep the sign a touch narrower so it reads as a plaque under the object */
-.adv-world[data-world="g2s2"] .adv-marker__sign{ max-width:min(280px,84vw); }
+/* falaj shimmer */
+.wd-falaj { stroke-dasharray: 26 20; animation: wd-flow 3.2s linear infinite; }
+@keyframes wd-flow { to { stroke-dashoffset: -46; } }
 
-/* signs read like carved wood plaques */
-.adv-world[data-world="g2s2"] .adv-marker__no{ background:linear-gradient(135deg,#3fd1c7,#ffca63); }
+/* stars twinkle (subtle, cheap) */
+.wd-star { animation: wd-tw 4s ease-in-out infinite; }
+@keyframes wd-tw { 0%,100% { opacity: .5; } 50% { opacity: .15; } }
 
-/* ---- marker art base tones ---- */
-.adv-world[data-world="g2s2"] .wd-flame{ fill:#6b7480; transition:fill .45s, filter .45s; }
-.adv-world[data-world="g2s2"] .wd-win{ fill:#1b2530; transition:fill .45s, filter .45s; }
-.adv-world[data-world="g2s2"] .wd-water{ fill:#31424e; transition:fill .45s; }
-.adv-world[data-world="g2s2"] .wd-lantern{ transform-origin:65px 13px; }
-.adv-world[data-world="g2s2"] [data-state="current"] .wd-lantern{ animation:wd-sway 3.5s ease-in-out infinite; }
-@keyframes wd-sway{ 0%,100%{ transform:rotate(-4deg) } 50%{ transform:rotate(4deg) } }
+/* the treasure comes alive when the world is complete / node done */
+.adv-root[data-world="g2s2"] .wd-rays { opacity: 0; transform-origin: center; }
+.adv-root[data-world="g2s2"] .wd-trglow { opacity: .35; transition: opacity .6s; }
+.adv-node[data-state="done"] .wd-rays { opacity: .9; animation: wd-spin 14s linear infinite; }
+.adv-node[data-state="done"] .wd-trglow { opacity: 1; }
+.adv-node[data-state="done"] .wd-gems .wd-spark { animation: wd-twinkle 1.6s ease-in-out infinite; }
+@keyframes wd-spin { to { transform: rotate(360deg); } }
+@keyframes wd-twinkle { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .4; transform: scale(.7); } }
 
-/* ---- DONE reactions (work for desktop markers and mobile legs) ---- */
-.adv-world[data-world="g2s2"] [data-state="done"] .wd-flame{ fill:#ffca63; filter:drop-shadow(0 0 6px rgba(255,202,99,.95)); }
-.adv-world[data-world="g2s2"] [data-state="done"] .wd-win{ fill:#ffd77a; filter:drop-shadow(0 0 7px rgba(255,202,99,.9)); }
-.adv-world[data-world="g2s2"] [data-state="done"] .wd-water{ fill:#3fd1c7; filter:drop-shadow(0 0 6px var(--adv-glow)); }
-.adv-world[data-world="g2s2"] [data-state="current"] .wd-flame{ fill:#ffe0a0; }
+/* just-completed flourish */
+.adv-node.is-justdone .adv-node__art { animation: wd-pop .7s ease-out; }
+@keyframes wd-pop { 0% { transform: scale(.9); } 55% { transform: scale(1.08); } 100% { transform: scale(1); } }
 
-/* treasure: rays + glow when the final mission is done */
-.adv-world[data-world="g2s2"] .wd-treasure-rays path{ transition:opacity .6s; }
-.adv-world[data-world="g2s2"] [data-state="done"] .wd-treasure-rays path{ opacity:.55; animation:wd-rays 3s ease-in-out infinite; }
-.adv-world[data-world="g2s2"] [data-state="done"] .wd-lock{ filter:drop-shadow(0 0 8px var(--adv-gold)); }
-@keyframes wd-rays{ 0%,100%{ opacity:.35 } 50%{ opacity:.7 } }
-.adv-world[data-world="g2s2"] .wd-treasure .adv-marker__art{ filter:drop-shadow(0 16px 20px rgba(0,0,0,.5)); }
-
-/* world-complete: warm wash */
-.adv-world[data-world="g2s2"].is-worlddone .adv-backdrop{ filter:saturate(1.12) brightness(1.07); transition:filter 1.2s ease; }
-
-@media (prefers-reduced-motion:reduce){
-  .adv-world[data-world="g2s2"] [data-state] .wd-lantern,
-  .adv-world[data-world="g2s2"] .wd-treasure-rays path{ animation:none!important; }
+@media (prefers-reduced-motion: reduce) {
+  .wd-falaj, .wd-star, .wd-rays, .wd-trglow, .wd-lan .wd-glow, .wd-gems .wd-spark, .adv-node.is-justdone .adv-node__art { animation: none !important; }
 }

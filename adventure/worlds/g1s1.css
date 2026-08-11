@@ -1,0 +1,47 @@
+/*!
+ * adventure/worlds/g1s1.css — «قرية التقنية المفقودة» bright village skin.
+ * Friendly painted village signboards; windows / falaj / gears come alive when
+ * a place is completed. Grade-1: sunny and warm.
+ */
+.adv-root[data-world="g1s1"] { --node-w: 262px; --art-w: 208px; }
+.adv-root[data-world="g1s1"] .adv-node__art svg { width: 208px; }
+
+/* painted village signboard on a little post */
+.vg-sign { display: flex; justify-content: center; }
+.vg-sign__board {
+  position: relative; min-width: 150px; max-width: 250px; padding: 11px 16px 12px;
+  border-radius: 16px; background: linear-gradient(180deg, #fff6e6, #ffe9c6);
+  border: 3px solid #e0a83a; box-shadow: 0 3px 0 #d98f2c, 0 14px 24px rgba(120,80,20,.32);
+}
+.vg-sign__board::after { content: ""; position: absolute; left: 50%; top: -12px; transform: translateX(-50%); width: 6px; height: 12px; background: #cf9a4a; border-radius: 3px; }
+.vg-sign__no {
+  position: absolute; top: -13px; inset-inline-start: -10px; width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 900; font-size: 15px; color: #fff;
+  background: radial-gradient(circle at 40% 35%, #6fd0e8, var(--adv-accent, #2fa8c9)); border: 3px solid #fff; box-shadow: 0 3px 7px rgba(0,0,0,.28);
+}
+.vg-sign__name { display: block; text-align: center; font-size: clamp(16px, 1.35vw, 18px); font-weight: 800; line-height: 1.4; color: #3a2a12; word-break: break-word; }
+.adv-node[data-state="current"] .vg-sign__board { border-color: var(--adv-accent-2, #ffb43e); box-shadow: 0 3px 0 #d98f2c, 0 0 0 3px rgba(255,180,62,.5), 0 16px 26px rgba(120,80,20,.4); }
+.adv-node[data-state="current"] .vg-sign__no { background: radial-gradient(circle at 40% 35%, #ffe0a0, var(--adv-accent-2, #ffb43e)); }
+.adv-node[data-state="done"] .vg-sign__no { background: radial-gradient(circle at 40% 35%, #bff0d2, var(--adv-done, #57c98a)); }
+.adv-node[data-state="locked"] .vg-sign__board { filter: saturate(.55) brightness(.94); }
+.adv-node[data-state="locked"] .vg-sign__no { background: radial-gradient(circle at 40% 35%, #d7dee4, #9aa7b3); }
+
+/* environmental state: windows/water/gears dim until the place is reached */
+.adv-root[data-world="g1s1"] .vg-onlit,
+.adv-root[data-world="g1s1"] .vg-onwater { opacity: .28; transition: opacity .5s; }
+.adv-node[data-state="done"] .vg-onlit, .adv-node[data-state="current"] .vg-onlit { opacity: 1; }
+.adv-node[data-state="done"] .vg-onlit rect { filter: drop-shadow(0 0 7px rgba(255,200,90,.85)); }
+.adv-node[data-state="done"] .vg-onwater { opacity: 1; }
+.adv-node[data-state="done"] .vg-onwater ellipse { filter: drop-shadow(0 0 7px rgba(90,220,210,.8)); }
+.adv-root[data-world="g1s1"] .vg-gear { transform-box: fill-box; transform-origin: center; }
+.adv-node[data-state="done"] .vg-gear { animation: vg-spin 6s linear infinite; }
+@keyframes vg-spin { to { transform: rotate(360deg); } }
+
+.vg-falaj { stroke-dasharray: 22 18; animation: vg-flow 3s linear infinite; }
+@keyframes vg-flow { to { stroke-dashoffset: -40; } }
+.vg-cloud { animation: vg-drift 26s linear infinite; }
+@keyframes vg-drift { 0% { transform: translateX(0); } 100% { transform: translateX(40px); } }
+.adv-node.is-justdone .adv-node__art { animation: vg-pop .7s ease-out; }
+@keyframes vg-pop { 0% { transform: scale(.9); } 55% { transform: scale(1.08); } 100% { transform: scale(1); } }
+
+@media (prefers-reduced-motion: reduce) { .vg-falaj, .vg-cloud, .vg-gear, .adv-node.is-justdone .adv-node__art { animation: none !important; } }

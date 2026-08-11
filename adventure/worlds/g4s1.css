@@ -1,0 +1,43 @@
+/*!
+ * adventure/worlds/g4s1.css — «استوديو الإنتاج الرقمي» studio-lot skin.
+ * Illuminated marquee signage; a facility's screens and «ON AIR» light on
+ * completion. Professional.
+ */
+.adv-root[data-world="g4s1"] { --node-w: 264px; --art-w: 198px; }
+.adv-root[data-world="g4s1"] .adv-node__art svg { width: 198px; }
+
+/* illuminated studio marquee */
+.st-sign { display: flex; justify-content: center; }
+.st-sign__marquee {
+  position: relative; min-width: 154px; max-width: 250px; padding: 10px 15px 11px; border-radius: 10px;
+  background: linear-gradient(180deg, #202638, #141824); border: 1.5px solid rgba(143,220,255,.4);
+  box-shadow: inset 0 0 0 3px rgba(255,255,255,.04), 0 0 16px rgba(138,90,208,.28), 0 12px 24px rgba(0,0,0,.55);
+}
+.st-sign__marquee::before { content: ""; position: absolute; inset: -1px; border-radius: 10px; padding: 1px; pointer-events: none;
+  background: repeating-linear-gradient(90deg, rgba(255,210,120,.55) 0 6px, transparent 6px 12px); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: .5; }
+.st-sign__no { position: absolute; top: -13px; inset-inline-start: -10px; width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; font-weight: 900; font-size: 14px; color: #fff; background: linear-gradient(180deg, #b98aff, var(--adv-accent, #8a5ad0)); border: 2px solid #14101f; box-shadow: 0 0 12px rgba(138,90,208,.7); }
+.st-sign__name { display: block; text-align: center; font-size: clamp(16px, 1.3vw, 18px); font-weight: 800; line-height: 1.4; color: #eaf1ff; word-break: break-word; }
+.adv-node[data-state="current"] .st-sign__marquee { border-color: var(--adv-accent-2, #ff7ac0); box-shadow: 0 0 20px rgba(255,122,192,.4), 0 12px 24px rgba(0,0,0,.55); }
+.adv-node[data-state="current"] .st-sign__no { background: linear-gradient(180deg, #ffb0d8, var(--adv-accent-2, #ff7ac0)); color: #2a0416; }
+.adv-node[data-state="locked"] .st-sign__marquee { filter: saturate(.4) brightness(.72); }
+.adv-node[data-state="locked"] .st-sign__no { background: #5a6072; }
+
+/* screens dark and ON AIR off until reached */
+.adv-root[data-world="g4s1"] .st-onlit { opacity: .12; transition: opacity .5s; }
+.adv-node[data-state="done"] .st-onlit, .adv-node[data-state="current"] .st-onlit { opacity: 1; }
+.adv-node[data-state="done"] .st-onlit rect { filter: drop-shadow(0 0 7px rgba(120,180,255,.7)); }
+.adv-root[data-world="g4s1"] .st-onair { opacity: .2; transition: opacity .4s; }
+.adv-node[data-state="done"] .st-onair { opacity: 1; }
+.adv-node[data-state="done"] .st-onair { animation: st-blink 1.6s step-end infinite; }
+@keyframes st-blink { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
+
+.st-beam { animation: st-sweep 6s ease-in-out infinite; transform-origin: top center; }
+.st-beam:nth-child(odd) { animation-delay: -3s; }
+@keyframes st-sweep { 0%,100% { transform: rotate(-4deg); opacity: .8; } 50% { transform: rotate(4deg); opacity: 1; } }
+.st-billboard { animation: st-flow 5s ease-in-out infinite; }
+@keyframes st-flow { 0%,100% { opacity: .4; } 50% { opacity: .7; } }
+.st-cable { animation: st-pulse 2.4s linear infinite; }
+@keyframes st-pulse { to { stroke-dashoffset: -34; } }
+.adv-node.is-justdone .adv-node__art { animation: st-pop .7s ease-out; }
+@keyframes st-pop { 0% { transform: scale(.9); } 55% { transform: scale(1.08); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .st-beam, .st-billboard, .st-cable, .st-onair, .adv-node.is-justdone .adv-node__art { animation: none !important; } }

@@ -20,7 +20,7 @@
  */
 "use strict";
 
-var CACHE_VERSION = "v3.4.0-adventure-worlds-2026-08-11";
+var CACHE_VERSION = "v4.0.0-adventure-gameworlds-2026-08-11";
 var SHELL = "waha-shell-" + CACHE_VERSION;
 var RUNTIME = "waha-runtime-" + CACHE_VERSION;
 
@@ -55,8 +55,14 @@ var SHELL_PRECACHE = [
   "./adventure/scenery.js",
   "./adventure/gate.css",
   "./adventure/gate.js",
-  "./adventure/worlds/worlds.css",
+  "./adventure/worlds/g1s1.css",
+  "./adventure/worlds/g1s2.css",
+  "./adventure/worlds/g2s1.css",
   "./adventure/worlds/g2s2.css",
+  "./adventure/worlds/g3s1.css",
+  "./adventure/worlds/g3s2.css",
+  "./adventure/worlds/g4s1.css",
+  "./adventure/worlds/g4s2.css",
   "./adventure/worlds/g1s1.js",
   "./adventure/worlds/g1s2.js",
   "./adventure/worlds/g2s1.js",

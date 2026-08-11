@@ -1,0 +1,35 @@
+/*!
+ * adventure/worlds/g2s1.css — «متحف المخترعين السري» museum skin.
+ * Brass plaques; a hall's spotlight and exhibit artifact light up on completion.
+ */
+.adv-root[data-world="g2s1"] { --node-w: 268px; --art-w: 196px; }
+.adv-root[data-world="g2s1"] .adv-node__art svg { width: 196px; }
+
+/* brass museum plaque on an easel */
+.ms-sign { display: flex; justify-content: center; }
+.ms-sign__plate {
+  position: relative; min-width: 156px; max-width: 252px; padding: 10px 15px 11px; border-radius: 8px;
+  background: linear-gradient(180deg, #e6c977, #c9a24b); border: 2px solid #8a6a2c;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 -4px 8px rgba(90,60,10,.4), 0 12px 22px rgba(0,0,0,.45);
+}
+.ms-sign__plate::before { content: ""; position: absolute; inset: 4px; border: 1px solid rgba(90,60,10,.45); border-radius: 5px; pointer-events: none; }
+.ms-sign__no { position: absolute; top: -13px; inset-inline-start: -10px; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 900; font-size: 14px; color: #3a2a08; background: radial-gradient(circle at 40% 35%, #fff0c0, #d9b24a); border: 3px solid #8a6a2c; box-shadow: 0 3px 7px rgba(0,0,0,.4); }
+.ms-sign__name { display: block; text-align: center; font-size: clamp(16px, 1.3vw, 18px); font-weight: 800; line-height: 1.4; color: #2a1e08; word-break: break-word; text-shadow: 0 1px 0 rgba(255,240,200,.5); }
+.adv-node[data-state="current"] .ms-sign__plate { box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 0 0 2px rgba(255,216,115,.7), 0 14px 26px rgba(0,0,0,.5); }
+.adv-node[data-state="done"] .ms-sign__no { background: radial-gradient(circle at 40% 35%, #bff0e0, var(--adv-done, #6fd0b0)); border-color: #2f7a63; }
+.adv-node[data-state="locked"] .ms-sign__plate { filter: saturate(.5) brightness(.72); }
+.adv-node[data-state="locked"] .ms-sign__no { background: #7f8aa2; border-color: #4a5268; color: #1a2033; }
+
+/* the hall archway + exhibit come alive when lit */
+.adv-root[data-world="g2s1"] .ms-hall { fill: #0e1424; transition: fill .5s; }
+.adv-node[data-state="done"] .ms-hall, .adv-node[data-state="current"] .ms-hall { fill: #2a3450; }
+.adv-root[data-world="g2s1"] .ms-onlit { opacity: 0; transition: opacity .5s; }
+.adv-node[data-state="done"] .ms-onlit, .adv-node[data-state="current"] .ms-onlit { opacity: 1; }
+.adv-root[data-world="g2s1"] .ms-artifact { filter: saturate(.4) brightness(.6); transition: filter .5s; }
+.adv-node[data-state="done"] .ms-artifact { filter: drop-shadow(0 0 10px rgba(120,200,255,.9)); }
+.adv-root[data-world="g2s1"] .ms-star { opacity: 0; }
+.adv-node[data-state="done"] .ms-star { opacity: 1; animation: ms-tw 1.8s ease-in-out infinite; }
+@keyframes ms-tw { 0%,100% { opacity: 1; transform: translate(0,-4px) scale(.7); } 50% { opacity: .3; transform: translate(0,-4px) scale(.5); } }
+.adv-node.is-justdone .adv-node__art { animation: ms-pop .7s ease-out; }
+@keyframes ms-pop { 0% { transform: scale(.9); } 55% { transform: scale(1.07); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .ms-star, .adv-node.is-justdone .adv-node__art { animation: none !important; } }

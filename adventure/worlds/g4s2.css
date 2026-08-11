@@ -1,0 +1,45 @@
+/*!
+ * adventure/worlds/g4s2.css — «محطة المستقبل والبيانات» station skin.
+ * Module display panels; a module's ring, screen and dish power on when the
+ * energy reaches it. Futuristic, holographic.
+ */
+.adv-root[data-world="g4s2"] { --node-w: 250px; --art-w: 176px; }
+.adv-root[data-world="g4s2"] .adv-node__art svg { width: 176px; }
+
+/* module display panel */
+.sp-sign { display: flex; justify-content: center; }
+.sp-sign__panel {
+  position: relative; min-width: 150px; max-width: 240px; padding: 10px 15px 11px; border-radius: 10px;
+  background: linear-gradient(180deg, rgba(12,28,52,.92), rgba(6,16,34,.92));
+  border: 1.5px solid rgba(79,195,255,.5);
+  box-shadow: 0 0 16px rgba(79,195,255,.22), 0 12px 24px rgba(0,0,0,.55);
+}
+.sp-sign__panel::before { content: ""; position: absolute; inset: 3px; border: 1px solid rgba(79,195,255,.18); border-radius: 8px; pointer-events: none; }
+.sp-sign__no { position: absolute; top: -13px; inset-inline-start: -10px; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 900; font-size: 13.5px; color: #04121f; background: radial-gradient(circle at 40% 35%, #d8f6ff, var(--adv-accent, #4fc3ff)); border: 2px solid #0a1830; box-shadow: 0 0 12px rgba(79,195,255,.7); }
+.sp-sign__name { display: block; text-align: center; font-size: clamp(16px, 1.3vw, 18px); font-weight: 800; line-height: 1.4; color: #dff3ff; word-break: break-word; text-shadow: 0 0 8px rgba(79,195,255,.35); }
+.adv-node[data-state="current"] .sp-sign__panel { border-color: var(--adv-accent-2, #8ff0ff); box-shadow: 0 0 22px rgba(143,240,255,.4), 0 12px 24px rgba(0,0,0,.55); }
+.adv-node[data-state="done"] .sp-sign__no { background: radial-gradient(circle at 40% 35%, #c0fff0, var(--adv-done, #4fe0c0)); }
+.adv-node[data-state="locked"] .sp-sign__panel { filter: saturate(.4) brightness(.7); border-color: rgba(74,85,106,.5); }
+.adv-node[data-state="locked"] .sp-sign__no { background: #4a556a; }
+
+/* power state: module contents off until energy arrives */
+.adv-root[data-world="g4s2"] .sp-onlit { opacity: 0; transition: opacity .5s; }
+.adv-node[data-state="done"] .sp-onlit, .adv-node[data-state="current"] .sp-onlit { opacity: 1; }
+.adv-root[data-world="g4s2"] .sp-ring-off { opacity: 1; transition: opacity .5s; }
+.adv-node[data-state="done"] .sp-ring-off, .adv-node[data-state="current"] .sp-ring-off { opacity: 0; }
+.adv-node[data-state="done"] .sp-screen { filter: drop-shadow(0 0 7px rgba(120,220,255,.8)); }
+.adv-node[data-state="done"] .sp-blip { animation: sp-blip 1.6s ease-in-out infinite; }
+@keyframes sp-blip { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+
+/* the data core is always alive */
+.sp-corepulse { animation: sp-core 3s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+@keyframes sp-core { 0%,100% { opacity: 1; } 50% { opacity: .5; } }
+.sp-corering { animation: sp-spin 30s linear infinite; transform-origin: center; transform-box: fill-box; }
+@keyframes sp-spin { to { transform: rotate(360deg); } }
+.sp-conduit { animation: sp-flow 2s linear infinite; }
+@keyframes sp-flow { to { stroke-dashoffset: -34; } }
+.sp-star { animation: sp-tw 3.5s ease-in-out infinite; }
+@keyframes sp-tw { 0%,100% { opacity: .6; } 50% { opacity: .15; } }
+.adv-node.is-justdone .adv-node__art { animation: sp-pop .7s ease-out; }
+@keyframes sp-pop { 0% { transform: scale(.9); } 55% { transform: scale(1.08); } 100% { transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .sp-corepulse, .sp-corering, .sp-conduit, .sp-star, .sp-blip, .adv-node.is-justdone .adv-node__art { animation: none !important; } }
