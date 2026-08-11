@@ -90,6 +90,10 @@
     return !!(e && typeof e === "object" && (e.done === true || e.mastered === true || e.completed === true));
   }
   function defaultReadDone(parsed, lesson) {
+    /* Prefer the shared adapter (adventure/progress.js) so the gate and the
+       engine decide "completed" identically. Fall back to an equivalent local
+       implementation if the shared module is not present. */
+    if (global.AdvProgress) return global.AdvProgress.doneInBlob(parsed, lesson.id);
     if (!parsed || typeof parsed !== "object") return false;
     var id = lesson.id, buckets = [];
     if (parsed.progress && parsed.progress.lessons) buckets.push(parsed.progress.lessons);
@@ -346,8 +350,9 @@
   };
 
   Engine.prototype.enterLesson = function (l) {
-    /* remember presentation target (optional, non-authoritative) */
-    try { global.sessionStorage.setItem("adv:target:" + this.world.code, l.id); } catch (e) {}
+    /* Hand the target to the navigation bridge (id to open, title to verify). */
+    try { global.sessionStorage.setItem("adv:target:" + this.world.code,
+      JSON.stringify({ id: l.id, no: l.no, ar: l.ar })); } catch (e) {}
     this.openMission();
   };
 

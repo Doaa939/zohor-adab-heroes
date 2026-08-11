@@ -44,31 +44,12 @@
     return out;
   }
   function purgeNS(code) { nsKeys(code).forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} }); }
-  function hasProgress(code) {
-    var ks = nsKeys(code), i, raw, j, p, id;
-    for (i = 0; i < ks.length; i++) {
-      try { raw = localStorage.getItem(ks[i]); j = JSON.parse(raw); } catch (e) { j = null; }
-      if (!j) continue;
-      p = j.progress || (j.lessons) || null;
-      if (p && typeof p === "object") {
-        for (id in p) if (Object.prototype.hasOwnProperty.call(p, id)) {
-          if (p[id] && (p[id].done || p[id].completed || p[id].mastered)) return doneCount(code);
-        }
-      }
-    }
-    return 0;
-  }
+  /* Completed-mission count via the SHARED adapter (adventure/progress.js), so the
+     gate and the world engine decide "completed" identically for every platform
+     shape. Falls back to a namespace check if the shared module is unavailable. */
   function doneCount(code) {
-    var ks = nsKeys(code), i, raw, j, p, id, n = 0, seen = {};
-    for (i = 0; i < ks.length; i++) {
-      try { j = JSON.parse(localStorage.getItem(ks[i])); } catch (e) { j = null; }
-      if (!j) continue;
-      p = j.progress || null;
-      if (p && typeof p === "object") for (id in p) if (Object.prototype.hasOwnProperty.call(p, id)) {
-        if (!seen[id] && p[id] && (p[id].done || p[id].completed || p[id].mastered)) { seen[id] = 1; n++; }
-      }
-    }
-    return n;
+    if (window.AdvProgress) return window.AdvProgress.count(code);
+    return nsKeys(code).length ? 1 : 0;
   }
   function markSkip(code) { try { sessionStorage.setItem("waha:gate:" + code, "1"); } catch (e) {} }
 
@@ -100,6 +81,7 @@
     trap(scrim, close);
 
     var progress = doneCount(ctx.code);
+    var hasPrior = window.AdvProgress ? window.AdvProgress.hasAny(ctx.code) : (progress > 0);
     var termLabel = "الصف " + arabicOrdinal(ctx.grade) + " · الفصل الدراسي " + (ctx.term === "2" ? "الثاني" : "الأول");
 
     function renderMode(sessionNote) {
@@ -200,7 +182,7 @@
     doc.documentElement.style.setProperty("overflow", "hidden");
     doc.body.appendChild(scrim);
     /* If prior progress exists, resolve session first; else go straight to mode. */
-    if (progress > 0) renderSession(); else renderMode();
+    if (hasPrior) renderSession(); else renderMode();
   }
 
   function toArabic(v) {
