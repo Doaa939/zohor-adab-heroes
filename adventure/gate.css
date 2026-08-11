@@ -1,0 +1,81 @@
+/*!
+ * adventure/gate.css — بوابة الدخول الموحّدة (الجلسة + الوضع) على صفحة الصف
+ * Unified session + mode entry gate, shown as an overlay after a semester is
+ * chosen on the grade page. Presentation layer; reuses the platform's own
+ * per-semester session-skip flag so there is a single source of truth.
+ */
+.wg-scrim{
+  position:fixed; inset:0; z-index:2147483000;
+  display:grid; place-items:center; padding:18px;
+  background:rgba(4,10,18,.66); backdrop-filter:blur(6px);
+  animation:wg-fade .25s ease;
+  font-family:"Tajawal","Noto Kufi Arabic",system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
+}
+@keyframes wg-fade{ from{opacity:0} to{opacity:1} }
+.wg-card{
+  width:min(560px,100%); max-height:calc(100svh - 36px); overflow:auto;
+  background:linear-gradient(180deg,#0e1f30,#0a1723);
+  border:1px solid rgba(120,190,255,.2); border-radius:22px;
+  box-shadow:0 30px 80px rgba(0,0,0,.6); color:#eef5ff;
+  padding:clamp(18px,4vw,30px);
+  animation:wg-rise .3s cubic-bezier(.22,.61,.36,1);
+}
+@keyframes wg-rise{ from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+.wg-eyebrow{ margin:0 0 4px; font-size:13px; font-weight:800; letter-spacing:.4px; color:#7fd8cb }
+.wg-title{ margin:0 0 2px; font-size:clamp(20px,4vw,26px); font-weight:800 }
+.wg-sub{ margin:0 0 18px; font-size:15px; color:rgba(238,245,255,.75); line-height:1.6 }
+
+.wg-choices{ display:grid; gap:14px; grid-template-columns:1fr 1fr }
+@media (max-width:520px){ .wg-choices{ grid-template-columns:1fr } }
+
+.wg-choice{
+  display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center;
+  min-height:150px; padding:20px 16px; cursor:pointer; color:inherit; font:inherit;
+  border:1px solid rgba(255,255,255,.14); border-radius:18px;
+  background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(0,0,0,.14));
+  transition:transform .18s,border-color .2s,box-shadow .2s;
+}
+.wg-choice:hover{ transform:translateY(-4px); border-color:#7fd8cb; box-shadow:0 16px 40px rgba(0,0,0,.4) }
+.wg-choice:focus-visible{ outline:3px solid #ffcf7a; outline-offset:3px }
+.wg-choice__icon{ width:52px; height:52px }
+.wg-choice__icon svg{ width:100%; height:100%; fill:none; stroke:currentColor; stroke-width:1.6 }
+.wg-choice--adv{ --c:#ffcf7a } .wg-choice--adv .wg-choice__icon{ color:#ffcf7a }
+.wg-choice--basic{ --c:#7fd8cb } .wg-choice--basic .wg-choice__icon{ color:#7fd8cb }
+.wg-choice__t{ font-size:18px; font-weight:800 }
+.wg-choice__d{ font-size:13px; color:rgba(238,245,255,.72); line-height:1.5 }
+
+/* session step */
+.wg-sessions{ display:grid; gap:12px; margin-bottom:6px }
+.wg-btn{
+  display:flex; align-items:center; gap:12px; width:100%;
+  min-height:56px; padding:12px 16px; cursor:pointer; text-align:start; color:inherit; font:inherit;
+  border:1px solid rgba(255,255,255,.16); border-radius:16px;
+  background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(0,0,0,.12));
+  transition:transform .15s,border-color .2s;
+}
+.wg-btn:hover{ transform:translateY(-2px); border-color:#7fd8cb }
+.wg-btn:focus-visible{ outline:3px solid #ffcf7a; outline-offset:2px }
+.wg-btn__ic{ flex:0 0 auto; width:40px; height:40px; display:grid; place-items:center;
+  border-radius:12px; background:rgba(127,216,203,.14) }
+.wg-btn__ic svg{ width:22px; height:22px; fill:currentColor }
+.wg-btn__body{ display:flex; flex-direction:column; line-height:1.35 }
+.wg-btn__t{ font-size:16px; font-weight:800 }
+.wg-btn__d{ font-size:13px; color:rgba(238,245,255,.72) }
+.wg-btn--primary{ background:linear-gradient(160deg,rgba(127,216,203,.2),rgba(127,216,203,.06));
+  border-color:rgba(127,216,203,.5) }
+.wg-btn--danger .wg-btn__ic{ background:rgba(255,140,140,.16); color:#ff9a9a }
+
+.wg-foot{ margin-top:16px; font-size:12.5px; color:rgba(238,245,255,.55); text-align:center; line-height:1.6 }
+.wg-back{ margin-top:14px; background:none; border:0; color:#7fd8cb; font:inherit; font-weight:700;
+  cursor:pointer; padding:8px; min-height:44px }
+.wg-back:hover{ text-decoration:underline }
+
+/* confirm */
+.wg-confirm .wg-title{ color:#ffcf7a }
+.wg-row{ display:flex; gap:10px; margin-top:8px }
+.wg-row .wg-btn{ justify-content:center }
+
+@media (prefers-reduced-motion:reduce){
+  .wg-scrim,.wg-card{ animation:none }
+  .wg-choice:hover,.wg-btn:hover{ transform:none }
+}

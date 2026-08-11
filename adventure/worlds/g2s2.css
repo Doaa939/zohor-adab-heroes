@@ -1,0 +1,116 @@
+/*!
+ * adventure/worlds/g2s2.css — عالم «وادي الشيفرات والكنز الرقمي»
+ * Grade 2 · Semester 2 — cinematic Omani wadi. Exploration / treasure journey.
+ * Navigation metaphor: a winding valley trail with a falaj, ending at the treasure.
+ * Presentation only. Distinct composition, palette, and unlock behaviour.
+ */
+
+.adv-world[data-world="g2s2"]{
+  --adv-bg-0:#0b1420;
+  --adv-bg-1:#132436;
+  --adv-accent:#3fd1c7;      /* falaj water */
+  --adv-accent-2:#ffca63;    /* lantern / treasure gold */
+  --adv-gold:#ffca63;
+  --adv-glow:rgba(63,209,199,.5);
+  --adv-ink:#f6efe0;
+  --adv-ink-soft:rgba(246,239,224,.82);
+  --adv-panel:rgba(14,26,38,.74);
+}
+
+/* ---- cinematic backdrop: dusk sky over the valley ---- */
+.adv-world[data-world="g2s2"] .adv-backdrop{
+  background:
+    radial-gradient(120% 80% at 78% -10%, rgba(255,202,99,.20), transparent 46%),
+    radial-gradient(140% 90% at 12% 0%, rgba(63,209,199,.12), transparent 50%),
+    linear-gradient(180deg,#0a1220 0%, #10202f 44%, #17293a 70%, #1d3040 100%);
+}
+/* soft stars / dust */
+.adv-world[data-world="g2s2"] .adv-sky-haze{
+  inset:0;
+  background:
+    radial-gradient(2px 2px at 20% 24%, rgba(255,255,255,.5), transparent 60%),
+    radial-gradient(1.6px 1.6px at 64% 16%, rgba(255,255,255,.4), transparent 60%),
+    radial-gradient(1.6px 1.6px at 84% 30%, rgba(255,255,255,.35), transparent 60%),
+    radial-gradient(2px 2px at 42% 12%, rgba(255,255,255,.4), transparent 60%);
+  opacity:.7;
+}
+.adv-world[data-world="g2s2"] .adv-far{ left:0; right:0; bottom:0; top:0; width:100%; height:100%; opacity:.9 }
+.adv-world[data-world="g2s2"] .adv-far svg{ width:100%; height:100% }
+.adv-world[data-world="g2s2"] .adv-sun{
+  top:6%; inset-inline-end:12%; width:130px; height:130px; border-radius:50%;
+  background:radial-gradient(circle,#ffe6a6,#ffb64d 60%,rgba(255,182,77,0) 72%);
+  filter:blur(2px); opacity:.8;
+}
+.adv-world[data-world="g2s2"] .adv-haze-bottom{
+  left:0; right:0; bottom:0; height:44%; width:100%;
+  background:linear-gradient(180deg,transparent, rgba(10,18,28,.5) 60%, rgba(10,18,28,.85));
+}
+
+/* ---- station = a stone waypoint / lantern post in the wadi ---- */
+.adv-world[data-world="g2s2"] .adv-place{
+  background:
+    linear-gradient(163deg, rgba(58,44,30,.55), rgba(20,26,34,.5)),
+    linear-gradient(180deg, #2a3b46, #1a2830);
+  border-color:rgba(255,202,99,.18);
+}
+/* carved stone texture */
+.adv-world[data-world="g2s2"] .adv-place__art{
+  background:
+    radial-gradient(60% 40% at 50% 0%, rgba(255,202,99,.10), transparent 60%),
+    repeating-linear-gradient(180deg, rgba(255,255,255,.03) 0 2px, transparent 2px 22px);
+}
+/* the falaj water ribbon runs along the bottom of each place */
+.adv-world[data-world="g2s2"] .adv-falaj{
+  position:absolute; left:0; right:0; bottom:0; height:10px; z-index:2;
+  background:linear-gradient(90deg, rgba(63,209,199,.12), rgba(63,209,199,.05));
+  overflow:hidden;
+}
+.adv-world[data-world="g2s2"] .adv-falaj::before{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(90deg, transparent, rgba(120,240,230,.6), transparent);
+  transform:translateX(-100%);
+}
+/* lantern icon top-start */
+.adv-world[data-world="g2s2"] .adv-lantern{
+  position:absolute; z-index:3; inset-block-start:12px; inset-inline-end:12px;
+  width:26px; height:34px; opacity:.5; transition:opacity .4s;
+}
+.adv-world[data-world="g2s2"] .adv-lantern svg{ width:100%; height:100%; }
+.adv-world[data-world="g2s2"] .adv-lantern .flame{ fill:#6b7480; transition:fill .4s, filter .4s; }
+
+/* DONE: lantern lit + falaj flows */
+.adv-world[data-world="g2s2"] .adv-station[data-state="done"] .adv-lantern{ opacity:1 }
+.adv-world[data-world="g2s2"] .adv-station[data-state="done"] .adv-lantern .flame{
+  fill:#ffca63; filter:drop-shadow(0 0 6px rgba(255,202,99,.9)); }
+.adv-world[data-world="g2s2"] .adv-station[data-state="done"] .adv-falaj::before{
+  animation:g2s2-flow 2.6s linear infinite; }
+.adv-world[data-world="g2s2"] .adv-station[data-state="current"] .adv-lantern{ opacity:.85 }
+.adv-world[data-world="g2s2"] .adv-station[data-state="current"] .adv-lantern .flame{ fill:#ffe0a0 }
+
+@keyframes g2s2-flow{ from{ transform:translateX(-100%) } to{ transform:translateX(100%) } }
+
+/* the last mission (the project) reads as the treasure chamber */
+.adv-world[data-world="g2s2"] .adv-station--treasure .adv-place{
+  border-color:rgba(255,202,99,.5);
+  background:
+    linear-gradient(163deg, rgba(255,202,99,.14), rgba(20,26,34,.5)),
+    linear-gradient(180deg, #33404a, #1a2830);
+}
+.adv-world[data-world="g2s2"] .adv-station--treasure[data-state="done"] .adv-place{
+  box-shadow:0 18px 46px rgba(0,0,0,.5), 0 0 44px rgba(255,202,99,.6);
+}
+.adv-world[data-world="g2s2"] .adv-treasure-glow{
+  position:absolute; inset:0; z-index:1; opacity:0; transition:opacity .6s;
+  background:radial-gradient(60% 50% at 50% 60%, rgba(255,202,99,.4), transparent 70%);
+}
+.adv-world[data-world="g2s2"] .adv-station--treasure[data-state="done"] .adv-treasure-glow{ opacity:1 }
+
+/* world-complete: warm valley wash */
+.adv-world[data-world="g2s2"].is-worlddone .adv-backdrop{
+  filter:saturate(1.1) brightness(1.06);
+  transition:filter 1.2s ease;
+}
+
+@media (prefers-reduced-motion:reduce){
+  .adv-world[data-world="g2s2"] .adv-falaj::before{ animation:none; transform:none; opacity:.4 }
+}

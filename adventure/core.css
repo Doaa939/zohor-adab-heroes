@@ -1,0 +1,346 @@
+/*!
+ * adventure/core.css — طبقة تجربة المغامرة (اختيارية) فوق منصة واحة التقنية
+ * Shared Adventure experience framework. NOT part of any lesson. Presentation
+ * only — lesson completion is read from the original platform's progress.
+ * إعداد الطبقة الإضافية فوق عمل الأستاذة دعاء الجرواني — لا يمسّ المحتوى التعليمي.
+ *
+ * Design contract enforced here:
+ *  - Arabic lesson names never below 16px, never clipped, never ellipsized.
+ *  - Every mission label sits in its own safe box (layout-guaranteed, no overlap).
+ *  - Interactive targets ≥ 44px (48px where layout allows).
+ *  - Full reduced-motion fallback; the world still works with all motion off.
+ *  - True reflow on small screens (no transform:scale of a desktop map).
+ */
+
+/* ---------------------------------------------------------------- tokens */
+.adv-root{
+  /* per-world palettes override these on .adv-world[data-world=…] */
+  --adv-bg-0:#071019;
+  --adv-bg-1:#0c1b2a;
+  --adv-ink:#f3f8ff;
+  --adv-ink-soft:rgba(243,248,255,.80);
+  --adv-ink-dim:rgba(243,248,255,.55);
+  --adv-line:rgba(255,255,255,.14);
+  --adv-accent:#5fd8cb;
+  --adv-accent-2:#ffcf7a;
+  --adv-gold:#ffce6b;
+  --adv-glow:rgba(95,216,203,.55);
+  --adv-panel:rgba(9,20,32,.72);
+  --adv-panel-2:rgba(255,255,255,.06);
+  --adv-radius:18px;
+  --adv-shadow:0 20px 60px rgba(0,0,0,.45);
+  --adv-locked:rgba(255,255,255,.34);
+  --adv-done:#7ef0c6;
+  --adv-tap:48px;
+  --adv-ease:cubic-bezier(.22,.61,.36,1);
+  --adv-dur:.5s;
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{ -webkit-text-size-adjust:100%; text-size-adjust:100% }
+
+.adv-body{
+  min-height:100svh;
+  min-height:100vh;
+  font-family:"Tajawal","Noto Kufi Arabic",system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
+  color:var(--adv-ink);
+  background:var(--adv-bg-0);
+  overflow-x:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* Full-bleed cinematic backdrop layer (decorative, never interactive) */
+.adv-scene{ position:relative; width:100%; min-height:100svh; min-height:100vh; isolation:isolate; }
+.adv-backdrop{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+.adv-backdrop > *{ position:absolute; }
+.adv-backdrop svg{ display:block; }
+
+/* content sits above backdrop */
+.adv-stagewrap{ position:relative; z-index:2; }
+
+/* ---------------------------------------------------------------- a11y */
+.adv-skip{
+  position:fixed; inset-inline-start:12px; top:-60px; z-index:100;
+  background:var(--adv-accent); color:#06202a; padding:10px 16px; border-radius:12px;
+  font-weight:700; text-decoration:none; transition:top .2s;
+}
+.adv-skip:focus{ top:12px }
+.adv-visually-hidden{
+  position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0,0,0,0);white-space:nowrap;border:0;
+}
+:focus-visible{ outline:3px solid var(--adv-accent-2); outline-offset:3px; border-radius:8px; }
+.adv-root :focus:not(:focus-visible){ outline:none }
+
+/* ---------------------------------------------------------------- sticky header */
+/* Topbar + mission bar live in one sticky header. At rest (scroll top) the header
+   sits ABOVE the trail, so persistent chrome never overlaps a mission label. */
+.adv-header{
+  position:sticky; top:0; z-index:40;
+  background:linear-gradient(180deg,var(--adv-bg-0) 42%,rgba(7,16,25,.86) 88%,rgba(7,16,25,.72));
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--adv-line);
+}
+
+/* ---------------------------------------------------------------- top bar / nav */
+.adv-topbar{
+  display:flex; align-items:center; flex-wrap:wrap; gap:10px;
+  padding:10px clamp(12px,3vw,26px);
+}
+.adv-nav-btn{
+  display:inline-flex; align-items:center; gap:8px;
+  min-height:var(--adv-tap); padding:8px 14px;
+  border:1px solid var(--adv-line); border-radius:14px;
+  background:var(--adv-panel-2); color:var(--adv-ink);
+  font:inherit; font-size:15px; font-weight:600; cursor:pointer; text-decoration:none;
+  transition:background .2s,border-color .2s,transform .15s;
+}
+.adv-nav-btn:hover{ background:rgba(255,255,255,.12); border-color:var(--adv-accent) }
+.adv-nav-btn:active{ transform:translateY(1px) }
+.adv-nav-btn svg{ width:20px;height:20px;fill:currentColor;flex:0 0 auto }
+.adv-nav-btn--primary{ background:var(--adv-accent); color:#06202a; border-color:transparent; font-weight:800 }
+.adv-nav-btn--primary:hover{ background:var(--adv-accent); filter:brightness(1.06) }
+.adv-topbar__spacer{ flex:1 1 auto }
+.adv-worldname{
+  display:flex; flex-direction:column; line-height:1.15; text-align:center;
+  min-width:0;
+}
+.adv-worldname b{ font-size:clamp(15px,2.4vw,19px); font-weight:800; letter-spacing:.2px }
+.adv-worldname span{ font-size:12px; color:var(--adv-ink-dim); font-weight:600 }
+
+/* ---------------------------------------------------------------- mission bar (HUD) */
+.adv-missionbar{
+  display:flex; align-items:center; gap:10px;
+  padding:8px clamp(12px,3vw,26px) 12px;
+  border-top:1px solid var(--adv-line);
+}
+.adv-missionbar.is-complete{ color:var(--adv-done); font-weight:800; justify-content:center }
+.adv-missionbar__badge{
+  flex:0 0 auto; min-width:44px; height:44px; padding:0 8px; border-radius:12px;
+  display:grid; place-items:center; font-weight:800; font-size:15px;
+  background:linear-gradient(135deg,var(--adv-accent),var(--adv-accent-2)); color:#06202a;
+}
+.adv-missionbar__txt{ min-width:0; display:flex; flex-direction:column; line-height:1.25; flex:1 1 auto }
+.adv-missionbar__k{ font-size:12px; color:var(--adv-accent-2); font-weight:800; letter-spacing:.3px }
+.adv-missionbar__v{ font-size:16px; font-weight:800; white-space:normal }
+.adv-missionbar__go{
+  flex:0 0 auto; min-height:48px; min-width:48px; padding:8px 18px; border-radius:13px;
+  border:0; background:var(--adv-accent-2); color:#3a2400; font-weight:800; font-size:15px; cursor:pointer;
+  transition:filter .2s,transform .15s;
+}
+.adv-missionbar__go:hover{ filter:brightness(1.06) }
+.adv-missionbar__go:active{ transform:translateY(1px) }
+
+/* progress meter in topbar */
+.adv-progress{ display:flex; align-items:center; gap:8px; font-size:13px; color:var(--adv-ink-soft); font-weight:700 }
+.adv-progress__track{ width:min(120px,22vw); height:8px; border-radius:99px; background:rgba(255,255,255,.12); overflow:hidden }
+.adv-progress__fill{ height:100%; width:0; border-radius:99px;
+  background:linear-gradient(90deg,var(--adv-accent),var(--adv-accent-2)); transition:width .6s var(--adv-ease) }
+
+/* ---------------------------------------------------------------- hudhud guide */
+.adv-hudhud{
+  position:fixed; z-index:44; inset-inline-start:14px; bottom:14px;
+  display:flex; align-items:flex-end; gap:10px; max-width:min(84vw,420px);
+  pointer-events:none;
+  opacity:0; transform:translateY(10px); transition:opacity .35s,transform .35s;
+}
+.adv-hudhud.is-on{ opacity:1; transform:none }
+.adv-hudhud__bird{
+  flex:0 0 auto; width:56px; height:56px; border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,#ffe6b0,#e79a3c 62%,#b96a1e);
+  box-shadow:0 8px 22px rgba(0,0,0,.4), inset 0 -6px 10px rgba(0,0,0,.18);
+  display:grid; place-items:center;
+}
+.adv-hudhud__bird svg{ width:40px;height:40px }
+.adv-hudhud__bubble{
+  pointer-events:auto;
+  background:var(--adv-panel); border:1px solid var(--adv-line); border-radius:16px 16px 16px 4px;
+  padding:10px 14px; font-size:15px; font-weight:600; line-height:1.5;
+  box-shadow:var(--adv-shadow); backdrop-filter:blur(8px);
+  max-width:340px;
+}
+.adv-hudhud__bubble b{ color:var(--adv-accent-2) }
+
+/* ---------------------------------------------------------------- the trail (missions) */
+.adv-trail-head{ text-align:center; padding:clamp(12px,3vw,26px) 16px 4px }
+.adv-trail-head h1{ margin:0; font-size:clamp(22px,4.6vw,40px); font-weight:800; letter-spacing:.4px;
+  text-shadow:0 4px 24px rgba(0,0,0,.5) }
+.adv-trail-head p{ margin:.4em auto 0; max-width:640px; font-size:clamp(14px,2.4vw,17px); color:var(--adv-ink-soft) }
+
+/* The trail lays missions out in reading order. It reflows: a flowing wide path
+   on desktop, a vertical journey on phones. Each station is a self-contained
+   box, so mission labels can never collide by construction. */
+.adv-trail{
+  position:relative; z-index:2;
+  display:flex; flex-wrap:wrap; justify-content:center; align-items:stretch;
+  gap:clamp(14px,2.4vw,26px);
+  padding:clamp(16px,3vw,34px) clamp(14px,4vw,48px) 120px;
+  max-width:1220px; margin:0 auto;
+}
+
+/* a mission "station" — a place in the world, not a floating circle */
+.adv-station{
+  position:relative;
+  flex:1 1 240px; max-width:300px; min-width:210px;
+  display:flex; flex-direction:column;
+  border:0; text-align:start; cursor:pointer;
+  background:transparent; color:inherit; font:inherit;
+  padding:0; border-radius:20px;
+  transition:transform .28s var(--adv-ease);
+}
+.adv-station:hover{ transform:translateY(-6px) }
+.adv-station:disabled,.adv-station[aria-disabled="true"]{ cursor:not-allowed }
+
+/* the visual "place" — worlds restyle .adv-place to look like a station/room/etc. */
+.adv-place{
+  position:relative; overflow:hidden;
+  min-height:150px; border-radius:20px;
+  border:1px solid var(--adv-line);
+  background:linear-gradient(160deg,var(--adv-panel-2),rgba(0,0,0,.14));
+  box-shadow:0 14px 34px rgba(0,0,0,.34);
+  display:flex; align-items:flex-end;
+  transition:box-shadow .3s,border-color .3s,filter .3s;
+}
+.adv-place__art{ position:absolute; inset:0; z-index:0; pointer-events:none }
+.adv-place__art svg{ width:100%; height:100%; display:block }
+
+/* mission number tag */
+.adv-station__no{
+  position:absolute; z-index:3; inset-block-start:10px; inset-inline-start:10px;
+  min-width:34px; height:34px; padding:0 9px; border-radius:10px;
+  display:inline-flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:800; letter-spacing:.3px;
+  background:var(--adv-panel); border:1px solid var(--adv-line); color:var(--adv-ink);
+}
+
+/* SIGNAGE — the mission label. Full lesson name, no clip, no ellipsis, ≥16px. */
+.adv-sign{
+  position:relative; z-index:3; width:100%;
+  margin:0; padding:12px 13px 13px;
+  background:linear-gradient(0deg,rgba(4,10,16,.92),rgba(4,10,16,.66) 70%,transparent);
+  border-radius:0 0 20px 20px;
+}
+.adv-sign__unit{ display:block; font-size:12px; font-weight:700; color:var(--adv-accent-2); margin-bottom:2px }
+.adv-sign__name{
+  display:block; margin:0;
+  font-size:clamp(16px,2vw,19px);   /* never below 16px */
+  line-height:1.35; font-weight:800;
+  overflow-wrap:break-word; word-break:normal; hyphens:none;
+  /* explicitly NOT clamped/ellipsized: name shows in full, wrapping as needed */
+}
+.adv-sign__meta{ display:flex; align-items:center; gap:8px; margin-top:8px; font-size:13px; font-weight:700 }
+
+/* state chip */
+.adv-chip{ display:inline-flex; align-items:center; gap:5px; padding:3px 9px; border-radius:99px;
+  font-size:12px; font-weight:800 }
+.adv-chip svg{ width:14px;height:14px;fill:currentColor }
+.adv-chip--done{ background:rgba(126,240,198,.16); color:var(--adv-done) }
+.adv-chip--current{ background:rgba(255,207,122,.18); color:var(--adv-accent-2) }
+.adv-chip--locked{ background:rgba(255,255,255,.08); color:var(--adv-locked) }
+
+/* connective path segment between stations (decorative) */
+.adv-link{ flex:0 0 auto; align-self:center; width:26px; height:3px; border-radius:2px;
+  background:linear-gradient(90deg,var(--adv-line),transparent); opacity:.6 }
+
+/* ---- states ---- */
+.adv-station[data-state="done"] .adv-place{ border-color:rgba(126,240,198,.5);
+  box-shadow:0 16px 40px rgba(0,0,0,.4), 0 0 0 1px rgba(126,240,198,.25), 0 0 32px var(--adv-glow) }
+.adv-station[data-state="current"] .adv-place{ border-color:var(--adv-accent-2);
+  box-shadow:0 18px 46px rgba(0,0,0,.46), 0 0 34px rgba(255,207,122,.5) }
+.adv-station[data-state="current"]::after{
+  content:""; position:absolute; inset:-4px; border-radius:24px; z-index:-1;
+  border:2px solid var(--adv-accent-2); opacity:.55; animation:adv-pulse 2.2s var(--adv-ease) infinite }
+.adv-station[data-state="locked"] .adv-place{ filter:saturate(.5) brightness(.62); border-color:var(--adv-line) }
+.adv-station[data-state="locked"] .adv-sign__name{ color:var(--adv-ink-soft) }
+
+@keyframes adv-pulse{ 0%,100%{ transform:scale(1); opacity:.5 } 50%{ transform:scale(1.015); opacity:.15 } }
+
+/* small lock mark (secondary, not a giant padlock over everything) */
+.adv-lockmark{ position:absolute; z-index:3; inset-block-start:12px; inset-inline-end:12px;
+  width:26px; height:26px; opacity:.7 }
+.adv-lockmark svg{ width:100%;height:100%;fill:var(--adv-locked) }
+
+/* ---------------------------------------------------------------- celebration */
+.adv-burst{ position:fixed; inset:0; z-index:70; pointer-events:none; display:grid; place-items:center }
+.adv-burst__ring{ width:10px;height:10px;border-radius:50%;
+  box-shadow:0 0 0 0 var(--adv-accent-2); animation:adv-ring 1.4s var(--adv-ease) forwards }
+.adv-burst__msg{
+  position:absolute; padding:12px 22px; border-radius:16px;
+  background:var(--adv-panel); border:1px solid var(--adv-accent-2); color:var(--adv-ink);
+  font-size:clamp(17px,3vw,22px); font-weight:800; box-shadow:var(--adv-shadow);
+  animation:adv-msg 2.4s var(--adv-ease) forwards;
+}
+.adv-spark{ position:absolute; width:9px;height:9px;border-radius:50%;
+  background:var(--adv-accent-2); animation:adv-spark 1.5s var(--adv-ease) forwards }
+@keyframes adv-ring{ 0%{box-shadow:0 0 0 0 rgba(255,207,122,.6)} 100%{box-shadow:0 0 0 60vmax rgba(255,207,122,0)} }
+@keyframes adv-msg{ 0%{opacity:0;transform:translateY(14px) scale(.9)} 14%,74%{opacity:1;transform:none} 100%{opacity:0;transform:translateY(-10px)} }
+@keyframes adv-spark{ 0%{opacity:1;transform:translate(0,0) scale(1)} 100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0)} }
+
+/* world-complete banner (brief, no dead-end button) */
+.adv-worlddone{
+  position:fixed; inset:0; z-index:72; display:grid; place-items:center; pointer-events:none;
+  background:radial-gradient(circle at 50% 40%,rgba(255,207,122,.16),transparent 60%);
+  animation:adv-fadein .5s ease;
+}
+.adv-worlddone__card{
+  pointer-events:auto; text-align:center; padding:22px 26px; max-width:420px;
+  background:var(--adv-panel); border:1px solid var(--adv-accent-2); border-radius:22px;
+  box-shadow:var(--adv-shadow);
+}
+.adv-worlddone__card h2{ margin:.1em 0 .3em; font-size:clamp(20px,4vw,28px) }
+.adv-worlddone__card p{ margin:0 0 14px; color:var(--adv-ink-soft) }
+@keyframes adv-fadein{ from{opacity:0} to{opacity:1} }
+
+/* ---------------------------------------------------------------- transition intro (skippable) */
+.adv-intro{ position:fixed; inset:0; z-index:80; display:grid; place-items:center;
+  background:var(--adv-bg-0); animation:adv-fadein .4s ease }
+.adv-intro__inner{ text-align:center; max-width:560px; padding:26px }
+.adv-intro h1{ font-size:clamp(24px,5vw,42px); margin:.2em 0 }
+.adv-intro p{ font-size:clamp(15px,2.6vw,19px); color:var(--adv-ink-soft); line-height:1.7 }
+.adv-intro__skip{ margin-top:18px }
+
+/* ---------------------------------------------------------------- responsive: TRUE reflow */
+/* Tablet: fewer per row, larger touch. */
+@media (max-width:900px){
+  .adv-station{ flex-basis:280px; max-width:340px }
+  .adv-link{ display:none }
+}
+/* Phone: the world becomes a vertical journey. Stations stack full width; the
+   trail scrolls top→bottom. This is a re-layout, NOT a shrink of the desktop map. */
+@media (max-width:640px){
+  .adv-trail{ flex-direction:column; align-items:stretch; flex-wrap:nowrap;
+    gap:16px; padding:16px 14px 120px; max-width:520px }
+  .adv-station{ flex:1 1 auto; max-width:none; min-width:0 }
+  .adv-place{ min-height:118px }
+  .adv-sign__name{ font-size:17px }         /* comfortably above the 16px floor */
+  .adv-hudhud{ inset-inline-end:10px; max-width:calc(100vw - 20px) }
+  .adv-worldname{ display:none }            /* keep the small screen uncluttered */
+  /* icon-only nav buttons so the top bar can never overflow the viewport */
+  .adv-nav-btn span{ position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
+  .adv-nav-btn{ min-width:48px; justify-content:center; padding:8px }
+  .adv-topbar{ gap:8px; padding:8px 10px }
+  .adv-progress__track{ width:64px }
+  .adv-missionbar{ padding:8px 12px 12px }
+}
+@media (max-width:380px){
+  .adv-topbar{ gap:6px }
+  .adv-progress__track{ width:48px }
+}
+
+/* very short landscape phones: keep the trail scrollable, shrink vertical rhythm only */
+@media (max-height:460px) and (orientation:landscape){
+  .adv-trail-head{ padding:10px 16px 2px }
+  .adv-place{ min-height:120px }
+}
+
+/* ---------------------------------------------------------------- reduced motion */
+@media (prefers-reduced-motion:reduce){
+  *{ animation-duration:.001ms!important; animation-iteration-count:1!important;
+     transition-duration:.001ms!important; scroll-behavior:auto!important }
+  .adv-station[data-state="current"]::after{ animation:none; opacity:.5 }
+}
+.adv-root[data-reduced="1"] *{ animation:none!important; transition:none!important }
+.adv-root[data-reduced="1"] .adv-station:hover{ transform:none }
