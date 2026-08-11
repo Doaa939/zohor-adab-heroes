@@ -350,15 +350,19 @@
     return el("span", { class: "adv-marker__chip adv-marker__chip--locked" },
       [icon(["M6 10V8a6 6 0 0 1 12 0v2h1.4v11H4.6V10H6z"]), el("span", { text: "قريبًا" })]);
   };
+  Engine.prototype._stateIcon = function (state) {
+    if (state === "done") { var i = icon(["M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"]); i.setAttribute("fill", "var(--adv-done)"); return i; }
+    if (state === "current") { var j = icon(["M8 5v14l11-7z"]); j.setAttribute("fill", "var(--adv-accent-2)"); return j; }
+    var k = icon(["M6 10V8a6 6 0 0 1 12 0v2h1.4v11H4.6V10H6zm2 0h8V8a4 4 0 0 0-8 0v2z"]); k.setAttribute("fill", "var(--adv-locked)"); return k;
+  };
   Engine.prototype._buildSign = function (row) {
     var l = row.lesson;
     return el("div", { class: "adv-marker__sign" }, [
       el("div", { class: "adv-marker__top" }, [
         el("span", { class: "adv-marker__no", text: l.no }),
-        this.world.unitOf ? el("span", { class: "adv-marker__unit", text: this.world.unitOf(l) }) : null
+        el("span", { class: "adv-marker__state", "aria-hidden": "true" }, [this._stateIcon(row.state)])
       ]),
-      el("h2", { class: "adv-marker__name", text: l.ar }),
-      this._markerChip(row.state)
+      el("h2", { class: "adv-marker__name", text: l.ar })
     ]);
   };
   Engine.prototype._buildArt = function (row, idx, cls) {
@@ -393,16 +397,24 @@
     stage.style.height = stageH + "px";
     stage.style.maxWidth = maxW + "px";
 
-    var bg = el("div", { class: "adv-stage__bg", "aria-hidden": "true" });
-    if (sc.background) { try { sc.background(this, bg, { el: el, svg: svg, icon: icon, stageH: stageH, n: n }); } catch (e) {} }
-    stage.appendChild(bg);
-
     /* positions: x% across, y px down its lane */
     var pts = visible.map(function (row, i) {
       var y = topPad + laneH / 2 + i * laneH;
       var x = sc.xAt ? sc.xAt(i, n) : (50 + (i % 2 ? 1 : -1) * 22);
       return { x: x, y: y, yp: (y / stageH) * 100, row: row };
     });
+
+    /* rich background scene — built AFTER points so worlds can decorate the path.
+       pts here are given in the background's 1000×stageH design space. */
+    var bg = el("div", { class: "adv-stage__bg", "aria-hidden": "true" });
+    if (sc.background) {
+      try {
+        sc.background(this, bg, { el: el, svg: svg, icon: icon, stageH: stageH, n: n, maxW: maxW,
+          W: 1000, H: stageH,
+          pts: pts.map(function (p) { return { x: p.x * 10, y: p.y, state: p.row.state }; }) });
+      } catch (e) {}
+    }
+    stage.appendChild(bg);
 
     /* themed connecting path (base + lit-to-current) */
     if (sc.path) {

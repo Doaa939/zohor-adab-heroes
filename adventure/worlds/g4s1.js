@@ -57,10 +57,31 @@
     scene: {
       laneH: 236, maxW: 980, mw: 162, marker: marker, pathDash: "2 5",
       xAt: function (i) { return 50 + Math.sin(i * 1.0) * 20; },
-      path: function (pts) { if (!pts.length) return ""; var d = "M" + pts[0].x + " " + pts[0].y;
-        for (var i = 1; i < pts.length; i++) { var a = pts[i - 1], b = pts[i], my = (a.y + b.y) / 2;
-          d += " C" + a.x + " " + my + " " + b.x + " " + my + " " + b.x + " " + b.y; } return d; },
-      background: function (e, bg, kit) { bg.appendChild(kit.el("div", { class: "st-floor" })); }
+      path: function (pts) { return window.ADV.art.smoothPath(pts); },
+      background: function (eng, bg, kit) {
+        var A = window.ADV.art, W = kit.W, H = kit.H, pts = kit.pts, i;
+        var svg = A.S("svg", { viewBox: "0 0 " + W + " " + H, preserveAspectRatio: "none" });
+        svg.appendChild(A.S("defs", {}, [A.grad("stFloor", [["0%", "#241536"], ["100%", "#140a22"]])]));
+        svg.appendChild(A.defs());
+        svg.appendChild(A.P("M0 0 H" + W + " V" + H + " H0 Z", { fill: "url(#stFloor)" }));
+        /* big screen wall at the top */
+        svg.appendChild(A.S("rect", { x: W * 0.2, y: 20, width: W * 0.6, height: 90, rx: 4, fill: "#0a0716", stroke: "#ff6fae", "stroke-width": 2 }));
+        for (i = 0; i < 5; i++) svg.appendChild(A.S("rect", { x: W * 0.22 + i * (W * 0.56 / 5), y: 30, width: W * 0.09, height: 70, rx: 2, fill: i % 2 ? "rgba(79,208,224,.5)" : "rgba(255,111,174,.5)" }));
+        /* truss of stage lights across the top */
+        svg.appendChild(A.S("rect", { x: 0, y: 122, width: W, height: 4, fill: "#2a1a3a" }));
+        for (i = 50; i < W; i += 90) { svg.appendChild(A.S("circle", { cx: i, cy: 132, r: 6, fill: i % 180 ? "#4fd0e0" : "#ff6fae", style: "filter:drop-shadow(0 0 6px currentColor)" })); }
+        /* light-cable path + waypoints */
+        var d = A.smoothPath(pts);
+        svg.appendChild(A.P(d, { fill: "none", stroke: "rgba(255,111,174,.4)", "stroke-width": 4, style: "filter:drop-shadow(0 0 5px rgba(255,111,174,.7))" }));
+        svg.appendChild(A.waypoints(pts, { on: "#ff6fae", off: "rgba(255,111,174,.3)" }));
+        /* colored spotlight beams onto each facility */
+        pts.forEach(function (pt, k) {
+          var lit = pt.state !== "locked", col = k % 2 ? "rgba(79,208,224," : "rgba(255,111,174,";
+          svg.appendChild(A.P("M" + (pt.x + (k % 2 ? 60 : -60)) + " 130 L" + (pt.x - 40) + " " + (pt.y + 20) + " L" + (pt.x + 40) + " " + (pt.y + 20) + " Z",
+            { fill: col + (lit ? ".12)" : ".03)") }));
+        });
+        bg.appendChild(svg);
+      }
     },
     backdrop: function (c, e, kit) { c.appendChild(kit.el("div", { class: "st-sky" })); },
     onMissionDone: function (st) { st.setAttribute("data-state", "done"); },

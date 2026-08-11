@@ -64,10 +64,37 @@
       laneH: 250, maxW: 900, mw: 172, marker: marker,
       /* near-central, gentle sway = climbing a keep */
       xAt: function (i) { return 50 + (i % 2 ? 12 : -12); },
-      path: function (pts) { if (!pts.length) return ""; var d = "M" + pts[0].x + " " + pts[0].y;
-        for (var i = 1; i < pts.length; i++) { var a = pts[i - 1], b = pts[i], my = (a.y + b.y) / 2;
-          d += " C" + a.x + " " + my + " " + b.x + " " + my + " " + b.x + " " + b.y; } return d; },
-      background: function (e, bg, kit) { bg.appendChild(kit.el("div", { class: "ct-stone" })); }
+      path: function (pts) { return window.ADV.art.smoothPath(pts); },
+      background: function (eng, bg, kit) {
+        var A = window.ADV.art, W = kit.W, H = kit.H, pts = kit.pts, i, j;
+        var svg = A.S("svg", { viewBox: "0 0 " + W + " " + H, preserveAspectRatio: "none" });
+        svg.appendChild(A.S("defs", {}, [A.grad("ctWall", [["0%", "#2c2418"], ["100%", "#181206"]])]));
+        svg.appendChild(A.defs());
+        /* great stone wall with courses + crenellations */
+        svg.appendChild(A.P("M0 0 H" + W + " V" + H + " H0 Z", { fill: "url(#ctWall)" }));
+        for (j = 60; j < H; j += 34) svg.appendChild(A.S("line", { x1: 0, y1: j, x2: W, y2: j, stroke: "rgba(0,0,0,.28)", "stroke-width": 2 }));
+        for (i = 0; i < W; i += 80) svg.appendChild(A.S("rect", { x: i, y: 0, width: 44, height: 30, fill: "#3a2f1e" }));
+        /* torch-lit stone stair path + waypoints */
+        var d = A.smoothPath(pts);
+        svg.appendChild(A.P(d, { fill: "none", stroke: "rgba(60,48,30,.9)", "stroke-width": 30, "stroke-linecap": "round" }));
+        svg.appendChild(A.P(d, { fill: "none", stroke: "rgba(226,178,90,.35)", "stroke-width": 3, "stroke-dasharray": "1 9" }));
+        svg.appendChild(A.waypoints(pts, { on: "#ff9d4d", off: "rgba(226,178,90,.3)" }));
+        pts.forEach(function (pt, k) {
+          var side = k % 2 ? 1 : -1, lit = pt.state !== "locked";
+          /* wall torch */
+          svg.appendChild(A.S("g", { transform: "translate(" + (pt.x + side * 96) + " " + (pt.y) + ")" }, [
+            A.S("rect", { x: -2, y: 0, width: 4, height: 20, fill: "#4a3826" }),
+            A.S("circle", { cx: 0, cy: -3, r: 12, fill: "url(#advLampGlow)", opacity: lit ? 0.9 : 0.12 }),
+            A.P("M0 -2 q5 -9 0 -16 q-5 7 0 16z", { fill: lit ? "#ff9d4d" : "#4a3826" })
+          ]));
+          /* hanging banner */
+          if (k % 2 === 0) svg.appendChild(A.S("g", { transform: "translate(" + (pt.x - side * 130) + " " + (pt.y - 40) + ")" }, [
+            A.P("M0 0 h24 v52 l-12 -10 l-12 10 z", { fill: side > 0 ? "#7a2e3a" : "#2e5a7a", opacity: 0.85 }),
+            A.S("rect", { x: -2, y: -4, width: 28, height: 5, fill: "#3a2f1e" })
+          ]));
+        });
+        bg.appendChild(svg);
+      }
     },
     backdrop: function (c, e, kit) { c.appendChild(kit.el("div", { class: "ct-sky" })); },
     onMissionDone: function (st) { st.setAttribute("data-state", "done"); },

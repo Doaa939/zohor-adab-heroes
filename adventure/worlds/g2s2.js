@@ -95,27 +95,40 @@
     completeText: "أضأتَ الوادي كله وجرى الفلج حتى انكشف الكنز الرقمي.",
     scene: {
       laneH: 250, maxW: 980, mw: 158, marker: marker,
-      /* serpentine down the wadi */
       xAt: function (i) { return 50 + Math.sin(i * 1.05) * 19; },
-      path: function (pts) {
-        if (!pts.length) return "";
-        var d = "M" + pts[0].x + " " + pts[0].y;
-        for (var i = 1; i < pts.length; i++) {
-          var a = pts[i - 1], b = pts[i], my = (a.y + b.y) / 2;
-          d += " C" + a.x + " " + my + " " + b.x + " " + my + " " + b.x + " " + b.y;
-        }
-        return d;
-      },
+      path: function (pts) { return window.ADV.art.smoothPath(pts); },
       background: function (eng, bg, kit) {
-        bg.appendChild(kit.el("div", { class: "wd-dunes" }));
-        bg.appendChild(kit.el("div", { class: "wd-stars" }));
+        var A = window.ADV.art, W = kit.W, H = kit.H, pts = kit.pts;
+        var svg = A.S("svg", { viewBox: "0 0 " + W + " " + H, preserveAspectRatio: "none" });
+        svg.appendChild(A.S("defs", {}, [
+          A.grad("wdGround", [["0%", "#5a4632"], ["45%", "#3e3020"], ["100%", "#241a12"]]),
+          A.grad("wdCliff", [["0%", "#6a4a35"], ["100%", "#3a281c"]])
+        ]));
+        svg.appendChild(A.defs());
+        svg.appendChild(A.stars(W, { n: 34, ymax: 160, seed: 8 }));
+        /* distant ridge + valley walls */
+        svg.appendChild(A.mountains(W, { y: 10, h: 150, fill: "#2e2436", opacity: 0.7, seed: 4, step: 150 }));
+        svg.appendChild(A.mountains(W, { y: 70, h: 150, fill: "url(#wdCliff)", opacity: 0.9, seed: 11, step: 100 }));
+        /* fort silhouette on a ridge */
+        svg.appendChild(A.building(150, 210, 70, 46, { fill: "#3a2a1c", roof: false, litWin: "#ffcf7a", win: "#20140c" }));
+        svg.appendChild(A.P("M150 164 h70 v-9 h-10 v-9 h-10 v9 h-10 v-9 h-10 v9 h-10 v-9 h-10 z", { fill: "#3a2a1c" }));
+        /* canyon ground */
+        svg.appendChild(A.P("M0 220 Q" + (W / 2) + " 175 " + W + " 220 L" + W + " " + H + " L0 " + H + " Z", { fill: "url(#wdGround)" }));
+        /* falaj + waypoints along the trail */
+        var d = A.smoothPath(pts);
+        svg.appendChild(A.stream(d, { w: 16, base: "rgba(52,120,150,.4)", glow: "rgba(120,215,240,.9)" }));
+        svg.appendChild(A.waypoints(pts, { on: "#3fd1c7", off: "rgba(180,230,240,.3)" }));
+        /* palms, lanterns, and a golden treasure glow at the journey's end */
+        pts.forEach(function (pt, i) {
+          var side = i % 2 ? 1 : -1;
+          svg.appendChild(A.palm(pt.x + side * 116, pt.y + 40, 1.1, { frond: "#365a3a", trunk: "#4a3320" }));
+          svg.appendChild(A.lantern(pt.x + side * 80, pt.y - 4, 1.4, { post: 24, lit: pt.state !== "locked" }));
+          if (i === pts.length - 1) svg.appendChild(A.S("circle", { cx: pt.x, cy: pt.y - 4, r: 60, fill: "url(#advLampGlow)", opacity: pt.state === "done" ? 0.9 : 0.4 }));
+        });
+        bg.appendChild(svg);
       }
     },
-    /* fixed sky behind the scrolling wadi */
-    backdrop: function (c, eng, kit) {
-      c.appendChild(kit.el("div", { class: "wd-sky" }));
-      c.appendChild(kit.el("div", { class: "wd-sun" }));
-    },
+    backdrop: function (c, eng, kit) { c.appendChild(kit.el("div", { class: "wd-sky" })); c.appendChild(kit.el("div", { class: "wd-sun" })); },
     onMissionDone: function (st) { st.setAttribute("data-state", "done"); },
     onWorldComplete: function (eng) { eng.root.classList.add("is-worlddone"); }
   });

@@ -58,10 +58,43 @@
     scene: {
       laneH: 236, maxW: 940, mw: 158, marker: marker, pathDash: "2 6",
       xAt: function (i) { return 50 + Math.sin(i * 0.8) * 16; },
-      path: function (pts) { if (!pts.length) return ""; var d = "M" + pts[0].x + " " + pts[0].y;
-        for (var i = 1; i < pts.length; i++) { var a = pts[i - 1], b = pts[i], my = (a.y + b.y) / 2;
-          d += " C" + a.x + " " + my + " " + b.x + " " + my + " " + b.x + " " + b.y; } return d; },
-      background: function (e, bg, kit) { bg.appendChild(kit.el("div", { class: "ms-floor" })); }
+      path: function (pts) { return window.ADV.art.smoothPath(pts); },
+      background: function (eng, bg, kit) {
+        var A = window.ADV.art, W = kit.W, H = kit.H, pts = kit.pts, i;
+        var svg = A.S("svg", { viewBox: "0 0 " + W + " " + H, preserveAspectRatio: "none" });
+        svg.appendChild(A.S("defs", {}, [
+          A.grad("msFloor", [["0%", "#141a30"], ["100%", "#0a0e1c"]]),
+          A.grad("msWall", [["0%", "#1a2038"], ["100%", "#10142a"]])
+        ]));
+        svg.appendChild(A.defs());
+        /* walls + marble floor */
+        svg.appendChild(A.P("M0 0 H" + W + " V" + H + " H0 Z", { fill: "url(#msWall)" }));
+        svg.appendChild(A.P("M0 " + (H * 0.32) + " H" + W + " V" + H + " H0 Z", { fill: "url(#msFloor)" }));
+        /* gold cornice + a row of hanging spotlights across the top */
+        svg.appendChild(A.S("rect", { x: 0, y: 44, width: W, height: 5, fill: "#c9a24b", opacity: 0.7 }));
+        for (i = 60; i < W; i += 150) {
+          svg.appendChild(A.S("rect", { x: i - 1.5, y: 0, width: 3, height: 26, fill: "#3a4260" }));
+          svg.appendChild(A.S("circle", { cx: i, cy: 30, r: 6, fill: "#ffe9b0", opacity: 0.85, style: "filter:drop-shadow(0 0 6px rgba(255,215,122,.7))" }));
+        }
+        /* colonnade down both sides */
+        for (i = 70; i < H; i += 200) {
+          svg.appendChild(A.S("rect", { x: 24, y: i, width: 26, height: 150, rx: 3, fill: "#232a44" }));
+          svg.appendChild(A.S("rect", { x: W - 50, y: i, width: 26, height: 150, rx: 3, fill: "#232a44" }));
+        }
+        /* gold carpet runner (the path) + waypoints */
+        var d = A.smoothPath(pts);
+        svg.appendChild(A.P(d, { fill: "none", stroke: "rgba(201,162,75,.35)", "stroke-width": 30, "stroke-linecap": "round" }));
+        svg.appendChild(A.P(d, { fill: "none", stroke: "rgba(255,215,122,.5)", "stroke-width": 3, "stroke-dasharray": "1 10", "stroke-linecap": "round" }));
+        svg.appendChild(A.waypoints(pts, { on: "#ffd77a", off: "rgba(201,162,75,.3)" }));
+        /* a spotlight cone + floor pool at each hall */
+        pts.forEach(function (pt) {
+          var lit = pt.state !== "locked";
+          svg.appendChild(A.P("M" + pt.x + " " + (pt.y - 120) + " L" + (pt.x - 44) + " " + (pt.y + 30) + " L" + (pt.x + 44) + " " + (pt.y + 30) + " Z",
+            { fill: "#ffe9b0", opacity: lit ? 0.12 : 0.03 }));
+          svg.appendChild(A.S("ellipse", { cx: pt.x, cy: pt.y + 34, rx: 46, ry: 10, fill: "#ffd77a", opacity: lit ? 0.16 : 0.04 }));
+        });
+        bg.appendChild(svg);
+      }
     },
     backdrop: function (c, e, kit) { c.appendChild(kit.el("div", { class: "ms-hallbg" })); },
     onMissionDone: function (st) { st.setAttribute("data-state", "done"); },

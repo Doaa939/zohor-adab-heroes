@@ -61,7 +61,32 @@
       xAt: function (i) { return i % 2 ? 70 : 30; },
       path: function (pts) { if (!pts.length) return ""; var d = "M" + pts[0].x + " " + pts[0].y;
         for (var i = 1; i < pts.length; i++) d += " L" + pts[i].x + " " + pts[i].y; return d; },
-      background: function (e, bg, kit) { bg.appendChild(kit.el("div", { class: "tr-land" })); }
+      background: function (eng, bg, kit) {
+        var A = window.ADV.art, W = kit.W, H = kit.H, pts = kit.pts, i;
+        var svg = A.S("svg", { viewBox: "0 0 " + W + " " + H, preserveAspectRatio: "none" });
+        svg.appendChild(A.S("defs", {}, [A.grad("trGround", [["0%", "#25415a"], ["50%", "#1b3145"], ["100%", "#12222f"]])]));
+        svg.appendChild(A.defs());
+        svg.appendChild(A.stars(W, { n: 30, ymax: 150, seed: 6 }));
+        svg.appendChild(A.mountains(W, { y: 30, h: 130, fill: "#20384e", opacity: 0.7, seed: 7, step: 140 }));
+        svg.appendChild(A.ridge(W, { y: 190, amp: 26, fill: "#1c3346", opacity: 0.9, seed: 5, step: 180 }));
+        svg.appendChild(A.P("M0 210 L" + W + " 210 L" + W + " " + H + " L0 " + H + " Z", { fill: "url(#trGround)" }));
+        /* the rail: ties then two bright rails following the track */
+        var d = "M" + pts[0].x + " " + pts[0].y; for (i = 1; i < pts.length; i++) d += " L" + pts[i].x + " " + pts[i].y;
+        svg.appendChild(A.P(d, { fill: "none", stroke: "#3a5568", "stroke-width": 16, "stroke-linecap": "round" }));
+        svg.appendChild(A.P(d, { fill: "none", stroke: "#7f9bb0", "stroke-width": 16, "stroke-linecap": "round", "stroke-dasharray": "2 12", opacity: 0.7 }));
+        svg.appendChild(A.P(d, { fill: "none", stroke: "#9fd0ff", "stroke-width": 2.5, "stroke-linecap": "round", style: "filter:drop-shadow(0 0 4px rgba(120,200,255,.7))" }));
+        /* trackside: telegraph poles, trees, station lamps */
+        pts.forEach(function (pt, k) {
+          var side = k % 2 ? 1 : -1;
+          svg.appendChild(A.lantern(pt.x + side * 92, pt.y - 4, 1.4, { post: 26, lit: pt.state !== "locked" }));
+          svg.appendChild(A.S("g", { transform: "translate(" + (pt.x - side * 120) + " " + (pt.y + 30) + ")" }, [
+            A.S("rect", { x: -1.5, y: -46, width: 3, height: 46, fill: "#2a3a48" }),
+            A.S("rect", { x: -12, y: -44, width: 24, height: 3, fill: "#2a3a48" })
+          ]));
+          if (k % 2 === 0) svg.appendChild(A.palm(pt.x + side * 150, pt.y + 30, 0.9, { frond: "#2e5238", trunk: "#3a4a2a" }));
+        });
+        bg.appendChild(svg);
+      }
     },
     backdrop: function (c, e, kit) { c.appendChild(kit.el("div", { class: "tr-sky" })); },
     onMissionDone: function (st) { st.setAttribute("data-state", "done"); },

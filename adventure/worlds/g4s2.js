@@ -50,10 +50,30 @@
     scene: {
       laneH: 236, maxW: 980, mw: 160, marker: marker, pathDash: "1 7",
       xAt: function (i) { return 50 + Math.sin(i * 1.15) * 21; },
-      path: function (pts) { if (!pts.length) return ""; var d = "M" + pts[0].x + " " + pts[0].y;
-        for (var i = 1; i < pts.length; i++) { var a = pts[i - 1], b = pts[i], my = (a.y + b.y) / 2;
-          d += " C" + a.x + " " + my + " " + b.x + " " + my + " " + b.x + " " + b.y; } return d; },
-      background: function (e, bg, kit) { bg.appendChild(kit.el("div", { class: "ds-grid" })); bg.appendChild(kit.el("div", { class: "ds-core" })); }
+      path: function (pts) { return window.ADV.art.smoothPath(pts); },
+      background: function (eng, bg, kit) {
+        var A = window.ADV.art, W = kit.W, H = kit.H, pts = kit.pts, i;
+        var svg = A.S("svg", { viewBox: "0 0 " + W + " " + H, preserveAspectRatio: "none" });
+        svg.appendChild(A.S("defs", {}, [A.grad("dsBg", [["0%", "#050b16"], ["100%", "#0a1524"]])]));
+        svg.appendChild(A.defs());
+        svg.appendChild(A.P("M0 0 H" + W + " V" + H + " H0 Z", { fill: "url(#dsBg)" }));
+        svg.appendChild(A.stars(W, { n: 70, ymax: H, seed: 13 }));
+        /* faint planet arc + station hull grid */
+        svg.appendChild(A.S("circle", { cx: W * 0.82, cy: 70, r: 130, fill: "none", stroke: "rgba(57,198,255,.14)", "stroke-width": 26 }));
+        for (i = 0; i < W; i += 60) svg.appendChild(A.S("line", { x1: i, y1: 0, x2: i, y2: H, stroke: "rgba(57,198,255,.04)", "stroke-width": 1 }));
+        /* central data core near the top */
+        svg.appendChild(A.S("circle", { cx: W / 2, cy: 100, r: 46, fill: "rgba(57,198,255,.22)", style: "filter:blur(2px)" }));
+        svg.appendChild(A.S("path", { d: "M" + (W / 2) + " 66 L" + (W / 2 + 28) + " 100 L" + (W / 2) + " 134 L" + (W / 2 - 28) + " 100 Z", fill: "#0e2236", stroke: "#39c6ff", "stroke-width": 2 }));
+        svg.appendChild(A.S("circle", { cx: W / 2, cy: 100, r: 7, fill: "#7ff0d0", style: "filter:drop-shadow(0 0 6px #7ff0d0)" }));
+        /* energy conduit (path) from the core through the modules + waypoints */
+        var d = A.smoothPath(pts);
+        svg.appendChild(A.P(d, { fill: "none", stroke: "rgba(57,198,255,.5)", "stroke-width": 3.5, style: "filter:drop-shadow(0 0 5px rgba(57,198,255,.8))" }));
+        svg.appendChild(A.P(d, { fill: "none", stroke: "rgba(127,240,208,.6)", "stroke-width": 1.5, "stroke-dasharray": "2 14" }));
+        svg.appendChild(A.waypoints(pts, { on: "#39c6ff", off: "rgba(57,198,255,.3)" }));
+        /* floating hologram panels beside modules */
+        pts.forEach(function (pt, k) { if (k % 2) svg.appendChild(A.S("rect", { x: pt.x + 84, y: pt.y - 30, width: 40, height: 26, rx: 3, fill: "rgba(57,198,255,.08)", stroke: "rgba(57,198,255,.4)", "stroke-width": 1 })); });
+        bg.appendChild(svg);
+      }
     },
     backdrop: function (c, e, kit) { c.appendChild(kit.el("div", { class: "ds-space" })); },
     onMissionDone: function (st) { st.setAttribute("data-state", "done"); },
