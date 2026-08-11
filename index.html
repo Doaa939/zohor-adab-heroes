@@ -2695,249 +2695,247 @@ body.is-dragging-block{cursor:grabbing}
 .idx-count,.idx-pages,.pathcount,.unithead-n,.tm-unit-n,.tm-refs,.tm-ref{display:none !important}
 
 </style>
-<style id="g3-world-css">
+<style id="w2-css">
 /* ============================================================================
- * WORLD LAYER — "عالَمُ المُغامَرَةِ" (adventure world)
- * A gamification / exploration shell rendered OVER the untouched curriculum.
- * It re-skins ONLY the navigation scenes (opening · hub · index). Every lesson,
- * activity, question and the ScratchJr studio are rendered by the original
- * engine and are never touched. All sizes are DESIGN-SPACE px on the fixed
- * 1280x760 surface. Everything is prefixed .g3- to avoid touching legacy CSS.
+ * واحَةُ التِّقْنِيَة — ADVENTURE LAYER v2  (premium game world, G2S2 flagship)
+ * ----------------------------------------------------------------------------
+ * Renders in a FULL-VIEWPORT overlay attached to <body>, OUTSIDE the fixed
+ * 1280x760 scaled canvas, so the experience uses TRUE responsive reflow (no
+ * transform:scale). It only ADDS scenes (portal · semester · gate · g2s2world)
+ * and a navigation bridge into the ORIGINAL, untouched lesson engine. No lesson
+ * content, order, name, activity, simulator, teacher mode or progress store is
+ * modified. All art is local, hand-authored SVG/CSS. No network, no libraries.
  * ========================================================================== */
-:root{
-  --g3-night:#0B1030; --g3-night2:#141B45; --g3-deep:#1E2A63;
-  --g3-lamp:#F2C230; --g3-lamp-2:#FFDD6B; --g3-warm:#E8853A;
-  --g3-cream:#FFF4E2; --g3-mist:#B9C4E8; --g3-ink:#0A0F26;
-  --g3-sea:#173A6B; --g3-sea-2:#22568F; --g3-sea-hi:#3E86C4;
-  --g3-teal:#3FBF9E; --g3-blue:#2F8FD6; --g3-copper:#EF8A24; --g3-purple:#9C6BC9;
-  --g3-rose:#E4586F; --g3-leaf:#5FB86A; --g3-sand:#F4E3C2; --g3-sandDk:#D9B679;
+.w2{position:fixed;inset:0;z-index:2147483000;overflow:hidden;
+  font-family:'Tajawal Embedded',Arial,'DejaVu Sans',sans-serif;color:#FFF4E2;
+  -webkit-tap-highlight-color:transparent;direction:rtl;
+  --sky1:#2A3F73;--sky2:#5B4B86;--sky3:#C97F4A;--sand:#E8C88E;--sand2:#D3A45E;
+  --stone:#C9B08A;--stone-d:#8A6E45;--falaj:#37C7B4;--falaj-d:#1E9A8C;
+  --lamp:#F7C948;--lamp-hi:#FFE79A;--ink:#1B1533;--leaf:#5FA85A;--leaf-d:#3E7C42;
+  --copper:#E08A3C;--gold:#F2C230;--rose:#E4586F;--night:#0F1836;
+  --sig-wood:#7A4A22;--sig-wood2:#5C3417;--sig-face:#F3E4C4;
+  --hud-h:clamp(52px,8vh,66px);}
+.w2 *{box-sizing:border-box}
+.w2 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+.w2 :focus-visible{outline:3px solid #FFE79A;outline-offset:2px;border-radius:6px}
+.w2-hidden{display:none!important}
+
+@keyframes w2-fade{from{opacity:0}to{opacity:1}}
+@keyframes w2-rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+@keyframes w2-pop{0%{transform:scale(.5);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+@keyframes w2-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes w2-floatS{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes w2-sway{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+@keyframes w2-tw{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes w2-flow{to{stroke-dashoffset:-40}}
+@keyframes w2-glowp{0%,100%{filter:drop-shadow(0 0 6px rgba(247,201,72,.5))}50%{filter:drop-shadow(0 0 20px rgba(247,201,72,.95))}}
+@keyframes w2-flick{0%,100%{opacity:.85}45%{opacity:1}70%{opacity:.7}}
+@keyframes w2-ping{0%{transform:translate(-50%,-50%) scale(.6);opacity:.9}100%{transform:translate(-50%,-50%) scale(2.6);opacity:0}}
+@keyframes w2-spin{to{transform:rotate(360deg)}}
+.w2-enter{animation:w2-fade .5s ease both}
+
+/* =========================================================================
+ * PORTAL / SEMESTER / GATE  (shared "sheet" styling)
+ * ======================================================================= */
+.w2-sky{position:absolute;inset:0;background:
+   radial-gradient(120% 90% at 50% 8%, var(--sky3) 0%, var(--sky2) 34%, var(--sky1) 68%, var(--night) 100%)}
+.w2-stars span{position:absolute;background:#fff;border-radius:50%;animation:w2-tw 3s ease-in-out infinite}
+.w2-dunes{position:absolute;left:0;right:0;bottom:0;height:42%}
+.w2-vign{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 100% at 50% 40%, transparent 55%, rgba(6,10,26,.55) 100%)}
+
+.w2-shell{position:relative;z-index:3;height:100%;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:clamp(14px,3vh,26px);padding:max(18px,4vw);text-align:center}
+.w2-brand{display:flex;flex-direction:column;align-items:center;gap:4px;animation:w2-rise .6s ease both}
+.w2-brand .w2-eyebrow{font-size:clamp(14px,2.4vw,18px);color:var(--lamp);letter-spacing:.5px;
+  padding:4px 18px;border-radius:999px;background:rgba(247,201,72,.14);border:1.5px solid rgba(247,201,72,.45)}
+.w2-brand h1{margin:2px 0 0;font-size:clamp(34px,7vw,68px);font-weight:700;color:#FFF4E2;
+  text-shadow:0 6px 30px rgba(247,201,72,.35),0 2px 4px rgba(0,0,0,.4)}
+.w2-brand p{margin:0;font-size:clamp(16px,3vw,24px);color:var(--lamp-hi)}
+.w2-sub{font-size:clamp(16px,2.6vw,21px);color:#D9E2FF;max-width:680px;line-height:1.6;margin:0}
+
+/* grade / semester grid of "worlds" */
+.w2-grid{display:grid;gap:clamp(12px,2.4vw,20px);width:min(1040px,94vw);
+  grid-template-columns:repeat(4,1fr);animation:w2-rise .7s ease both}
+.w2-grid.sem{grid-template-columns:repeat(2,1fr);width:min(680px,94vw)}
+.w2-card{position:relative;border-radius:20px;overflow:hidden;cursor:pointer;min-height:clamp(150px,26vh,220px);
+  border:2.5px solid rgba(255,255,255,.16);background:#1a2246;text-align:right;
+  box-shadow:0 14px 34px rgba(0,0,0,.4);transition:transform .16s,border-color .16s,box-shadow .16s;
+  display:flex;flex-direction:column;justify-content:flex-end}
+.w2-card:hover:not(.locked){transform:translateY(-6px);border-color:var(--lamp);box-shadow:0 20px 46px rgba(0,0,0,.5)}
+.w2-card .w2-card-art{position:absolute;inset:0;width:100%;height:100%}
+.w2-card .w2-card-body{position:relative;z-index:2;padding:clamp(12px,2vw,18px);
+  background:linear-gradient(180deg,transparent,rgba(6,10,26,.82))}
+.w2-card .w2-card-k{font-size:clamp(13px,1.8vw,15px);color:var(--lamp);font-weight:700}
+.w2-card .w2-card-t{font-size:clamp(17px,2.4vw,22px);font-weight:700;color:#fff;line-height:1.25;margin-top:2px}
+.w2-card .w2-card-badge{position:absolute;top:12px;inset-inline-start:12px;z-index:3;font-size:13px;font-weight:700;
+  padding:4px 12px;border-radius:999px;background:linear-gradient(180deg,var(--lamp-hi),var(--copper));color:#3A2410}
+.w2-card.locked{cursor:not-allowed;filter:grayscale(.5) brightness(.62)}
+.w2-card.locked .w2-card-badge{background:rgba(255,255,255,.16);color:#cdd6f2;border:1px solid rgba(255,255,255,.28)}
+.w2-card .w2-card-lock{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;font-size:34px;opacity:.9}
+.w2-card .w2-card-prog{position:absolute;top:12px;inset-inline-end:12px;z-index:3;font-size:12.5px;font-weight:700;
+  padding:3px 10px;border-radius:999px;background:rgba(15,24,54,.7);color:#dfe6ff}
+
+.w2-backrow{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+.w2-btn{min-height:52px;padding:0 26px;border-radius:14px;font-size:clamp(16px,2.4vw,20px);font-weight:700;
+  background:linear-gradient(180deg,var(--lamp-hi),var(--copper));color:#3A2410;border:2.5px solid #B4703C;
+  box-shadow:0 5px 0 #8A5B32,0 12px 26px rgba(0,0,0,.36);transition:transform .1s,box-shadow .1s;
+  display:inline-flex;align-items:center;gap:10px}
+.w2-btn:hover{transform:translateY(-2px);box-shadow:0 7px 0 #8A5B32,0 16px 30px rgba(0,0,0,.4)}
+.w2-btn:active{transform:translateY(3px);box-shadow:0 2px 0 #8A5B32}
+.w2-btn.ghost{background:rgba(255,255,255,.07);color:#eef2ff;border:1.5px solid rgba(255,255,255,.28);box-shadow:none}
+.w2-btn.ghost:hover{border-color:var(--lamp);transform:translateY(-2px)}
+.w2-btn.big{min-height:64px;font-size:clamp(19px,3vw,26px);padding:0 40px}
+
+/* the GATE: mode + session choices */
+.w2-gate-modes{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(14px,2.6vw,22px);width:min(860px,94vw)}
+.w2-mode{position:relative;border-radius:22px;padding:clamp(20px,3vw,30px);cursor:pointer;text-align:center;
+  border:2.5px solid rgba(255,255,255,.18);box-shadow:0 14px 34px rgba(0,0,0,.4);
+  transition:transform .16s,border-color .16s;min-height:clamp(170px,30vh,240px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.w2-mode.adv{background:linear-gradient(180deg,#243a2c,#16281c)}
+.w2-mode.basic{background:linear-gradient(180deg,#26325e,#1a2350)}
+.w2-mode:hover{transform:translateY(-6px);border-color:var(--lamp)}
+.w2-mode .w2-mode-ic{font-size:clamp(40px,7vw,58px)}
+.w2-mode .w2-mode-t{font-size:clamp(20px,3vw,27px);font-weight:700;color:#fff}
+.w2-mode .w2-mode-s{font-size:clamp(14px,2vw,17px);color:#cdd6f2;line-height:1.5;max-width:320px}
+.w2-session{width:min(700px,94vw);display:flex;flex-direction:column;gap:12px;
+  background:rgba(15,24,54,.55);border:1.5px solid rgba(255,255,255,.16);border-radius:18px;padding:clamp(14px,2.4vw,20px)}
+.w2-session .w2-sess-h{font-size:clamp(15px,2.2vw,18px);color:var(--lamp);font-weight:700}
+.w2-session .w2-sess-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+
+/* modal */
+.w2-modal{position:fixed;inset:0;z-index:2147483200;display:flex;align-items:center;justify-content:center;
+  background:rgba(6,10,26,.66);backdrop-filter:blur(3px);animation:w2-fade .2s ease both;padding:20px}
+.w2-dialog{width:min(520px,94vw);border-radius:22px;padding:clamp(22px,4vw,30px);text-align:center;position:relative;
+  background:linear-gradient(180deg,#22305f,#182247);border:2px solid #3E4E92;box-shadow:0 26px 60px rgba(0,0,0,.55);
+  animation:w2-pop .3s ease both}
+.w2-dialog .w2-dg-ic{font-size:44px}
+.w2-dialog h3{margin:8px 0 4px;font-size:clamp(21px,3.4vw,27px);color:#FFF4E2;font-weight:700}
+.w2-dialog p{margin:6px 0 0;font-size:clamp(15px,2.4vw,18px);line-height:1.6;color:#CBD4F0}
+.w2-dialog .w2-dg-btns{display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap}
+
+/* =========================================================================
+ * THE VALLEY WORLD (g2s2world)
+ * ======================================================================= */
+.w2-world{position:absolute;inset:0;background:linear-gradient(180deg,#20345f 0%,#40406f 30%,#7a5a6e 60%,#a9704a 100%)}
+/* scroll viewport: horizontal on wide, vertical on tall */
+.w2-viewport{position:absolute;inset:0;top:var(--hud-h);overflow:auto;scroll-behavior:smooth;
+  overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.w2-viewport::-webkit-scrollbar{height:12px;width:12px}
+.w2-viewport::-webkit-scrollbar-thumb{background:rgba(255,255,255,.28);border-radius:8px}
+.w2-viewport::-webkit-scrollbar-track{background:rgba(0,0,0,.18)}
+
+/* terrain is larger than the viewport → the world is explored by scrolling */
+.w2-terrain{position:relative}
+/* WIDE / DESKTOP: a long horizontal valley */
+.w2-terrain.wide{width:2600px;height:100%;min-height:520px}
+/* TALL / PORTRAIT: a vertical journey down the valley */
+.w2-terrain.tall{width:100%;height:3200px}
+.w2-terrainbg{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+/* a lesson LOCATION integrated in the terrain (NOT a card) */
+.w2-place{position:absolute;transform:translate(-50%,-50%);z-index:5;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  left:calc(var(--x)*1%);top:calc(var(--y)*1%);transition:transform .16s}
+.w2-place:hover{transform:translate(-50%,-50%) scale(1.045)}
+.w2-place .w2-struct{position:relative;filter:drop-shadow(0 12px 14px rgba(0,0,0,.4))}
+.w2-struct svg{display:block;overflow:visible}
+/* the wooden signboard carries the REAL lesson name (never baked into art) */
+.w2-sign{position:relative;z-index:6;max-width:min(240px,44vw);min-width:120px;
+  background:linear-gradient(180deg,var(--sig-face),#E4CE9C);color:#3A2410;
+  border:3px solid var(--sig-wood);border-radius:12px;padding:7px 12px 8px;text-align:center;
+  box-shadow:0 6px 0 var(--sig-wood2),0 10px 18px rgba(0,0,0,.35)}
+.w2-sign::before,.w2-sign::after{content:"";position:absolute;top:-14px;width:7px;height:16px;
+  background:linear-gradient(180deg,var(--sig-wood2),var(--sig-wood));border-radius:3px}
+.w2-sign::before{inset-inline-start:18px}
+.w2-sign::after{inset-inline-end:18px}
+.w2-sign .w2-sign-no{display:inline-block;font-size:14px;font-weight:700;color:#fff;background:var(--copper);
+  padding:1px 10px;border-radius:999px;margin-bottom:3px}
+.w2-sign .w2-sign-name{font-size:clamp(16px,2.1vw,19px);font-weight:700;line-height:1.25;
+  white-space:normal;word-break:normal;overflow-wrap:break-word}
+.w2-place.done .w2-sign{background:linear-gradient(180deg,#FCEFC6,#F3D98C);border-color:#A9781E}
+.w2-place.done .w2-sign .w2-sign-no{background:var(--leaf-d)}
+
+/* state visuals on the structure itself (environmental, not badges) */
+.w2-place.locked .w2-struct{filter:drop-shadow(0 10px 12px rgba(0,0,0,.4)) brightness(.72) saturate(.7)}
+.w2-place.locked .w2-sign{opacity:.92}
+.w2-place.open .w2-struct{animation:w2-glowp 2.6s ease-in-out infinite}
+.w2-glow{opacity:0;transition:opacity .4s}
+.w2-place.done .w2-glow,.w2-place.open .w2-glow{opacity:1}
+.w2-lampflame{animation:w2-flick 1.3s ease-in-out infinite;transform-origin:center bottom}
+
+/* avatar (Omani child guide) walks to the current place */
+.w2-avatar{position:absolute;z-index:8;width:64px;height:78px;transform:translate(-50%,-120%);
+  left:calc(var(--x)*1%);top:calc(var(--y)*1%);pointer-events:none;
+  transition:left .7s cubic-bezier(.3,.7,.3,1),top .7s cubic-bezier(.3,.7,.3,1);
+  filter:drop-shadow(0 8px 8px rgba(0,0,0,.4));animation:w2-floatS 2.6s ease-in-out infinite}
+.w2-ping{position:absolute;z-index:7;width:70px;height:70px;border-radius:50%;border:3px solid var(--lamp);
+  left:calc(var(--x)*1%);top:calc(var(--y)*1%);animation:w2-ping 1s ease-out both;pointer-events:none}
+
+/* zone banner rooted in the terrain */
+.w2-zone{position:absolute;transform:translate(-50%,-50%);z-index:4;
+  left:calc(var(--x)*1%);top:calc(var(--y)*1%);
+  font-size:clamp(15px,2vw,18px);font-weight:700;color:#fff;white-space:nowrap;
+  padding:5px 16px;border-radius:12px;background:rgba(15,24,54,.4);border:1.5px solid var(--zc,#37C7B4);
+  box-shadow:0 4px 14px rgba(0,0,0,.35)}
+
+/* =========================================================================
+ * HUD (small; world dominates)
+ * ======================================================================= */
+.w2-hud{position:absolute;top:0;left:0;right:0;height:var(--hud-h);z-index:20;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 clamp(10px,2vw,18px);
+  background:linear-gradient(180deg,rgba(10,16,40,.82),rgba(10,16,40,0));pointer-events:none}
+.w2-hud>*{pointer-events:auto}
+.w2-hud-left,.w2-hud-right{display:flex;align-items:center;gap:8px;min-width:0}
+.w2-hud-mission{display:flex;flex-direction:column;min-width:0}
+.w2-hud-mission .k{font-size:11px;color:#9fb0e0;line-height:1}
+.w2-hud-mission .v{font-size:clamp(14px,2vw,17px);font-weight:700;color:#FFF4E2;line-height:1.15;
+  max-width:min(46vw,360px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.w2-hbtn{min-width:44px;min-height:44px;padding:0 12px;border-radius:12px;display:inline-flex;align-items:center;gap:7px;
+  justify-content:center;font-size:15px;font-weight:700;color:#eef2ff;
+  background:rgba(28,40,80,.9);border:1.5px solid #3a4a8c}
+.w2-hbtn:hover{border-color:var(--lamp)}
+.w2-hbtn.icon{padding:0}
+.w2-prog{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 6px 0 14px;border-radius:999px;
+  background:rgba(247,201,72,.14);border:1.5px solid rgba(247,201,72,.45)}
+.w2-prog b{font-size:16px;color:var(--lamp)}
+.w2-prog .lbl{font-size:12px;color:#E4D6AE}
+.w2-prog svg{width:30px;height:30px}
+
+/* Hudhud guide + speech (only appears at key moments, not fixed centre) */
+.w2-hud-guide{position:absolute;z-index:30;width:96px;height:96px;pointer-events:none;animation:w2-float 4s ease-in-out infinite}
+.w2-hud-guide svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 8px 10px rgba(0,0,0,.4))}
+.w2-hud-guide .w2-crest{animation:w2-sway 2.2s ease-in-out infinite;transform-origin:52px 20px}
+.w2-speech{position:absolute;z-index:31;max-width:min(300px,80vw);padding:11px 15px;border-radius:16px;
+  background:#FFF4E2;color:#2A2140;font-size:clamp(15px,2.2vw,17px);line-height:1.45;font-weight:600;
+  box-shadow:0 12px 30px rgba(0,0,0,.4);border:2px solid #E4CE93;animation:w2-pop .35s ease both}
+
+/* celebration confetti */
+.w2-confetti{position:absolute;z-index:35;pointer-events:none;width:11px;height:15px;border-radius:2px}
+
+/* helper hint chip (bottom) */
+.w2-scrollhint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);z-index:20;
+  font-size:14px;color:#eef2ff;background:rgba(15,24,54,.75);border:1px solid rgba(255,255,255,.2);
+  padding:7px 16px;border-radius:999px;animation:w2-floatS 2s ease-in-out infinite;pointer-events:none}
+.w2-credit{position:absolute;bottom:6px;inset-inline-end:12px;z-index:20;font-size:12px;color:#c9d3f2;opacity:.7;pointer-events:none}
+
+/* orientation switch: which terrain shows */
+.w2-terrain.tall{display:none}
+@media (max-aspect-ratio:1/1){
+  .w2-terrain.wide{display:none}
+  .w2-terrain.tall{display:block}
 }
 
-/* ---- the world stage: a 3D-perspective container inside #stageInner ---- */
-.g3{position:absolute;inset:0;overflow:hidden;background:
-   radial-gradient(120% 90% at 50% -10%, #26306B 0%, #141B45 42%, #0B1030 100%);
-   font-family:var(--font-body,Arial),sans-serif;color:var(--g3-cream);
-   perspective:1200px;perspective-origin:50% 42%;-webkit-tap-highlight-color:transparent}
-.g3 *{box-sizing:border-box}
-.g3 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
-.g3-fill{position:absolute;inset:0;width:100%;height:100%;display:block}
-.g3-layer{position:absolute;inset:0;will-change:transform}
-.g3-parallax{transition:transform .18s cubic-bezier(.22,.61,.36,1)}
+/* touch targets & small screens */
+@media (max-width:560px){
+  .w2-grid{grid-template-columns:repeat(2,1fr)}
+  .w2-gate-modes{grid-template-columns:1fr}
+  .w2-hud-mission .v{max-width:52vw}
+}
 
-/* twinkle stars + drifting dust */
-@keyframes g3-tw{0%,100%{opacity:.25}50%{opacity:1}}
-@keyframes g3-drift{from{transform:translateX(0)}to{transform:translateX(-60px)}}
-@keyframes g3-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-@keyframes g3-float2{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-@keyframes g3-sway{0%,100%{transform:rotate(-2.2deg)}50%{transform:rotate(2.2deg)}}
-@keyframes g3-shine{0%,100%{opacity:.5}50%{opacity:1}}
-@keyframes g3-wave{from{transform:translateX(0)}to{transform:translateX(-140px)}}
-@keyframes g3-ray{0%,100%{opacity:.35;transform:rotate(-3deg)}50%{opacity:.7;transform:rotate(3deg)}}
-@keyframes g3-pop{0%{transform:scale(.4);opacity:0}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
-@keyframes g3-rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
-@keyframes g3-hop{0%,100%{transform:translateY(0)}30%{transform:translateY(-16px)}55%{transform:translateY(0)}}
-@keyframes g3-spin{to{transform:rotate(360deg)}}
-@keyframes g3-gate{0%{transform:scaleY(1)}100%{transform:scaleY(0);opacity:0}}
-@keyframes g3-ping{0%{transform:scale(.7);opacity:.9}100%{transform:scale(2.6);opacity:0}}
-@keyframes g3-fadein{from{opacity:0}to{opacity:1}}
-
-.g3-star{position:absolute;background:#fff;border-radius:50%;animation:g3-tw 3s ease-in-out infinite}
-.g3-dust{position:absolute;top:0;left:0;width:200%;height:100%;
-  background-image:radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.5), transparent),
-   radial-gradient(2px 2px at 60% 70%, rgba(255,255,255,.35), transparent),
-   radial-gradient(1.5px 1.5px at 80% 40%, rgba(255,255,255,.4), transparent);
-  animation:g3-drift 26s linear infinite}
-
-/* ---- cinematic scene transition (camera push + fade) ---- */
-.g3-enter{animation:g3-cam .62s cubic-bezier(.2,.7,.25,1) both}
-@keyframes g3-cam{from{opacity:0;transform:scale(1.06)}to{opacity:1;transform:scale(1)}}
-.g3-iris{position:absolute;inset:0;z-index:90;pointer-events:none;background:radial-gradient(circle at 50% 46%, transparent 0%, transparent 30%, #0B1030 78%);opacity:0;animation:g3-irisout .6s ease both}
-@keyframes g3-irisout{0%{opacity:1}100%{opacity:0}}
-
-/* =========================== TOP BAR =========================== */
-.g3-topbar{position:absolute;top:14px;left:18px;right:18px;z-index:40;display:flex;
-  align-items:center;justify-content:space-between;gap:12px;pointer-events:none}
-.g3-topbar>*{pointer-events:auto}
-.g3-titlewrap{display:flex;flex-direction:column;gap:1px}
-.g3-eyebrow{font-size:15px;color:var(--g3-lamp);letter-spacing:.5px;
-  background:rgba(242,194,48,.12);border:1px solid rgba(242,194,48,.4);
-  border-radius:999px;padding:3px 14px;align-self:flex-start}
-.g3-h1{margin:2px 0 0;font-size:30px;font-weight:700;color:var(--g3-cream);
-  text-shadow:0 3px 18px rgba(0,0,0,.5)}
-.g3-tools{display:flex;gap:8px}
-.g3-chip{display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 16px;border-radius:14px;
-  background:linear-gradient(180deg,#28356E,#1A2350);border:1.5px solid #3A4A8C;color:var(--g3-cream);
-  font-size:17px;font-weight:600;box-shadow:0 4px 14px rgba(0,0,0,.35);transition:transform .12s,border-color .12s,box-shadow .12s}
-.g3-chip:hover{transform:translateY(-2px);border-color:var(--g3-lamp);box-shadow:0 8px 22px rgba(0,0,0,.45)}
-.g3-chip .g3-ci{font-size:20px;line-height:1}
-.g3-iconbtn{width:46px;height:46px;padding:0;justify-content:center;font-size:21px}
-.g3-progresspill{display:inline-flex;align-items:center;gap:10px;height:46px;padding:0 8px 0 16px;border-radius:999px;
-  background:rgba(242,194,48,.12);border:1.5px solid rgba(242,194,48,.45)}
-.g3-progresspill b{font-size:20px;color:var(--g3-lamp)}
-.g3-progresspill span{font-size:14px;color:#E4D6AE}
-.g3-mini-ring{width:34px;height:34px}
-
-/* =========================== OPENING =========================== */
-.g3-opening{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;text-align:center;z-index:20}
-.g3-op-inner{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;gap:10px;
-  animation:g3-rise .8s ease both}
-.g3-op-badge{padding:6px 20px;border-radius:999px;background:rgba(242,194,48,.14);
-  border:1.5px solid rgba(242,194,48,.5);color:var(--g3-lamp);font-size:19px}
-.g3-op-title{margin:6px 0 0;font-size:74px;font-weight:700;color:var(--g3-cream);letter-spacing:.5px;
-  text-shadow:0 6px 30px rgba(242,194,48,.35),0 2px 4px rgba(0,0,0,.4)}
-.g3-op-sub{font-size:32px;font-weight:500;color:var(--g3-lamp);margin-top:-2px}
-.g3-op-line{max-width:660px;font-size:20px;color:#CBD4F0;line-height:1.7;margin:10px 0 4px}
-.g3-op-cta{margin-top:14px}
-.g3-bigbtn{min-height:66px;min-width:230px;padding:0 40px;border-radius:16px;font-size:27px;font-weight:700;
-  color:#3A2410;background:linear-gradient(180deg,#FFDD6B,#EDA93E);
-  border:2.5px solid #B4703C;box-shadow:0 6px 0 #8A5B32,0 14px 30px rgba(0,0,0,.4);
-  transition:transform .12s,box-shadow .12s;display:inline-flex;align-items:center;gap:12px}
-.g3-bigbtn:hover{transform:translateY(-2px);box-shadow:0 8px 0 #8A5B32,0 18px 36px rgba(0,0,0,.45)}
-.g3-bigbtn:active{transform:translateY(4px);box-shadow:0 2px 0 #8A5B32,0 8px 18px rgba(0,0,0,.4)}
-.g3-bigbtn.g3-pulse{animation:g3-pulsebtn 2.2s ease-in-out infinite}
-@keyframes g3-pulsebtn{0%,100%{box-shadow:0 6px 0 #8A5B32,0 14px 30px rgba(0,0,0,.4),0 0 0 0 rgba(242,194,48,.5)}
-  50%{box-shadow:0 6px 0 #8A5B32,0 14px 30px rgba(0,0,0,.4),0 0 0 16px rgba(242,194,48,0)}}
-.g3-skip{position:absolute;bottom:16px;left:18px;z-index:30;font-size:15px;color:#8f9cc9;
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:6px 14px}
-.g3-skip:hover{color:var(--g3-cream)}
-
-/* =========================== HUB / WORLD MAP =========================== */
-.g3-map{position:absolute;inset:0;z-index:10}
-.g3-sea{position:absolute;left:-6%;right:-6%;bottom:-8%;height:64%;
-  background:linear-gradient(180deg,#1E4E86 0%,#173A6B 55%,#102B54 100%);
-  transform:rotateX(52deg);transform-origin:50% 100%;border-radius:50% 50% 0 0/12% 12% 0 0;
-  box-shadow:0 -30px 80px rgba(20,60,120,.4) inset}
-.g3-searow{position:absolute;left:0;right:0;height:3px;background:rgba(255,255,255,.16);border-radius:2px;
-  animation:g3-wave 7s linear infinite}
-.g3-mapscene{position:absolute;inset:0;z-index:12}
-
-/* an island token on the map */
-.g3-isle{position:absolute;cursor:pointer;transition:transform .2s;filter:drop-shadow(0 22px 26px rgba(0,0,0,.45))}
-.g3-isle:hover{transform:translateY(-6px) scale(1.02)}
-.g3-isle.locked{cursor:not-allowed;filter:drop-shadow(0 18px 22px rgba(0,0,0,.4)) grayscale(.35) brightness(.72)}
-.g3-isle.locked:hover{transform:translateY(-1px)}
-.g3-isle .g3-isle-name{position:absolute;left:50%;transform:translateX(-50%);white-space:nowrap;
-  bottom:-6px;font-size:22px;font-weight:700;color:var(--g3-cream);text-shadow:0 2px 10px rgba(0,0,0,.6)}
-.g3-isle-badge{position:absolute;top:-6px;left:50%;transform:translateX(-50%);white-space:nowrap;
-  font-size:14px;font-weight:700;padding:4px 14px;border-radius:999px}
-.g3-isle-badge.go{background:linear-gradient(180deg,#FFDD6B,#EDA93E);color:#3A2410;box-shadow:0 4px 14px rgba(242,194,48,.5);animation:g3-float2 3s ease-in-out infinite}
-.g3-isle-badge.soon{background:rgba(255,255,255,.14);color:#cdd6f2;border:1px solid rgba(255,255,255,.25)}
-.g3-isle-prog{position:absolute;left:50%;transform:translateX(-50%);bottom:-40px;
-  font-size:14px;color:#dfe6ff;background:rgba(11,16,48,.55);padding:3px 12px;border-radius:999px;white-space:nowrap}
-.g3-lockbig{position:absolute;top:38%;left:50%;transform:translate(-50%,-50%);font-size:52px;
-  filter:drop-shadow(0 3px 6px rgba(0,0,0,.5))}
-
-/* floating structures (workshop / assessment / teacher) */
-.g3-struct{position:absolute;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;
-  transition:transform .16s;animation:g3-float 6s ease-in-out infinite}
-.g3-struct:hover{transform:translateY(-6px)}
-.g3-struct .g3-struct-ico{width:96px;height:96px;filter:drop-shadow(0 14px 16px rgba(0,0,0,.4))}
-.g3-struct .g3-struct-t{font-size:16px;font-weight:700;color:var(--g3-cream);text-shadow:0 2px 8px rgba(0,0,0,.6);
-  background:rgba(11,16,48,.5);padding:3px 12px;border-radius:999px}
-
-.g3-hint-guide{position:absolute;z-index:22}
-
-/* =========================== ISLAND / STAGE PATH =========================== */
-.g3-island{position:absolute;inset:0;z-index:10}
-.g3-islandbg{position:absolute;inset:0}
-.g3-trail{position:absolute;inset:0;z-index:14}
-.g3-trailsvg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-
-.g3-zonelabel{position:absolute;z-index:15;display:flex;align-items:center;gap:8px;
-  font-size:16px;font-weight:700;padding:5px 14px;border-radius:999px;color:#fff;white-space:nowrap;
-  background:rgba(11,16,48,.42);border:1.5px solid var(--zc,#3FBF9E);box-shadow:0 4px 14px rgba(0,0,0,.35)}
-.g3-zonelabel .g3-zi{width:20px;height:20px;border-radius:50%;background:var(--zc,#3FBF9E);display:inline-block}
-
-/* a stage node */
-.g3-node{position:absolute;z-index:18;transform:translate(-50%,-50%);width:96px;height:96px;
-  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .16s}
-.g3-node:hover{transform:translate(-50%,-50%) scale(1.07)}
-.g3-node .g3-node-disc{position:absolute;inset:0;border-radius:50%;
-  background:radial-gradient(circle at 35% 30%,#3A4A8C,#1B2450);border:3px solid #4A5DA0;
-  box-shadow:0 8px 18px rgba(0,0,0,.45)}
-.g3-node .g3-node-no{position:relative;z-index:3;font-size:26px;font-weight:700;color:#cfd8ff;
-  text-shadow:0 2px 4px rgba(0,0,0,.5)}
-.g3-node .g3-node-label{position:absolute;top:100%;margin-top:7px;left:50%;transform:translateX(-50%);
-  white-space:normal;width:158px;line-height:1.2;font-size:14px;font-weight:700;color:#eaf0ff;text-align:center;
-  text-shadow:0 2px 6px rgba(0,0,0,.75);background:rgba(11,16,48,.58);padding:3px 8px;border-radius:11px}
-.g3-node .g3-node-lock{position:absolute;z-index:4;font-size:30px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
-
-/* reachable (open, not yet mastered) */
-.g3-node.open .g3-node-disc{background:radial-gradient(circle at 35% 30%,#FFE79A,#E89A2E);
-  border-color:#FFDD6B;box-shadow:0 8px 22px rgba(242,194,48,.5),0 0 0 6px rgba(242,194,48,.14)}
-.g3-node.open .g3-node-no{color:#4A2E0C}
-.g3-node.open{animation:g3-float2 3.4s ease-in-out infinite}
-/* mastered (lit) */
-.g3-node.done .g3-node-disc{background:radial-gradient(circle at 35% 30%,var(--zc,#3FBF9E),#0E5140);
-  border-color:#BFFAE6;box-shadow:0 8px 20px rgba(0,0,0,.4),0 0 22px rgba(63,191,158,.4) inset}
-.g3-node.done .g3-node-no{color:#fff}
-/* locked */
-.g3-node.locked{cursor:pointer}
-.g3-node.locked .g3-node-disc{background:radial-gradient(circle at 35% 30%,#2A3568,#161d40);border-color:#333e73;opacity:.9}
-.g3-node.locked .g3-node-no{opacity:0}
-.g3-node.locked:hover{transform:translate(-50%,-50%) scale(1.03)}
-.g3-node.isfinal .g3-node-disc{width:112px;height:112px;inset:-8px}
-
-/* stars over a node */
-.g3-node-stars{position:absolute;top:-18px;left:50%;transform:translateX(-50%);display:flex;gap:2px;z-index:5}
-.g3-node-stars i{font-size:18px;color:#FFDD6B;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5));font-style:normal}
-.g3-node-stars i.off{color:rgba(255,255,255,.22)}
-
-/* the player avatar sits on the current node */
-.g3-avatar{position:absolute;z-index:26;width:78px;height:78px;transform:translate(-50%,-118%);
-  pointer-events:none;transition:left .6s cubic-bezier(.3,.7,.3,1),top .6s cubic-bezier(.3,.7,.3,1);
-  filter:drop-shadow(0 8px 8px rgba(0,0,0,.4));animation:g3-hop 2.4s ease-in-out infinite}
-.g3-ping{position:absolute;z-index:20;width:96px;height:96px;transform:translate(-50%,-50%);
-  border-radius:50%;border:3px solid var(--g3-lamp);animation:g3-ping .9s ease-out both;pointer-events:none}
-
-/* =========================== GUIDE (HOOPOE) + SPEECH =========================== */
-.g3-guide{position:relative;width:118px;height:118px;animation:g3-float 5s ease-in-out infinite}
-.g3-guide svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 8px 10px rgba(0,0,0,.35))}
-.g3-guide .g3-crest{animation:g3-sway 2.4s ease-in-out infinite;transform-origin:52px 20px}
-.g3-speech{position:absolute;z-index:60;max-width:300px;padding:12px 16px;border-radius:16px;
-  background:var(--g3-cream);color:#2A2140;font-size:17px;line-height:1.5;font-weight:600;
-  box-shadow:0 12px 30px rgba(0,0,0,.4);border:2px solid #E4CE93;animation:g3-pop .4s ease both}
-.g3-speech::after{content:"";position:absolute;width:16px;height:16px;background:var(--g3-cream);
-  border-right:2px solid #E4CE93;border-bottom:2px solid #E4CE93;transform:rotate(45deg)}
-.g3-speech.below::after{top:-9px;right:32px;transform:rotate(225deg)}
-.g3-speech.above::after{bottom:-9px;right:32px}
-
-/* =========================== MODAL (stage preview / soft lock) =========================== */
-.g3-modal{position:absolute;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;
-  background:rgba(6,10,30,.62);backdrop-filter:blur(3px);animation:g3-fadein .22s ease both}
-.g3-card{width:min(560px,86%);border-radius:22px;padding:26px 28px;text-align:center;position:relative;
-  background:linear-gradient(180deg,#20305F,#182247);border:2px solid #3E4E92;box-shadow:0 26px 60px rgba(0,0,0,.55);
-  animation:g3-pop .32s ease both}
-.g3-card .g3-card-emoji{font-size:46px}
-.g3-card h3{margin:8px 0 2px;font-size:27px;color:var(--g3-cream);font-weight:700}
-.g3-card .g3-card-no{font-size:16px;color:var(--g3-lamp);font-weight:700}
-.g3-card p{margin:12px 0 0;font-size:18px;line-height:1.6;color:#CBD4F0}
-.g3-card .g3-card-obj{margin:14px auto 0;text-align:right;max-width:440px;display:flex;flex-direction:column;gap:8px}
-.g3-card .g3-card-obj .g3-objrow{display:flex;gap:10px;align-items:flex-start;font-size:16px;color:#E7ECFF;
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:9px 13px}
-.g3-card .g3-card-obj .g3-objrow b{color:var(--g3-lamp);flex:0 0 auto}
-.g3-card-btns{display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap}
-.g3-btn2{min-height:54px;padding:0 26px;border-radius:14px;font-size:19px;font-weight:700;
-  background:linear-gradient(180deg,#FFDD6B,#EDA93E);color:#3A2410;border:2px solid #B4703C;
-  box-shadow:0 4px 0 #8A5B32;transition:transform .1s,box-shadow .1s}
-.g3-btn2:hover{transform:translateY(-2px);box-shadow:0 6px 0 #8A5B32}
-.g3-btn2:active{transform:translateY(3px);box-shadow:0 1px 0 #8A5B32}
-.g3-btn2.ghost{background:rgba(255,255,255,.06);color:#dfe6ff;border:1.5px solid rgba(255,255,255,.22);box-shadow:none}
-.g3-btn2.ghost:hover{border-color:var(--g3-lamp);transform:translateY(-2px)}
-.g3-close{position:absolute;top:12px;left:14px;width:38px;height:38px;border-radius:10px;font-size:20px;
-  background:rgba(255,255,255,.08);color:#cdd6f2}
-.g3-close:hover{background:rgba(255,255,255,.16)}
-
-/* celebration confetti burst */
-.g3-confetti{position:absolute;z-index:85;pointer-events:none;width:12px;height:16px;border-radius:2px}
-
-/* respect reduced motion / low performance */
-.g3.g3-reduced *{animation-duration:.001ms !important;animation-iteration-count:1 !important}
-.g3.g3-reduced .g3-parallax{transition:none}
-
-/* fit smaller heights gracefully */
-.g3-credit{position:absolute;bottom:8px;right:16px;z-index:35;font-size:13px;color:#8f9cc9;pointer-events:none}
+/* reduced motion */
+.w2.rm *{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}
 
 </style>
 </head>
@@ -13519,739 +13517,623 @@ window.WADI = window.WADI || {};
 })(window.WADI);
 
 </script>
-<script id="g3-world-js">
+<script id="w2-js">
 /* ============================================================================
- * world/adventure.js — GAMIFICATION / EXPLORATION LAYER  (added on top)
+ * واحَةُ التِّقْنِيَة — ADVENTURE LAYER v2 (premium game world)
  * ----------------------------------------------------------------------------
- * CONTENT LOCK: this module changes ONLY how the pupil TRAVELS to a lesson.
- * It re-registers the three calm navigation scenes (opening · hub · index)
- * as a pseudo-3D Omani adventure world, and hands off to the ORIGINAL,
- * untouched `lesson` scene through `ctx.go('lesson', { id })`. No lesson,
- * objective, term, activity, question or the ScratchJr studio is modified,
- * reordered or reworded. Progress is read from the same W.store the engine
- * writes. Everything stays a single offline file — no network, no libraries.
+ * ADDS scenes + a navigation bridge on TOP of the untouched platform:
+ *   portal → semester → gate(mode + session) → g2s2world → ORIGINAL lesson
+ * Basic Mode opens the ORIGINAL platform (scene 'hub') unchanged.
+ * The adventure renders in a full-viewport overlay on <body> (true responsive
+ * reflow, no transform:scale). Progress uses the SAME W.store as the engine.
+ * No lesson content / order / name / simulator / teacher mode is modified.
  * ========================================================================== */
 (function (W) {
   'use strict';
-  if (!W || !W.scene || !W.util || !W.curriculum) return;   // engine must be ready
+  if (!W || !W.scene || !W.util || !W.curriculum || !W.store) return;
   const { el, clamp } = W.util;
   const A = W.audio || {};
   const store = W.store;
   const CREDIT = 'إعداد وتنفيذ الأستاذة دعاء الجرواني';
-
   const lessons = () => W.curriculum.lessons;
   const unit = () => W.curriculum.units[0];
-  const settings = () => (store && store.settings) || {};
+  const settings = () => store.settings || {};
+  const rm = () => !!(settings().reducedMotion || settings().lowPerf);
 
-  /* remember mastered count between scene visits, to celebrate a fresh unlock */
-  const G = (W._g3 = W._g3 || { seen: (store ? store.masteredCount() : 0) });
-
-  /* --- presentation-only zones. Lessons keep their official 1.1–1.14 order. --- */
-  const ZONES = [
-    { id: 'a', name: 'نَبْعُ الأفْكارِ',      c: '#3FBF9E', ids: ['l1', 'l2', 'l3'] },
-    { id: 'b', name: 'كُثْبانُ الحَرَكَةِ',   c: '#2F8FD6', ids: ['l4', 'l5', 'l6', 'l7'] },
-    { id: 'c', name: 'حِصْنُ البِناءِ',       c: '#EF8A24', ids: ['l8', 'l9', 'l10', 'l11'] },
-    { id: 'd', name: 'مِهْرَجانُ الأضْواءِ', c: '#9C6BC9', ids: ['l12', 'l13', 'l14'] },
-  ];
-
-  /* the 14 stage positions along the winding island trail (design px, 1280x760) */
-  const TRAIL = [
-    [1120, 560], [955, 610], [790, 560],
-    [630, 612], [470, 568], [335, 610], [205, 545],
-    [235, 420], [400, 462], [565, 415], [730, 468],
-    [905, 432], [1010, 305], [820, 262],
-  ];
-
-  /* ordered lesson list, each tagged with its zone colour */
-  function ordered() {
-    const out = [];
-    ZONES.forEach(z => z.ids.forEach(id => {
-      const L = lessons().find(l => l.id === id);
-      if (L) out.push({ L, zone: z });
-    }));
-    return out;
-  }
-  const isDone = id => !!(store && store.isMastered(id));
-  const isBuilt = id => !!(W.lessons && W.lessons.has(id));
-  /* a stage is "open" (glowing) when it is the first, or the one before is done */
-  function reachable(list, i) { return i === 0 || isDone(list[i - 1].L.id); }
-  /* partial stars = declared criteria steps completed (0..3) */
-  function starCount(L) {
-    const cs = L.criteria || [];
-    if (!cs.length) return isDone(L.id) ? 3 : 0;
-    const done = cs.filter(c => store && store.stepIsDone(L.id, c)).length;
-    return Math.max(isDone(L.id) ? 1 : 0, Math.round((done / cs.length) * 3));
-  }
-  const masteredTotal = () => (store ? lessons().filter(l => isDone(l.id)).length : 0);
-
-  /* ---------- tiny DOM helper for static SVG art (no external input) -------- */
-  function raw(tag, cls, html) {
-    const n = document.createElement(tag);
-    if (cls) n.className = cls;
-    if (html != null) n.innerHTML = html;
-    return n;
-  }
-  const rnd = (seed => () => (seed = (seed * 9301 + 49297) % 233280) / 233280)(1337);
+  /* ---- module flags ---- */
+  W._adv = W._adv || { returnTo: null, seen: store.masteredCount() };
 
   /* =========================================================================
-   * SHARED ART
+   * NAVIGATION BRIDGE — redirect boot to the portal, and route the lesson
+   * scene's built-in `go('index')` back to the adventure world when the
+   * lesson was opened from adventure (otherwise to the original index).
+   * Nothing in the lesson engine is modified.
    * ======================================================================= */
-  function skyField() {
-    const wrap = raw('div', 'g3-layer');
-    wrap.setAttribute('data-depth', '4');
-    for (let i = 0; i < 70; i++) {
-      const s = document.createElement('span');
-      s.className = 'g3-star';
-      const sz = 1 + rnd() * 2.4;
-      s.style.cssText = 'width:' + sz + 'px;height:' + sz + 'px;left:' + (rnd() * 100).toFixed(2) +
-        '%;top:' + (rnd() * 62).toFixed(2) + '%;animation-delay:' + (rnd() * 3).toFixed(2) + 's';
-      wrap.appendChild(s);
+  const _go = W.scene.go.bind(W.scene);
+  let bootRedirected = false;
+  W.scene.go = function (id, p) {
+    if (!bootRedirected && (id === 'opening' || id === 'hub')) {
+      bootRedirected = true; return _go('portal', p);
     }
-    wrap.appendChild(raw('span', 'g3-dust'));
-    return wrap;
-  }
+    if (id === 'index' && W._adv.returnTo === 'g2s2world') return _go('g2s2world', p);
+    return _go(id, p);
+  };
 
-  function moonSVG() {
-    return '<svg viewBox="0 0 200 200" width="150" height="150">' +
-      '<defs><radialGradient id="g3moon" cx="38%" cy="34%" r="70%">' +
-      '<stop offset="0%" stop-color="#FFF6D8"/><stop offset="60%" stop-color="#F6DE9C"/>' +
-      '<stop offset="100%" stop-color="#E7B85E"/></radialGradient>' +
-      '<radialGradient id="g3halo" cx="50%" cy="50%" r="50%">' +
-      '<stop offset="55%" stop-color="rgba(242,194,48,.32)"/><stop offset="100%" stop-color="rgba(242,194,48,0)"/>' +
-      '</radialGradient></defs>' +
-      '<circle cx="100" cy="100" r="96" fill="url(#g3halo)"/>' +
-      '<circle cx="100" cy="100" r="56" fill="url(#g3moon)"/>' +
-      '<circle cx="82" cy="86" r="9" fill="rgba(190,150,80,.35)"/>' +
-      '<circle cx="118" cy="112" r="6" fill="rgba(190,150,80,.3)"/>' +
-      '<circle cx="104" cy="74" r="4" fill="rgba(190,150,80,.28)"/></svg>';
-  }
+  /* =========================================================================
+   * PROGRESS ADAPTER — one source of truth (W.store). Shaped so other grades
+   * can register their own reader later without a second progress system.
+   * ======================================================================= */
+  const Progress = {
+    grade: 2, semester: 2,
+    all() { return lessons(); },
+    isDone(id) { return store.isMastered(id); },
+    doneCount() { return lessons().filter(l => store.isMastered(l.id)).length; },
+    total() { return lessons().length; },
+    frac(L) {
+      const cs = L.criteria || [];
+      if (!cs.length) return store.isMastered(L.id) ? 1 : 0;
+      const d = cs.filter(c => store.stepIsDone(L.id, c)).length;
+      return d / cs.length;
+    },
+    hasProgress() { return this.doneCount() > 0; },
+    resetScope() { lessons().forEach(l => store.clearLesson(l.id)); W._adv.seen = 0; },
+  };
 
-  function cloud(w) {
-    return '<svg viewBox="0 0 200 80" width="' + w + '" height="' + (w * 0.4) + '">' +
-      '<g fill="rgba(210,220,255,.16)"><ellipse cx="70" cy="50" rx="60" ry="26"/>' +
-      '<ellipse cx="120" cy="42" rx="46" ry="30"/><ellipse cx="150" cy="54" rx="40" ry="22"/></g></svg>';
+  /* =========================================================================
+   * OVERLAY LIFECYCLE — every adventure scene lives in a <body> overlay so it
+   * escapes the fixed 1280x760 scaled canvas and reflows for real.
+   * ======================================================================= */
+  let overlay = null;
+  function makeOverlay(kind) {
+    removeOverlay();
+    overlay = document.createElement('div');
+    overlay.className = 'w2 w2-enter w2-' + kind + (rm() ? ' rm' : '');
+    overlay.setAttribute('dir', 'rtl');
+    overlay.setAttribute('lang', 'ar');
+    document.body.appendChild(overlay);
+    // ensure the scaled platform canvas doesn't intercept while overlay is up
+    return overlay;
   }
+  function removeOverlay() { if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay); overlay = null; }
 
-  /* a friendly hoopoe (الهُدْهُد) — Oman's national bird — as the guide */
+  /* ---- tiny helpers ---- */
+  function raw(tag, cls, html) { const n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; }
+  const seedRnd = (s => () => (s = (s * 9301 + 49297) % 233280) / 233280)(97);
+  function starsBg(host, n, maxY) {
+    const w = raw('div', 'w2-stars'); w.style.cssText = 'position:absolute;inset:0';
+    for (let i = 0; i < n; i++) { const s = document.createElement('span'); const z = 1 + seedRnd() * 2;
+      s.style.cssText = 'width:' + z + 'px;height:' + z + 'px;left:' + (seedRnd() * 100).toFixed(1) + '%;top:' + (seedRnd() * (maxY || 55)).toFixed(1) + '%;animation-delay:' + (seedRnd() * 3).toFixed(1) + 's';
+      w.appendChild(s); }
+    host.appendChild(w);
+  }
   function hoopoeSVG() {
     return '<svg viewBox="0 0 120 120">' +
-      '<ellipse cx="60" cy="112" rx="26" ry="5" fill="rgba(0,0,0,.18)"/>' +
-      /* crest */
-      '<g class="g3-crest">' +
-      '<path d="M52 34 L50 12 L58 26 L60 8 L66 26 L72 12 L70 34 Z" fill="#E8853A"/>' +
-      '<path d="M50 12 L58 26 M60 8 L60 30 M72 12 L66 26" stroke="#2A1206" stroke-width="1.4"/>' +
-      '<circle cx="50" cy="12" r="2.6" fill="#2A1206"/><circle cx="60" cy="8" r="2.6" fill="#2A1206"/><circle cx="72" cy="12" r="2.6" fill="#2A1206"/></g>' +
-      /* head + body */
+      '<ellipse cx="60" cy="112" rx="24" ry="4.5" fill="rgba(0,0,0,.18)"/>' +
+      '<g class="w2-crest"><path d="M52 34 L50 12 L58 26 L60 8 L66 26 L72 12 L70 34 Z" fill="#E8853A"/>' +
+      '<circle cx="50" cy="12" r="2.4" fill="#2A1206"/><circle cx="60" cy="8" r="2.4" fill="#2A1206"/><circle cx="72" cy="12" r="2.4" fill="#2A1206"/></g>' +
       '<path d="M40 46 q20 -18 40 0 q10 26 -4 44 q-16 14 -32 0 q-14 -18 -4 -44Z" fill="#E9A25A"/>' +
       '<path d="M44 52 q16 -12 32 0 q6 20 -4 34 q-12 10 -24 0 q-10 -14 -4 -34Z" fill="#F4C88C"/>' +
-      /* wing bars */
-      '<g stroke="#2A1206" stroke-width="3" stroke-linecap="round">' +
-      '<path d="M70 64 h12"/><path d="M70 72 h14"/><path d="M70 80 h12"/></g>' +
-      /* eye + beak */
-      '<circle cx="56" cy="52" r="4.4" fill="#2A1206"/><circle cx="57.4" cy="50.6" r="1.4" fill="#fff"/>' +
+      '<g stroke="#2A1206" stroke-width="3" stroke-linecap="round"><path d="M70 64 h12"/><path d="M70 72 h14"/><path d="M70 80 h12"/></g>' +
+      '<circle cx="56" cy="52" r="4.2" fill="#2A1206"/><circle cx="57.3" cy="50.7" r="1.3" fill="#fff"/>' +
       '<path d="M40 54 q-16 4 -22 12 q10 -2 22 -4Z" fill="#3A2418"/>' +
-      /* feet */
       '<path d="M54 92 v10 M66 92 v10" stroke="#C8781E" stroke-width="3" stroke-linecap="round"/></svg>';
   }
-  function guideEl() {
-    const g = raw('div', 'g3-guide', hoopoeSVG());
-    g.setAttribute('aria-hidden', 'true');
-    return g;
+  function childSVG() {
+    return '<svg viewBox="0 0 64 78">' +
+      '<ellipse cx="32" cy="75" rx="16" ry="3.5" fill="rgba(0,0,0,.28)"/>' +
+      '<rect x="20" y="34" width="24" height="34" rx="9" fill="#FBF3E4"/>' +          /* thobe */
+      '<rect x="14" y="30" width="10" height="22" rx="5" fill="#2FA98E"/>' +          /* backpack strap */
+      '<circle cx="32" cy="22" r="12" fill="#E8B98C"/>' +                              /* head */
+      '<path d="M20 20 a12 9 0 0 1 24 0 q-12 -5 -24 0Z" fill="#EFE3C6"/>' +            /* kummah */
+      '<path d="M20 20 q12 -4 24 0" stroke="#C7A15A" stroke-width="1.5" fill="none"/>' +
+      '<circle cx="28" cy="22" r="1.6" fill="#3a2a1a"/><circle cx="36" cy="22" r="1.6" fill="#3a2a1a"/>' +
+      '<path d="M29 27 q3 2 6 0" stroke="#8a5a3a" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>';
   }
-  /* a speech bubble anchored at (x,y) design px, opening above or below */
-  function speech(host, x, y, text, dir) {
-    const b = raw('div', 'g3-speech ' + (dir || 'below'));
-    b.textContent = text;
-    b.style.left = x + 'px';
-    b.style.top = y + 'px';
-    host.appendChild(b);
-    return b;
-  }
+  function guideEl() { const g = raw('div', 'w2-hud-guide', hoopoeSVG()); g.setAttribute('aria-hidden', 'true'); return g; }
+  function speak(host, x, y, text) { const b = raw('div', 'w2-speech'); b.textContent = text; b.style.left = x; b.style.top = y; host.appendChild(b); return b; }
 
-  /* an Omani fort motif (sandstone tower with crenellations) */
-  function fortSVG(w) {
-    return '<svg viewBox="0 0 160 150" width="' + w + '" height="' + (w * 0.94) + '">' +
-      '<defs><linearGradient id="g3fort" x1="0" y1="0" x2="0" y2="1">' +
-      '<stop offset="0%" stop-color="#F0D9A8"/><stop offset="100%" stop-color="#D3A96A"/></linearGradient></defs>' +
-      '<path d="M30 150 V70 h100 v80Z" fill="url(#g3fort)"/>' +
-      '<path d="M30 70 v-12 h10 v8 h12 v-8 h12 v8 h12 v-8 h12 v8 h12 v-8 h10 v12Z" fill="#E7C994"/>' +
-      '<rect x="52" y="94" width="18" height="34" rx="3" fill="#7A4A1E"/>' +
-      '<rect x="90" y="94" width="18" height="34" rx="3" fill="#7A4A1E"/>' +
-      '<rect x="70" y="78" width="20" height="16" rx="3" fill="#7A4A1E"/>' +
-      '<path d="M20 150 V86 h14 v64Z M126 150 V86 h14 v64Z" fill="#DBB57A"/>' +
-      '<path d="M20 86 v-8 h4 v5 h6 v-5 h4 v8Z M126 86 v-8 h4 v5 h6 v-5 h4 v8Z" fill="#E7C994"/>' +
-      '<path d="M80 78 l0 -20 l16 6 l-16 6" fill="#3FBF9E"/></svg>';
-  }
-  function palmSVG(h) {
-    return '<svg viewBox="0 0 80 120" width="' + (h * 0.66) + '" height="' + h + '">' +
-      '<path d="M40 120 Q36 80 42 46" stroke="#8A5B32" stroke-width="7" fill="none" stroke-linecap="round"/>' +
-      '<g fill="#4FA85A"><path d="M42 46 Q16 34 4 44 Q22 40 42 52Z"/><path d="M42 46 Q68 34 78 46 Q60 40 42 52Z"/>' +
-      '<path d="M42 46 Q22 22 16 8 Q34 24 44 48Z"/><path d="M42 46 Q62 22 68 8 Q50 24 42 48Z"/>' +
-      '<path d="M42 48 Q40 26 42 12 Q46 28 44 50Z"/></g>' +
-      '<g fill="#B4703C"><circle cx="40" cy="50" r="3"/><circle cx="46" cy="52" r="3"/><circle cx="43" cy="47" r="3"/></g></svg>';
+  function ringSVG(frac) {
+    const r = 13, c = 2 * Math.PI * r, off = c * (1 - clamp(frac, 0, 1));
+    return '<svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="13" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="4"/>' +
+      '<circle cx="16" cy="16" r="13" fill="none" stroke="#F7C948" stroke-width="4" stroke-linecap="round" stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + off.toFixed(1) + '" transform="rotate(-90 16 16)"/></svg>';
   }
 
   /* =========================================================================
-   * PARALLAX + CINEMATIC ENTRY
+   * GRADE / SEMESTER catalogue (worlds). Only Grade 2 · Semester 2 has real
+   * platform content in this build; the rest are honestly shown as "قريبًا".
+   * NO lesson data is invented for locked worlds.
    * ======================================================================= */
-  function reducedMotion() { return !!settings().reducedMotion; }
-  function lowPerf() { return !!settings().lowPerf; }
+  const GRADES = [
+    { g: 1, ar: 'الصَّفُّ الأوَّلُ', ready: false, worlds: ['قَرْيَةُ التِّقْنِيَةِ', 'قِطارُ الأوامِرِ'] , art: 'village' },
+    { g: 2, ar: 'الصَّفُّ الثَّاني', ready: true,  worlds: ['مُتْحَفُ المُخْتَرِعينَ', 'وادي الشِّيفْراتِ'], art: 'valley' },
+    { g: 3, ar: 'الصَّفُّ الثَّالِثُ', ready: false, worlds: ['قَلْعَةُ المَعْرِفَةِ', 'مَدينَةُ الرُّوبوتاتِ'], art: 'castle' },
+    { g: 4, ar: 'الصَّفُّ الرَّابِعُ', ready: false, worlds: ['اسْتوديو الإنْتاجِ', 'مَحَطَّةُ البَياناتِ'], art: 'station' },
+  ];
 
-  function shell(cls) {
-    const g = raw('div', 'g3 g3-enter ' + (cls || ''));
-    if (reducedMotion() || lowPerf()) g.classList.add('g3-reduced');
-    g.appendChild(raw('div', 'g3-iris'));
-    return g;
+  function cardArt(kind) {
+    const S = (inner) => '<svg class="w2-card-art" viewBox="0 0 300 220" preserveAspectRatio="xMidYMid slice">' + inner + '</svg>';
+    const sky = '<defs><linearGradient id="sk' + kind + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a4f86"/><stop offset="1" stop-color="#8a5a5e"/></linearGradient></defs><rect width="300" height="220" fill="url(#sk' + kind + ')"/>';
+    if (kind === 'valley') return S(sky + '<path d="M0 150 L70 90 L120 130 L180 70 L240 120 L300 80 V220 H0Z" fill="#6b4a34"/><path d="M0 175 Q150 150 300 180 V220 H0Z" fill="#caa062"/><path d="M150 120 h40 v40 h-40Z" fill="#e0be86"/><circle cx="250" cy="70" r="16" fill="#ffe79a"/><path d="M60 200 q40 -30 90 0 q60 -26 150 0" stroke="#37c7b4" stroke-width="4" fill="none" opacity=".8"/>');
+    if (kind === 'village') return S(sky + '<path d="M0 160 Q80 110 160 150 T300 150 V220 H0Z" fill="#7a5a3a"/><rect x="120" y="120" width="46" height="46" fill="#e6c07a"/><path d="M118 120 L143 100 L168 120Z" fill="#c97f35"/><rect x="60" y="140" width="34" height="30" fill="#dbb57a"/><rect x="200" y="138" width="38" height="34" fill="#dbb57a"/>');
+    if (kind === 'castle') return S(sky + '<path d="M0 190 H300 V220 H0Z" fill="#5a4a6a"/><path d="M110 80 v110 h80 V80 h-14 v-12 h-12 v12 h-16 v-12 h-12 v12Z" fill="#b9a6cf"/><rect x="140" y="120" width="20" height="70" fill="#3a2a4a"/><path d="M80 110 v80 h20 v-80 h-6 v-8 h-8 v8Z M200 110 v80 h20 v-80 h-6 v-8 h-8 v8Z" fill="#a897c4"/>');
+    return S(sky + '<rect width="300" height="220" fill="#101a34"/><circle cx="150" cy="110" r="46" fill="none" stroke="#37c7b4" stroke-width="4"/><circle cx="150" cy="110" r="18" fill="#2f8fd6"/><g stroke="#8ea6ff" stroke-width="3"><path d="M150 64 V30"/><path d="M150 156 V190"/><path d="M104 110 H70"/><path d="M196 110 H230"/></g><circle cx="150" cy="30" r="5" fill="#F7C948"/>');
   }
-  function bindParallax(g) {
-    if (reducedMotion() || lowPerf()) return;
-    const layers = [...g.querySelectorAll('[data-depth]')];
-    if (!layers.length) return;
-    let raf = 0, tx = 0, ty = 0;
-    g.addEventListener('pointermove', e => {
-      const r = g.getBoundingClientRect();
-      tx = ((e.clientX - r.left) / r.width - 0.5);
-      ty = ((e.clientY - r.top) / r.height - 0.5);
-      if (!raf) raf = requestAnimationFrame(apply);
-    });
-    g.addEventListener('pointerleave', () => { tx = 0; ty = 0; if (!raf) raf = requestAnimationFrame(apply); });
-    function apply() {
-      raf = 0;
-      layers.forEach(l => {
-        const d = parseFloat(l.getAttribute('data-depth')) || 1;
-        const m = 26 / d;
-        l.style.transform = 'translate(' + (-tx * m).toFixed(1) + 'px,' + (-ty * m).toFixed(1) + 'px)';
+
+  /* =========================================================================
+   * SCENE — portal (grade selection)
+   * ======================================================================= */
+  W.scene.register('portal', {
+    mount() {
+      W._adv.returnTo = null;
+      const g = makeOverlay('portal');
+      g.appendChild(raw('div', 'w2-sky'));
+      starsBg(g, 60, 55);
+      g.appendChild(sandDunes());
+      g.appendChild(raw('div', 'w2-vign'));
+
+      const grid = raw('div', 'w2-grid');
+      GRADES.forEach(G => {
+        const card = raw(G.ready ? 'button' : 'div', 'w2-card' + (G.ready ? '' : ' locked'));
+        const art = raw('div'); art.innerHTML = cardArt(G.art); card.appendChild(art.firstChild);
+        card.appendChild(el('div', { class: 'w2-card-badge', text: G.ready ? 'مُتاح' : 'قَريبًا' }));
+        card.appendChild(el('div', { class: 'w2-card-body' }, [
+          el('div', { class: 'w2-card-k', text: 'واحَةُ التِّقْنِيَة' }),
+          el('div', { class: 'w2-card-t', text: G.ar }),
+        ]));
+        if (!G.ready) card.appendChild(raw('div', 'w2-card-lock', '🔒'));
+        else { card.setAttribute('type', 'button'); card.setAttribute('aria-label', G.ar); card.addEventListener('click', () => { A.click && A.click(); _go('semester', { grade: G.g }); }); }
+        grid.appendChild(card);
       });
-    }
-  }
-  /* go to another scene with a soft click + (the target adds its own entry) */
-  function goTo(ctx, id, params) { try { A.click && A.click(); } catch (e) {} ctx.go(id, params || {}); }
 
-  function topbar(opts) {
-    const bar = raw('div', 'g3-topbar');
-    const tw = raw('div', 'g3-titlewrap');
-    if (opts.eyebrow) tw.appendChild(el('span', { class: 'g3-eyebrow', text: opts.eyebrow }));
-    tw.appendChild(el('h1', { class: 'g3-h1', text: opts.title }));
-    bar.appendChild(tw);
-    const tools = raw('div', 'g3-tools');
-    (opts.tools || []).forEach(t => tools.appendChild(t));
-    bar.appendChild(tools);
-    return bar;
-  }
-  function ringPill(done, total) {
-    const p = 1280, frac = total ? done / total : 0;
-    const r = 15, c = 2 * Math.PI * r, off = c * (1 - frac);
-    const svg = '<svg class="g3-mini-ring" viewBox="0 0 36 36">' +
-      '<circle cx="18" cy="18" r="15" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="4"/>' +
-      '<circle cx="18" cy="18" r="15" fill="none" stroke="#F2C230" stroke-width="4" stroke-linecap="round"' +
-      ' stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + off.toFixed(1) + '" transform="rotate(-90 18 18)"/></svg>';
-    const pill = raw('div', 'g3-progresspill');
-    pill.appendChild(raw('span', '', svg));
-    pill.appendChild(el('b', { text: done + '/' + total }));
-    pill.appendChild(el('span', { text: 'مَراحِلُ مُضاءَةٌ' }));
-    void p;
-    return pill;
-  }
-  function iconChip(icon, label, fn, extraCls) {
-    return el('button', { class: 'g3-chip ' + (extraCls || ''), type: 'button', 'aria-label': label, onclick: fn }, [
-      el('span', { class: 'g3-ci', text: icon }),
-      label ? el('span', { text: label }) : null,
-    ].filter(Boolean));
-  }
-  function creditLine() { return el('div', { class: 'g3-credit', text: CREDIT }); }
+      g.appendChild(el('div', { class: 'w2-shell' }, [
+        el('div', { class: 'w2-brand' }, [
+          el('span', { class: 'w2-eyebrow', text: 'تَقْنِيَةُ المَعْلوماتِ · سَلْطَنَةُ عُمان' }),
+          el('h1', { text: 'واحَةُ التِّقْنِيَة' }),
+          el('p', { text: 'اخْتَرْ صَفَّكَ لِتَدْخُلَ عالَمَهُ' }),
+        ]),
+        grid,
+      ]));
+      g.appendChild(el('div', { class: 'w2-credit', text: CREDIT }));
+    },
+    unmount() { removeOverlay(); },
+  });
 
   /* =========================================================================
-   * SCENE — opening (cinematic world intro)
+   * SCENE — semester selection
    * ======================================================================= */
-  W.scene.register('opening', {
+  W.scene.register('semester', {
     mount(ctx) {
-      const root = ctx.root;
-      const g = shell('g3-open-scene');
+      W._adv.returnTo = null;
+      const grade = (ctx.params && ctx.params.grade) || 2;
+      const g = makeOverlay('semester');
+      g.appendChild(raw('div', 'w2-sky')); starsBg(g, 50, 55); g.appendChild(sandDunes()); g.appendChild(raw('div', 'w2-vign'));
 
-      /* sky + moon + silhouette landscape (all parallax) */
-      g.appendChild(skyField());
-
-      const moon = raw('div', 'g3-layer'); moon.setAttribute('data-depth', '3');
-      const mm = raw('div', '', moonSVG());
-      mm.style.cssText = 'position:absolute;right:120px;top:60px;animation:g3-float 7s ease-in-out infinite';
-      moon.appendChild(mm); g.appendChild(moon);
-
-      const cl = raw('div', 'g3-layer'); cl.setAttribute('data-depth', '2.4');
-      [[120, 150, 260], [820, 110, 210], [420, 210, 180]].forEach(([x, y, w]) => {
-        const c = raw('div', '', cloud(w)); c.style.cssText = 'position:absolute;left:' + x + 'px;top:' + y + 'px;animation:g3-float2 8s ease-in-out infinite';
-        cl.appendChild(c);
+      const SEMS = [
+        { s: 1, ar: 'الفَصْلُ الدِّراسِيُّ الأوَّلُ', ready: (grade === 2 ? false : false), art: grade === 2 ? 'village' : 'village' },
+        { s: 2, ar: 'الفَصْلُ الدِّراسِيُّ الثَّاني', ready: (grade === 2), art: 'valley' },
+      ];
+      const grid = raw('div', 'w2-grid sem');
+      SEMS.forEach(S => {
+        const ready = S.ready;
+        const card = raw(ready ? 'button' : 'div', 'w2-card' + (ready ? '' : ' locked'));
+        const art = raw('div'); art.innerHTML = cardArt(S.art); card.appendChild(art.firstChild);
+        card.appendChild(el('div', { class: 'w2-card-badge', text: ready ? 'مُتاح' : 'قَريبًا' }));
+        if (ready) card.appendChild(el('div', { class: 'w2-card-prog', text: Progress.doneCount() + '/' + Progress.total() }));
+        card.appendChild(el('div', { class: 'w2-card-body' }, [
+          el('div', { class: 'w2-card-k', text: 'الصَّفُّ الثَّاني' }),
+          el('div', { class: 'w2-card-t', text: S.ar }),
+        ]));
+        if (!ready) card.appendChild(raw('div', 'w2-card-lock', '🔒'));
+        else { card.setAttribute('type', 'button'); card.setAttribute('aria-label', S.ar); card.addEventListener('click', () => { A.click && A.click(); _go('gate', { grade: grade, semester: S.s }); }); }
+        grid.appendChild(card);
       });
-      g.appendChild(cl);
 
-      /* foreground dune + fort + palms silhouette */
-      const fg = raw('div', 'g3-layer'); fg.setAttribute('data-depth', '1.3');
-      fg.innerHTML =
-        '<svg class="g3-fill" viewBox="0 0 1280 760" preserveAspectRatio="xMidYMax slice">' +
-        '<path d="M0 640 Q220 560 480 620 T1000 610 T1280 650 V760 H0Z" fill="#0E1740"/>' +
-        '<path d="M0 700 Q320 640 700 690 T1280 700 V760 H0Z" fill="#0A0F2E"/></svg>';
-      const fort = raw('div', '', fortSVG(150)); fort.style.cssText = 'position:absolute;left:150px;bottom:96px;opacity:.9';
-      fg.appendChild(fort);
-      [[980, 120], [1080, 150], [300, 110]].forEach(([x, h]) => {
-        const p = raw('div', '', palmSVG(h)); p.style.cssText = 'position:absolute;left:' + x + 'px;bottom:110px;transform-origin:bottom center;animation:g3-sway 5s ease-in-out infinite';
-        fg.appendChild(p);
-      });
-      g.appendChild(fg);
+      g.appendChild(el('div', { class: 'w2-shell' }, [
+        el('div', { class: 'w2-brand' }, [
+          el('span', { class: 'w2-eyebrow', text: 'الصَّفُّ الثَّاني' }),
+          el('h1', { text: 'اخْتَرِ الفَصْلَ' }),
+        ]),
+        grid,
+        el('div', { class: 'w2-backrow' }, [
+          el('button', { class: 'w2-btn ghost', type: 'button', text: '⟵ الصُّفوفُ', onclick: () => { A.click && A.click(); _go('portal'); } }),
+        ]),
+      ]));
+      g.appendChild(el('div', { class: 'w2-credit', text: CREDIT }));
+    },
+    unmount() { removeOverlay(); },
+  });
 
-      /* the greeting guide */
-      const guideWrap = raw('div', 'g3-hint-guide'); guideWrap.style.cssText = 'right:150px;bottom:150px;';
-      guideWrap.appendChild(guideEl());
-      g.appendChild(guideWrap);
+  /* =========================================================================
+   * SCENE — gate (mode + session)
+   * ======================================================================= */
+  W.scene.register('gate', {
+    mount(ctx) {
+      W._adv.returnTo = null;
+      const g = makeOverlay('gate');
+      g.appendChild(raw('div', 'w2-sky')); starsBg(g, 50, 55); g.appendChild(sandDunes()); g.appendChild(raw('div', 'w2-vign'));
 
-      /* title + CTA */
-      const inner = el('div', { class: 'g3-op-inner' }, [
-        el('div', { class: 'g3-op-badge', text: 'الصَّفُّ الثَّاني · ' + unit().ar }),
-        el('h1', { class: 'g3-op-title', text: 'واحَةُ التِّقْنِيَة' }),
-        el('div', { class: 'g3-op-sub', text: 'عالَمُكَ الرَّقْمِيُّ يَنْتَظِرُكَ' }),
-        el('p', { class: 'g3-op-line', text: 'ادْخُلْ إلى عالَمِ الجُزُرِ، وَاسْتَكْشِفْ مَراحِلَهُ مَرْحَلَةً بَعْدَ مَرْحَلَةٍ، وَأَضِئْ طَريقَكَ بِما تَتَعَلَّمُهُ.' }),
-        el('div', { class: 'g3-op-cta' }, [
-          el('button', {
-            class: 'g3-bigbtn g3-pulse', type: 'button',
-            onclick: () => { try { store.setSetting('seenIntro', true); } catch (e) {} A.light && A.light(); ctx.go('hub'); },
-          }, [el('span', { text: '🚀' }), el('span', { text: 'ادْخُلِ العالَمَ' })]),
+      const modes = el('div', { class: 'w2-gate-modes' }, [
+        el('button', { class: 'w2-mode adv', type: 'button', 'aria-label': 'وضع المغامرة والتحدي', onclick: enterAdventure }, [
+          el('div', { class: 'w2-mode-ic', text: '🎮' }),
+          el('div', { class: 'w2-mode-t', text: 'وَضْعُ المُغامَرَةِ وَالتَّحَدّي' }),
+          el('div', { class: 'w2-mode-s', text: 'ادْخُلْ عالَمَ الوادي وَاسْتَكْشِفْ مَراحِلَهُ.' }),
+        ]),
+        el('button', { class: 'w2-mode basic', type: 'button', 'aria-label': 'الوضع الأساسي', onclick: enterBasic }, [
+          el('div', { class: 'w2-mode-ic', text: '📚' }),
+          el('div', { class: 'w2-mode-t', text: 'الوَضْعُ الأساسِيُّ' }),
+          el('div', { class: 'w2-mode-s', text: 'المِنَصَّةُ التَّعْليمِيَّةُ كَما هِيَ.' }),
         ]),
       ]);
-      const stack = raw('div', 'g3-opening'); stack.appendChild(inner);
-      g.appendChild(stack);
 
-      g.appendChild(el('button', {
-        class: 'g3-skip', type: 'button', text: 'تَخَطّي ⟵',
-        onclick: () => { try { store.setSetting('seenIntro', true); } catch (e) {} ctx.go('hub'); },
-      }));
-      g.appendChild(creditLine());
+      const shell = el('div', { class: 'w2-shell' }, [
+        el('div', { class: 'w2-brand' }, [
+          el('span', { class: 'w2-eyebrow', text: 'الصَّفُّ الثَّاني · الفَصْلُ الثَّاني · وادي الشِّيفْراتِ' }),
+          el('h1', { text: 'كَيْفَ تُريدُ أنْ تَبْدَأَ؟' }),
+        ]),
+        modes,
+      ]);
 
-      root.appendChild(g);
-      bindParallax(g);
-      setTimeout(() => { const sp = speech(guideWrap, -230, 6, 'أهْلًا بِكَ! أنا الهُدْهُدُ، سَأُرافِقُكَ في رِحْلَتِكَ.', 'below'); void sp; }, 640);
-    },
-  });
-
-  /* =========================================================================
-   * SCENE — hub (the archipelago world map)
-   * ======================================================================= */
-  W.scene.register('hub', {
-    mount(ctx) {
-      const root = ctx.root;
-      const g = shell('g3-hub-scene');
-      const done = masteredTotal(), total = lessons().length;
-
-      g.appendChild(skyField());
-      const cl = raw('div', 'g3-layer'); cl.setAttribute('data-depth', '2.6');
-      [[80, 120, 240], [900, 90, 220], [520, 60, 160]].forEach(([x, y, w]) => {
-        const c = raw('div', '', cloud(w)); c.style.cssText = 'position:absolute;left:' + x + 'px;top:' + y + 'px;animation:g3-float2 9s ease-in-out infinite';
-        cl.appendChild(c);
-      });
-      g.appendChild(cl);
-
-      /* perspective ocean */
-      const seaLayer = raw('div', 'g3-layer'); seaLayer.setAttribute('data-depth', '5');
-      const sea = raw('div', 'g3-sea');
-      for (let i = 0; i < 5; i++) {
-        const row = raw('div', 'g3-searow');
-        row.style.cssText = 'top:' + (18 + i * 16) + '%;width:120%;left:-10%;opacity:' + (0.5 - i * 0.07) + ';animation-delay:' + (i * 0.8) + 's';
-        sea.appendChild(row);
+      /* session block only when progress exists on THIS grade+semester */
+      if (Progress.hasProgress()) {
+        shell.appendChild(el('div', { class: 'w2-session' }, [
+          el('div', { class: 'w2-sess-h', text: 'وُجِدَ تَقَدُّمٌ سابِقٌ على هذا الجِهازِ (' + Progress.doneCount() + ' مِنْ ' + Progress.total() + ' مُهِمَّةً مُكْتَمِلَةً):' }),
+          el('div', { class: 'w2-sess-row' }, [
+            el('button', { class: 'w2-btn', type: 'button', text: '▶ مُتابَعَةُ الجَلْسَةِ', onclick: enterAdventure }),
+            el('button', { class: 'w2-btn ghost', type: 'button', text: '✦ بَدْءُ جَلْسَةٍ جَديدَةٍ', onclick: confirmNewSession }),
+          ]),
+        ]));
       }
-      seaLayer.appendChild(sea);
-      g.appendChild(seaLayer);
+      shell.appendChild(el('div', { class: 'w2-backrow' }, [
+        el('button', { class: 'w2-btn ghost', type: 'button', text: '⟵ الفُصولُ', onclick: () => { A.click && A.click(); _go('semester', { grade: 2 }); } }),
+      ]));
+      g.appendChild(shell);
+      g.appendChild(el('div', { class: 'w2-credit', text: CREDIT }));
 
-      /* moon */
-      const moon = raw('div', 'g3-layer'); moon.setAttribute('data-depth', '3');
-      const mm = raw('div', '', moonSVG()); mm.style.cssText = 'position:absolute;left:80px;top:96px;transform:scale(.8);animation:g3-float 7s ease-in-out infinite';
-      moon.appendChild(mm); g.appendChild(moon);
-
-      /* island tokens */
-      const scene = raw('div', 'g3-mapscene');
-
-      /* Island 2 — active (RTL: primary on the right) */
-      const isle2 = raw('div', 'g3-isle');
-      isle2.style.cssText = 'right:150px;top:300px;width:360px;height:300px;';
-      isle2.setAttribute('role', 'button');
-      isle2.setAttribute('tabindex', '0');
-      isle2.setAttribute('aria-label', 'جزيرة الفصل الدراسي الثاني — ادخل');
-      isle2.appendChild(raw('div', '', islandTokenSVG(360, false)));
-      isle2.appendChild(el('span', { class: 'g3-isle-badge go', text: 'ابْدَأِ المُغامَرَةَ' }));
-      isle2.appendChild(el('span', { class: 'g3-isle-name', text: 'جَزيرَةُ الفَصْلِ الثَّاني' }));
-      isle2.appendChild(el('span', { class: 'g3-isle-prog', text: done + ' مِنْ ' + total + ' مَراحِلَ مُضاءَةٍ' }));
-      const enter2 = () => { A.water && A.water(); ctx.go('index'); };
-      isle2.addEventListener('click', enter2);
-      isle2.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); enter2(); } });
-      scene.appendChild(isle2);
-
-      /* Island 1 — semester one (content not part of this package) → locked */
-      const isle1 = raw('div', 'g3-isle locked');
-      isle1.style.cssText = 'left:150px;top:360px;width:300px;height:250px;';
-      isle1.setAttribute('aria-label', 'جزيرة الفصل الدراسي الأول — قريبًا');
-      isle1.appendChild(raw('div', '', islandTokenSVG(300, true)));
-      isle1.appendChild(raw('div', 'g3-lockbig', '🔒'));
-      isle1.appendChild(el('span', { class: 'g3-isle-badge soon', text: 'قَريبًا' }));
-      isle1.appendChild(el('span', { class: 'g3-isle-name', text: 'جَزيرَةُ الفَصْلِ الأوَّلِ' }));
-      let lockMsg = null;
-      isle1.addEventListener('click', () => {
+      function enterAdventure() { A.light && A.light(); _go('g2s2world'); }
+      function enterBasic() {
+        A.click && A.click(); W._adv.returnTo = null; removeOverlay(); _go('hub');   // ORIGINAL platform
+      }
+      function confirmNewSession() {
         A.soft && A.soft();
-        if (lockMsg) { lockMsg.remove(); lockMsg = null; return; }
-        lockMsg = speech(scene, 250, 336, 'هذِهِ الجَزيرَةُ سَتُفْتَحُ لاحِقًا بِإذْنِ اللهِ.', 'below');
-        setTimeout(() => { if (lockMsg) { lockMsg.remove(); lockMsg = null; } }, 2600);
-      });
-      scene.appendChild(isle1);
-
-      /* floating structures for the other hub features */
-      scene.appendChild(structure('right:60px;top:150px;', workshopSVG(), 'وَرْشَةُ الإبْداعِ', () => { A.click && A.click(); ctx.go('free'); }));
-      scene.appendChild(structure('left:470px;top:170px;', towerSVG(), 'بُرْجُ التَّقْييمِ', () => { A.click && A.click(); ctx.go('selfcheck'); }));
-      scene.appendChild(structure('left:52px;top:296px;', gateSVG(), 'رُكْنُ المُعَلِّمَةِ', () => { A.click && A.click(); W.teacher && W.teacher.open(); }));
-
-      g.appendChild(scene);
-
-      /* guide floating near island 2 */
-      const guideWrap = raw('div', 'g3-hint-guide'); guideWrap.style.cssText = 'right:470px;top:300px;transform:scale(.9);';
-      guideWrap.appendChild(guideEl());
-      g.appendChild(guideWrap);
-
-      /* top bar */
-      g.appendChild(topbar({
-        eyebrow: 'خَريطَةُ العالَمِ',
-        title: 'واحَةُ التِّقْنِيَة',
-        tools: [
-          ringPillWrap(done, total),
-          iconChip('👩‍🏫', '', () => W.teacher && W.teacher.open(), 'g3-iconbtn'),
-          iconChip('↺', '', () => confirmReset(ctx), 'g3-iconbtn'),
-        ],
-      }));
-      g.appendChild(creditLine());
-
-      root.appendChild(g);
-      bindParallax(g);
-      setTimeout(() => speech(guideWrap, -250, -6, 'اخْتَرْ جَزيرَةَ الفَصْلِ الثَّاني لِتَبْدَأَ!', 'below'), 620);
-
-      function ringPillWrap(d, t) { return ringPill(d, t); }
+        const m = raw('div', 'w2-modal');
+        const d = el('div', { class: 'w2-dialog' }, [
+          el('div', { class: 'w2-dg-ic', text: '✦' }),
+          el('h3', { text: 'بَدْءُ رِحْلَةٍ جَديدَةٍ؟' }),
+          el('p', { text: 'سَيَبْدَأُ هذا الفَصْلُ مِنَ الدَّرْسِ الأوَّلِ على هذا الجِهازِ. لَنْ يَتَأَثَّرَ أيُّ صَفٍّ أو فَصْلٍ آخَرَ.' }),
+          el('div', { class: 'w2-dg-btns' }, [
+            el('button', { class: 'w2-btn', type: 'button', text: 'ابْدَأِ الرِّحْلَةَ', onclick: () => { Progress.resetScope(); m.remove(); _go('gate', { grade: 2, semester: 2 }); } }),
+            el('button', { class: 'w2-btn ghost', type: 'button', text: 'إلْغاءٌ', onclick: () => m.remove() }),
+          ]),
+        ]);
+        m.appendChild(d); m.addEventListener('click', e => { if (e.target === m) m.remove(); }); g.appendChild(m);
+      }
     },
+    unmount() { removeOverlay(); },
   });
 
   /* =========================================================================
-   * SCENE — index (the island stage path)
+   * ZONES + PLACE definitions (presentation only; lessons keep 1.1–1.14)
    * ======================================================================= */
-  W.scene.register('index', {
-    mount(ctx) {
-      const root = ctx.root;
-      const g = shell('g3-island-scene');
+  const ZONES = [
+    { name: 'نَبْعُ الأفْكارِ', c: '#37C7B4', ids: ['l1', 'l2', 'l3'] },
+    { name: 'مَعابِرُ الحَرَكَةِ', c: '#2F8FD6', ids: ['l4', 'l5', 'l6', 'l7'] },
+    { name: 'حِصْنُ البِناءِ', c: '#EF8A24', ids: ['l8', 'l9', 'l10', 'l11'] },
+    { name: 'كَنْزُ الأضْواءِ', c: '#9C6BC9', ids: ['l12', 'l13', 'l14'] },
+  ];
+  const TYPES = ['gate', 'house', 'tent', 'mill', 'bridge', 'tower', 'arch', 'fort', 'ruin', 'oasis', 'lantern', 'cave', 'stage', 'treasure'];
+  const WIDE = [[92, 62], [84, 48], [76, 64], [68, 46], [60, 62], [52, 44], [45, 62], [38, 46], [31, 64], [25, 48], [19, 62], [13, 44], [8, 60], [5, 26]];
+  const TALL = [[60, 7], [40, 13], [62, 19], [38, 25], [60, 31], [40, 37], [62, 43], [38, 49], [60, 55], [40, 61], [62, 67], [38, 73], [58, 80], [50, 91]];
+
+  function ordered() {
+    const out = [];
+    ZONES.forEach((z, zi) => z.ids.forEach(id => { const L = lessons().find(l => l.id === id); if (L) out.push({ L, zone: z, zi }); }));
+    return out;
+  }
+  function reachable(list, i) { return i === 0 || Progress.isDone(list[i - 1].L.id); }
+
+  /* structure art per type. `lit` toggles environmental "alive" details. */
+  function structSVG(type) {
+    const W_ = 130, H = 120;
+    const open = '<svg viewBox="0 0 130 120" width="130" height="120">';
+    const glowLamp = '<g class="w2-glow"><circle cx="0" cy="0" r="0" fill="none"/></g>';
+    let body = '';
+    const lamp = (x, y) => '<g class="w2-glow"><circle cx="' + x + '" cy="' + y + '" r="13" fill="rgba(247,201,72,.5)"/></g>' +
+      '<rect x="' + (x - 2.5) + '" y="' + (y - 3) + '" width="5" height="9" rx="2" fill="#7A4A22"/>' +
+      '<path class="w2-lampflame" d="M' + x + ' ' + (y - 4) + ' q3 3 0 7 q-3 -4 0 -7Z" fill="#FFE79A"/>';
+    const win = (x, y, w, h) => '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="2" fill="#3a2414"/><rect class="w2-glow" x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="2" fill="#FFD98A"/>';
+    switch (type) {
+      case 'gate': body = '<path d="M18 118 V44 h94 v74Z" fill="#CDB187"/><path d="M18 44 v-10 h94 v10Z" fill="#DcC299"/>' +
+        '<path d="M45 118 V70 q20 -22 40 0 v48Z" fill="#5A3A18"/>' + lamp(30, 60) + lamp(100, 60) +
+        '<path d="M20 34 v-6 h8 v4 h10 v-4 h8 v4 h10 v-4 h8 v4 h10 v-4 h8 v6Z" fill="#DcC299"/>'; break;
+      case 'house': body = '<path d="M22 118 V58 h86 v60Z" fill="#E4C289"/><path d="M16 58 L65 26 L114 58Z" fill="#C1732E"/>' +
+        win(40, 74, 18, 22) + win(74, 74, 18, 22) + '<path d="M58 118 V92 h14 v26Z" fill="#5A3A18"/>' + lamp(30, 66); break;
+      case 'tent': body = '<path d="M20 118 L65 40 L110 118Z" fill="#D98C4A"/><path d="M52 118 L65 40 L78 118Z" fill="#C1732E"/>' +
+        '<path d="M50 118 q15 -20 30 0Z" fill="#3a2414"/><rect x="24" y="96" width="82" height="6" fill="#8A5B32"/>' + lamp(26, 92); break;
+      case 'mill': body = '<rect x="34" y="52" width="60" height="66" fill="#D9B87A"/><path d="M30 52 L64 30 L98 52Z" fill="#9A6A2E"/>' +
+        win(54, 74, 20, 24) + '<g class="w2-glow" style="transform-origin:64px 46px" ><path d="M64 46 l0 -26 M64 46 l24 0 M64 46 l0 26 M64 46 l-24 0" stroke="#8A5B32" stroke-width="5"/><circle cx="64" cy="46" r="5" fill="#C1732E"/></g>' +
+        '<path d="M18 116 q46 -12 94 0" stroke="#37C7B4" stroke-width="5" fill="none" class="w2-glow"/>'; break;
+      case 'bridge': body = '<path d="M6 96 q59 -46 118 0" stroke="#B99668" stroke-width="12" fill="none"/><path d="M6 96 q59 -46 118 0" stroke="#8A6E45" stroke-width="4" fill="none"/>' +
+        '<g stroke="#8A6E45" stroke-width="4"><path d="M24 86 V104"/><path d="M52 74 V104"/><path d="M78 74 V104"/><path d="M106 86 V104"/></g>' +
+        '<path d="M0 108 q65 -8 130 0 V120 H0Z" fill="#2E6E86" opacity=".55" class="w2-glow"/>' + lamp(20, 74) + lamp(110, 74); break;
+      case 'tower': body = '<rect x="44" y="30" width="40" height="88" fill="#D9B87A"/><path d="M40 30 v-8 h8 v5 h8 v-5 h8 v5 h8 v-5 h8 v8Z" fill="#E4C289"/>' +
+        win(56, 50, 16, 18) + win(56, 82, 16, 18) + lamp(64, 34); break;
+      case 'arch': body = '<path d="M20 118 V54 h18 v64Z M92 118 V54 h18 v64Z" fill="#CDB187"/><path d="M20 54 q45 -48 90 0 h-18 q-27 -30 -54 0Z" fill="#DcC299"/>' +
+        '<path d="M38 118 V70 q27 -26 54 0 v48Z" fill="#4A2E14" class="w2-glow"/>' + lamp(26, 60) + lamp(104, 60); break;
+      case 'fort': body = '<path d="M16 118 V50 h98 v68Z" fill="#D3A45E"/><path d="M16 50 v-12 h12 v7 h14 v-7 h14 v7 h14 v-7 h14 v7 h14 v-7 h12 v12Z" fill="#E4C289"/>' +
+        '<path d="M52 118 V78 q13 -16 26 0 v40Z" fill="#5A3A18" class="w2-glow"/>' + win(30, 66, 14, 16) + win(86, 66, 14, 16) +
+        '<path d="M65 38 v-16 l14 5 l-14 5" fill="#37C7B4"/>' + lamp(24, 60) + lamp(106, 60); break;
+      case 'ruin': body = '<path d="M22 118 V60 h14 V118Z M54 118 V48 h14 V118Z M86 118 V64 h14 V118Z" fill="#C4AD82"/>' +
+        '<path d="M18 118 h96 v-8 h-96Z" fill="#A98F63"/><circle cx="61" cy="40" r="8" fill="none" stroke="#C4AD82" stroke-width="5"/>' + lamp(104, 70); break;
+      case 'oasis': body = '<ellipse cx="65" cy="104" rx="52" ry="14" fill="#2E8E86" class="w2-glow"/><ellipse cx="65" cy="102" rx="40" ry="10" fill="#37C7B4"/>' +
+        '<path d="M40 104 Q36 74 42 54" stroke="#8A5B32" stroke-width="6" fill="none"/><g fill="#5FA85A"><path d="M42 54 Q22 46 12 54 Q28 50 42 60Z"/><path d="M42 54 Q62 46 72 54 Q56 50 42 60Z"/><path d="M42 56 Q40 34 44 22 Q48 38 44 58Z"/></g>' +
+        '<path d="M86 104 Q82 78 88 60" stroke="#8A5B32" stroke-width="5" fill="none"/><g fill="#5FA85A"><path d="M88 60 Q72 54 64 60 Q78 58 88 66Z"/><path d="M88 60 Q104 54 112 60 Q98 58 88 66Z"/></g>'; break;
+      case 'lantern': body = '<rect x="56" y="60" width="18" height="58" fill="#7A4A22"/><path d="M50 60 h30 l-6 -12 h-18Z" fill="#5C3417"/>' +
+        '<g class="w2-glow"><circle cx="65" cy="44" r="22" fill="rgba(247,201,72,.45)"/></g><rect x="55" y="30" width="20" height="24" rx="4" fill="#C89A3A"/>' +
+        '<rect class="w2-glow" x="58" y="33" width="14" height="18" rx="2" fill="#FFE79A"/><path class="w2-lampflame w2-glow" d="M65 34 q4 5 0 12 q-4 -7 0 -12Z" fill="#FFF3C4"/>'; break;
+      case 'cave': body = '<path d="M10 118 Q10 54 65 46 Q120 54 120 118Z" fill="#7A5A3E"/><path d="M30 118 Q34 78 65 72 Q96 78 100 118Z" fill="#1a120a"/>' +
+        '<path class="w2-glow" d="M40 118 Q44 88 65 84 Q86 88 90 118Z" fill="#F7C948" opacity=".7"/>' + lamp(22, 78) + lamp(108, 78); break;
+      case 'stage': body = '<rect x="20" y="86" width="90" height="32" fill="#9A6A2E"/><rect x="20" y="80" width="90" height="8" fill="#C1732E"/>' +
+        '<path d="M20 80 L36 44 h58 L110 80Z" fill="#8B5BB5" class="w2-glow"/><path d="M30 80 L44 50 h42 L100 80Z" fill="#B98BD6"/>' +
+        lamp(28, 60) + lamp(102, 60) + '<circle cx="65" cy="66" r="7" fill="#FFE79A" class="w2-glow"/>'; break;
+      case 'treasure': body = '<path d="M8 118 Q8 60 65 40 Q122 60 122 118Z" fill="#B98B3A"/><path d="M20 118 Q22 74 65 60 Q108 74 110 118Z" fill="#E0BE86"/>' +
+        '<g class="w2-glow"><rect x="46" y="70" width="38" height="30" rx="4" fill="#C89A3A"/><rect x="46" y="70" width="38" height="10" fill="#A9781E"/>' +
+        '<circle cx="65" cy="66" r="6" fill="#FFF3C4"/><path d="M65 40 v-18" stroke="#FFE79A" stroke-width="3"/><circle cx="65" cy="20" r="4" fill="#FFF3C4"/></g>' +
+        '<path d="M40 100 l6 -10 l6 10Z M78 100 l6 -10 l6 10Z" fill="#F7C948" class="w2-glow"/>' + lamp(24, 76) + lamp(106, 76); break;
+      default: body = '<rect x="40" y="60" width="50" height="58" fill="#D9B87A"/>';
+    }
+    void W_; void H; void glowLamp;
+    return open + body + '</svg>';
+  }
+
+  function sandDunes() {
+    const d = raw('div', 'w2-dunes');
+    d.innerHTML = '<svg width="100%" height="100%" viewBox="0 0 1200 400" preserveAspectRatio="none">' +
+      '<path d="M0 220 Q300 150 600 210 T1200 200 V400 H0Z" fill="#8a5a44" opacity=".7"/>' +
+      '<path d="M0 300 Q300 240 700 290 T1200 300 V400 H0Z" fill="#caa062"/>' +
+      '<path d="M0 360 Q400 320 800 356 T1200 360 V400 H0Z" fill="#b98a54"/></svg>';
+    return d;
+  }
+
+  /* =========================================================================
+   * SCENE — g2s2world (the valley adventure)
+   * ======================================================================= */
+  W.scene.register('g2s2world', {
+    mount() {
+      W._adv.returnTo = 'g2s2world';
       const list = ordered();
-      const done = masteredTotal(), total = list.length;
+      const g = makeOverlay('worldscene');
+      const world = raw('div', 'w2-world');
+      g.appendChild(world);
 
-      /* --- background: sky, sea, island landmass, palms, fort at the summit --- */
-      g.appendChild(skyField());
-      const cl = raw('div', 'g3-layer'); cl.setAttribute('data-depth', '3');
-      [[120, 96, 220], [860, 84, 200]].forEach(([x, y, w]) => {
-        const c = raw('div', '', cloud(w)); c.style.cssText = 'position:absolute;left:' + x + 'px;top:' + y + 'px;animation:g3-float2 10s ease-in-out infinite';
-        cl.appendChild(c);
+      /* HUD */
+      let currentIdx = 0;
+      for (let i = 0; i < list.length; i++) { if (reachable(list, i) && !Progress.isDone(list[i].L.id)) { currentIdx = i; break; } if (Progress.isDone(list[i].L.id)) currentIdx = Math.min(i + 1, list.length - 1); }
+      const curL = list[currentIdx].L;
+      const hud = el('div', { class: 'w2-hud' }, [
+        el('div', { class: 'w2-hud-left' }, [
+          el('button', { class: 'w2-hbtn', type: 'button', 'aria-label': 'العودة إلى البوابة', onclick: () => { A.click && A.click(); W._adv.returnTo = null; _go('gate', { grade: 2, semester: 2 }); }, text: '⟵' }),
+          el('button', { class: 'w2-hbtn', type: 'button', onclick: () => { A.click && A.click(); W._adv.returnTo = null; removeOverlay(); _go('hub'); }, text: '📚 الأساسِيُّ' }),
+        ]),
+        el('div', { class: 'w2-hud-mission' }, [
+          el('span', { class: 'k', text: 'مُهِمَّتُكَ الحالِيَّةُ' }),
+          el('span', { class: 'v', id: 'w2mission', text: 'الدَّرْسُ ' + curL.no }),
+        ]),
+        el('div', { class: 'w2-hud-right' }, [
+          el('div', { class: 'w2-prog', title: 'المهام المكتملة' }, [
+            raw('span', null, ringSVG(Progress.doneCount() / Progress.total())),
+            el('b', { text: Progress.doneCount() + '/' + Progress.total() }),
+            el('span', { class: 'lbl', text: 'مُهِمَّة' }),
+          ]),
+          el('button', { class: 'w2-hbtn icon', type: 'button', 'aria-label': 'الصوت', onclick: toggleSound, id: 'w2sound', text: settings().sound === false ? '🔇' : '🔊' }),
+        ]),
+      ]);
+      g.appendChild(hud);
+
+      /* scroll viewport with BOTH terrains (only one shown per orientation) */
+      const vp = raw('div', 'w2-viewport');
+      const wide = buildTerrain('wide', WIDE, list);
+      const tall = buildTerrain('tall', TALL, list);
+      vp.appendChild(wide); vp.appendChild(tall);
+      g.appendChild(vp);
+
+      g.appendChild(el('div', { class: 'w2-scrollhint', text: 'اسْحَبْ لِتَسْتَكْشِفَ الوادي ↔' }));
+      g.appendChild(el('div', { class: 'w2-credit', text: CREDIT }));
+
+      /* focus camera on the current place of the visible terrain */
+      const portrait = window.matchMedia('(max-aspect-ratio:1/1)').matches;
+      const activeTerrain = portrait ? tall : wide;
+      requestAnimationFrame(() => {
+        const cur = activeTerrain.querySelector('.w2-place[data-i="' + currentIdx + '"]');
+        if (cur) cur.scrollIntoView({ block: 'center', inline: 'center', behavior: rm() ? 'auto' : 'smooth' });
+        if (portrait) g.querySelector('.w2-scrollhint').textContent = 'اسْحَبْ لِلأسْفَلِ لِتَسْتَكْشِفَ ↓';
       });
-      g.appendChild(cl);
 
-      const bg = raw('div', 'g3-islandbg');
-      bg.innerHTML = islandFieldSVG();
-      g.appendChild(bg);
+      /* Hudhud welcomes on entry (once per session-ish) */
+      setTimeout(() => {
+        const gw = guideEl(); gw.style.cssText = 'left:auto;inset-inline-start:14px;bottom:16px;position:absolute';
+        g.appendChild(gw);
+        const sp = speak(g, 'auto', 'auto', currentIdx === 0 ? 'جاهِزٌ؟ مُهِمَّتُكَ الأولى تَنْتَظِرُكَ!' : 'تابِعْ رِحْلَتَكَ نَحْوَ الكَنْزِ!');
+        sp.style.cssText = 'inset-inline-start:118px;bottom:60px;position:absolute';
+        setTimeout(() => { gw.remove(); sp.remove(); }, 3600);
+      }, 700);
 
-      /* palms + fort as scenery around the trail */
-      const scenery = raw('div', 'g3-layer'); scenery.setAttribute('data-depth', '1.6');
-      const fort = raw('div', '', fortSVG(120)); fort.style.cssText = 'position:absolute;left:700px;top:120px;transform:translateX(-50%);';
-      scenery.appendChild(fort);
-      [[1180, 90, 520], [70, 84, 470], [560, 78, 300]].forEach(([x, h, top]) => {
-        const p = raw('div', '', palmSVG(h)); p.style.cssText = 'position:absolute;left:' + x + 'px;top:' + top + 'px;transform-origin:bottom center;animation:g3-sway 6s ease-in-out infinite';
-        scenery.appendChild(p);
-      });
-      g.appendChild(scenery);
-
-      /* --- the winding trail path (SVG under the nodes) --- */
-      const trail = raw('div', 'g3-trail');
-      trail.innerHTML = trailPathSVG(list);
-      g.appendChild(trail);
-
-      /* --- zone labels near the first node of each zone --- */
-      const firstOf = {};
-      list.forEach((it, i) => { if (firstOf[it.zone.id] === undefined) firstOf[it.zone.id] = i; });
-      ZONES.forEach(z => {
-        const i = firstOf[z.id]; if (i === undefined) return;
-        const [x, y] = TRAIL[i];
-        const lab = el('div', { class: 'g3-zonelabel', style: { '--zc': z.c, left: (x - 34) + 'px', top: (y - 104) + 'px' } }, [
-          el('span', { class: 'g3-zi' }), el('span', { text: z.name }),
-        ]);
-        g.appendChild(lab);
-      });
-
-      /* --- the 14 stage nodes --- */
-      let currentIndex = 0;
-      list.forEach((it, i) => {
-        const [x, y] = TRAIL[i];
-        const L = it.L;
-        const built = isBuilt(L.id);
-        const open = reachable(list, i) && built;
-        const doneL = isDone(L.id);
-        if (open && !doneL) currentIndex = i;      // furthest reachable, not-yet-mastered
-        let cls = 'g3-node ' + (doneL ? 'done' : (open ? 'open' : 'locked'));
-        if (i === list.length - 1) cls += ' isfinal';
-        const node = el('button', {
-          class: cls, type: 'button',
-          style: { left: x + 'px', top: y + 'px', '--zc': it.zone.c },
-          'data-lesson': L.id,
-          'aria-label': 'المرحلة ' + L.no + ' — ' + L.ar + (doneL ? ' (مكتملة)' : (open ? '' : ' (مقفلة)')),
-          onclick: () => openStage(ctx, list, i, node),
-        }, [
-          raw('span', 'g3-node-disc'),
-          el('span', { class: 'g3-node-no', text: L.no }),
-          (!built ? el('span', { class: 'g3-node-lock', text: '⏳' })
-            : (!open && !doneL ? el('span', { class: 'g3-node-lock', text: '🔒' }) : null)),
-          el('span', { class: 'g3-node-label', text: L.ar }),
-          starRow(L, open || doneL),
-        ].filter(Boolean));
-        g.appendChild(node);
-      });
-      if (masteredTotal() >= total && total) currentIndex = total - 1;
-
-      /* --- player avatar on the current node --- */
-      const [ax, ay] = TRAIL[currentIndex];
-      const avatar = raw('div', 'g3-avatar', hoopoeSVG());
-      avatar.style.left = ax + 'px'; avatar.style.top = ay + 'px';
-      g.appendChild(avatar);
-
-      /* --- top bar --- */
-      g.appendChild(topbar({
-        eyebrow: 'الوَحْدَةُ الأولى · ' + unit().ar,
-        title: 'جَزيرَةُ الفَصْلِ الثَّاني',
-        tools: [
-          ringPill(done, total),
-          iconChip('🗺️', 'الخَريطَةُ', () => goTo(ctx, 'hub'), ''),
-          iconChip('👩‍🏫', '', () => W.teacher && W.teacher.open(), 'g3-iconbtn'),
-        ],
-      }));
-      g.appendChild(creditLine());
-
-      root.appendChild(g);
-      bindParallax(g);
-
-      /* --- celebrate a freshly-mastered stage since last visit --- */
-      const now = masteredTotal();
-      if (now > G.seen) {
-        const justNode = g.querySelector('.g3-node.open') || g.querySelector('.g3-node.isfinal');
-        setTimeout(() => {
-          celebrate(g, currentIndex);
-          const gw = raw('div', 'g3-hint-guide');
-          gw.style.cssText = 'left:' + clamp(ax - 150, 20, 1100) + 'px;top:' + clamp(ay + 30, 60, 560) + 'px;transform:scale(.8);';
-          gw.appendChild(guideEl()); g.appendChild(gw);
-          speech(gw, -60, -10, 'أحْسَنْتَ! أُضيئَتْ مَرْحَلَةٌ جَديدَةٌ. تابِعْ طَريقَكَ!', 'below');
-          setTimeout(() => gw.remove(), 3400);
-          void justNode;
-        }, 460);
+      /* celebrate a freshly completed lesson since last visit */
+      const now = Progress.doneCount();
+      if (now > W._adv.seen) {
+        setTimeout(() => celebrate(activeTerrain, currentIdx, g), 500);
       }
-      G.seen = now;
+      W._adv.seen = now;
+
+      function toggleSound() {
+        const on = settings().sound !== false; store.setSetting('sound', !on);
+        document.getElementById('w2sound').textContent = on ? '🔇' : '🔊';
+      }
     },
+    unmount() { removeOverlay(); },
   });
 
-  function starRow(L, show) {
-    if (!show) return null;
-    const n = starCount(L);
-    const wrap = raw('div', 'g3-node-stars');
-    for (let i = 0; i < 3; i++) {
-      const s = document.createElement('i'); s.textContent = '★';
-      if (i >= n) s.className = 'off';
-      wrap.appendChild(s);
+  function trailLayer(kind, coords) {
+    const vw = kind === 'tall' ? 400 : 2600, vh = kind === 'tall' ? 1600 : 800;
+    const pts = coords.map(([x, y]) => [(x / 100 * vw), (y / 100 * vh)]);
+    let d = 'M' + pts[0][0].toFixed(0) + ' ' + pts[0][1].toFixed(0);
+    for (let i = 1; i < pts.length; i++) {
+      const [px, py] = pts[i - 1], [x, y] = pts[i], mx = (px + x) / 2, my = (py + y) / 2;
+      d += ' Q' + px.toFixed(0) + ' ' + py.toFixed(0) + ' ' + mx.toFixed(0) + ' ' + my.toFixed(0);
+      d += ' Q' + ((mx + x) / 2).toFixed(0) + ' ' + ((my + y) / 2).toFixed(0) + ' ' + x.toFixed(0) + ' ' + y.toFixed(0);
     }
-    return wrap;
+    const s = '<svg class="w2-terrainbg" viewBox="0 0 ' + vw + ' ' + vh + '" preserveAspectRatio="none" style="pointer-events:none">' +
+      '<path d="' + d + '" fill="none" stroke="rgba(58,36,20,.28)" stroke-width="' + (kind === 'tall' ? 30 : 34) + '" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<path d="' + d + '" fill="none" stroke="#E8D3A6" stroke-width="' + (kind === 'tall' ? 16 : 18) + '" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<path d="' + d + '" fill="none" stroke="#C9A768" stroke-width="' + (kind === 'tall' ? 3 : 4) + '" stroke-dasharray="2 22" stroke-linecap="round" opacity=".9"/></svg>';
+    const w = raw('div', 'w2-terrainbg', s); w.style.zIndex = '2'; return w;
   }
-
-  /* open a stage: reachable → straight in; locked → a friendly preview modal
-   * that STILL lets the pupil explore (viewing is never recorded as mastery,
-   * exactly as the original platform allowed). */
-  function openStage(ctx, list, i, node) {
-    const it = list[i], L = it.L;
-    const built = isBuilt(L.id);
-    const open = reachable(list, i) && built;
-    const doneL = isDone(L.id);
-    if (!built) { A.soft && A.soft(); toast(node, 'هذا الدَّرْسُ سَيُضافُ قَريبًا.'); return; }
-    if (open || doneL) { enterLesson(ctx, L, node); return; }
-    A.soft && A.soft();
-    stagePreview(ctx, list, i);
-  }
-
-  function enterLesson(ctx, L, node) {
-    A.light && A.light();
-    if (node) {
-      const ping = raw('div', 'g3-ping');
-      const r = node.getBoundingClientRect(), pr = node.closest('.g3').getBoundingClientRect();
-      ping.style.left = (parseFloat(node.style.left)) + 'px';
-      ping.style.top = (parseFloat(node.style.top)) + 'px';
-      node.closest('.g3').appendChild(ping);
-      setTimeout(() => ping.remove(), 900);
-      void r; void pr;
-    }
-    setTimeout(() => ctx.go('lesson', { id: L.id }), 220);
-  }
-
-  /* the preview / soft-lock card for a not-yet-reached stage */
-  function stagePreview(ctx, list, i) {
-    const it = list[i], L = it.L;
-    const g = document.querySelector('.g3'); if (!g) return;
-    const modal = raw('div', 'g3-modal');
-    const card = raw('div', 'g3-card');
-    card.style.setProperty('--zc', it.zone.c);
-    card.appendChild(el('button', { class: 'g3-close', type: 'button', text: '✕', 'aria-label': 'إغلاق', onclick: close }));
-    card.appendChild(el('div', { class: 'g3-card-emoji', text: '🔒' }));
-    card.appendChild(el('div', { class: 'g3-card-no', text: 'المَرْحَلَةُ ' + L.no + ' · ' + it.zone.name }));
-    card.appendChild(el('h3', { text: L.ar }));
-    card.appendChild(el('p', { text: 'أكْمِلِ المَرْحَلَةَ السَّابِقَةَ لِتُضيءَ هذا الطَّريقَ. وَيُمْكِنُكَ الآنَ الدُّخولُ لِلاسْتِطْلاعِ دونَ أنْ يُسَجَّلَ إنْجازًا.' }));
-    const obj = raw('div', 'g3-card-obj');
-    (L.objectives || []).slice(0, 4).forEach(o => {
-      obj.appendChild(el('div', { class: 'g3-objrow' }, [el('b', { text: '•' }), el('span', { text: o })]));
+  function buildTerrain(kind, coords, list) {
+    const t = raw('div', 'w2-terrain ' + kind);
+    t.appendChild(raw('div', 'w2-terrainbg', terrainBg(kind)));
+    t.appendChild(trailLayer(kind, coords));
+    /* zone banners */
+    const firstOf = {}; list.forEach((it, i) => { if (firstOf[it.zi] === undefined) firstOf[it.zi] = i; });
+    ZONES.forEach((z, zi) => {
+      const i = firstOf[zi]; if (i === undefined) return;
+      const [x, y] = coords[i];
+      const yy = kind === 'tall' ? Math.max(2, y - 5) : Math.max(6, y - 22);
+      const b = el('div', { class: 'w2-zone', style: { '--x': x, '--y': yy, '--zc': z.c } , text: z.name });
+      t.appendChild(b);
     });
-    if ((L.objectives || []).length) card.appendChild(obj);
-    card.appendChild(el('div', { class: 'g3-card-btns' }, [
-      el('button', { class: 'g3-btn2', type: 'button', text: 'ادْخُلْ لِلاسْتِطْلاعِ', onclick: () => { close(); ctx.go('lesson', { id: L.id }); } }),
-      el('button', { class: 'g3-btn2 ghost', type: 'button', text: 'العَوْدَةُ لِلطَّريقِ', onclick: close }),
-    ]));
-    modal.appendChild(card);
-    modal.addEventListener('click', e => { if (e.target === modal) close(); });
-    g.appendChild(modal);
-    function close() { modal.remove(); }
+    /* places */
+    let currentIdx = 0;
+    for (let i = 0; i < list.length; i++) { if (reachable(list, i) && !Progress.isDone(list[i].L.id)) { currentIdx = i; break; } if (Progress.isDone(list[i].L.id)) currentIdx = Math.min(i + 1, list.length - 1); }
+    list.forEach((it, i) => {
+      const [x, y] = coords[i];
+      const L = it.L;
+      const done = Progress.isDone(L.id);
+      const open = reachable(list, i);
+      const state = done ? 'done' : (open ? 'open' : 'locked');
+      const place = el('button', {
+        class: 'w2-place ' + state, type: 'button', 'data-i': i, 'data-lesson': L.id,
+        style: { '--x': x, '--y': y },
+        'aria-label': 'المرحلة ' + L.no + ' — ' + L.ar + (done ? ' (مكتملة)' : (open ? '' : ' (مقفلة)')),
+        onclick: () => openPlace(list, i),
+      }, [
+        raw('div', 'w2-struct', structSVG(TYPES[i] || 'house')),
+        el('div', { class: 'w2-sign' }, [
+          el('span', { class: 'w2-sign-no', text: L.no }),
+          el('div', { class: 'w2-sign-name', text: L.ar }),
+        ]),
+      ]);
+      t.appendChild(place);
+    });
+    /* avatar on current place */
+    const [ax, ay] = coords[currentIdx];
+    const av = raw('div', 'w2-avatar', childSVG());
+    av.style.setProperty('--x', ax); av.style.setProperty('--y', ay);
+    t.appendChild(av);
+    return t;
   }
 
-  function toast(node, msg) {
-    const g = node.closest('.g3'); if (!g) return;
-    const b = speech(g, parseFloat(node.style.left) - 90, parseFloat(node.style.top) - 96, msg, 'above');
-    setTimeout(() => b.remove(), 2200);
+  function terrainBg(kind) {
+    if (kind === 'tall') {
+      return '<svg class="w2-terrainbg" viewBox="0 0 400 1600" preserveAspectRatio="xMidYMid slice">' +
+        '<defs><linearGradient id="tv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#26386b"/><stop offset=".28" stop-color="#5a4a7e"/><stop offset=".6" stop-color="#9a6a55"/><stop offset="1" stop-color="#7a4a30"/></linearGradient>' +
+        '<linearGradient id="fj" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7FDCCF"/><stop offset="1" stop-color="#2F9E92"/></linearGradient></defs>' +
+        '<rect width="400" height="1600" fill="url(#tv)"/>' +
+        mountainsTall() +
+        /* winding falaj down the valley */
+        '<path d="M240 40 Q120 180 240 320 Q360 460 200 620 Q80 760 240 900 Q380 1050 200 1200 Q120 1340 200 1560" stroke="url(#fj)" stroke-width="14" fill="none" stroke-linecap="round" opacity=".85"/>' +
+        '<path d="M240 40 Q120 180 240 320 Q360 460 200 620 Q80 760 240 900 Q380 1050 200 1200 Q120 1340 200 1560" stroke="#CFF6EE" stroke-width="4" fill="none" stroke-dasharray="6 14" stroke-linecap="round"><animate attributeName="stroke-dashoffset" from="0" to="-40" dur="1.4s" repeatCount="indefinite"/></path>' +
+        palmClusterTall() +
+        '</svg>';
+    }
+    return '<svg class="w2-terrainbg" viewBox="0 0 2600 800" preserveAspectRatio="xMidYMid slice">' +
+      '<defs><linearGradient id="wv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#24386b"/><stop offset=".4" stop-color="#5a4a7e"/><stop offset=".7" stop-color="#9a6a55"/><stop offset="1" stop-color="#7a4a30"/></linearGradient>' +
+      '<radialGradient id="sun" cx="16%" cy="26%" r="30%"><stop offset="0" stop-color="rgba(255,231,154,.9)"/><stop offset="1" stop-color="rgba(255,231,154,0)"/></radialGradient>' +
+      '<linearGradient id="fjw" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7FDCCF"/><stop offset="1" stop-color="#2F9E92"/></linearGradient></defs>' +
+      '<rect width="2600" height="800" fill="url(#wv)"/><ellipse cx="420" cy="210" rx="520" ry="360" fill="url(#sun)"/>' +
+      '<circle cx="420" cy="200" r="70" fill="#FFE79A" opacity=".9"/>' +
+      birds([[900, 150], [1000, 180], [1080, 160], [1700, 130], [1780, 158]]) +
+      mountainsWide() +
+      '<path d="M0 470 Q650 438 1300 470 T2600 470 V540 H0Z" fill="rgba(255,220,180,.12)"/>' +
+      /* valley floor */
+      '<path d="M0 560 Q400 500 900 550 T1800 540 T2600 560 V800 H0Z" fill="#8a5a40"/>' +
+      '<path d="M0 620 Q500 570 1100 610 T2600 620 V800 H0Z" fill="#caa062"/>' +
+      /* falaj along the floor */
+      '<path d="M2560 640 Q2100 600 1700 646 Q1300 690 950 646 Q560 600 60 648" stroke="url(#fjw)" stroke-width="12" fill="none" stroke-linecap="round" opacity=".85"/>' +
+      '<path d="M2560 640 Q2100 600 1700 646 Q1300 690 950 646 Q560 600 60 648" stroke="#CFF6EE" stroke-width="4" fill="none" stroke-dasharray="6 16" stroke-linecap="round"><animate attributeName="stroke-dashoffset" from="0" to="-44" dur="1.5s" repeatCount="indefinite"/></path>' +
+      palmClusterWide() +
+      '</svg>';
+  }
+  function birds(list) {
+    return '<g stroke="#2e2540" stroke-width="3" fill="none" stroke-linecap="round" opacity=".5">' +
+      list.map(([x, y]) => '<path d="M' + x + ' ' + y + ' q7 -6 14 0 q7 -6 14 0"/>').join('') + '</g>';
+  }
+  function mountainsWide() {
+    return '<g opacity=".9"><path d="M0 420 L280 240 L520 400 L820 200 L1120 380 L1500 220 L1900 400 L2300 240 L2600 380 V560 H0Z" fill="#4a3a63"/>' +
+      '<path d="M0 500 L360 360 L760 470 L1200 330 L1700 470 L2200 350 L2600 460 V620 H0Z" fill="#6a4a5a"/></g>';
+  }
+  function mountainsTall() {
+    return '<g opacity=".9"><path d="M0 200 L120 90 L240 190 L360 70 L400 150 V360 H0Z" fill="#463a63"/>' +
+      '<path d="M0 320 L140 220 L280 320 L400 240 V460 H0Z" fill="#6a4a5a"/></g>';
+  }
+  function palmClusterWide() {
+    let s = ''; [[180, 600], [720, 640], [1300, 610], [1950, 645], [2400, 600]].forEach(([x, y]) => {
+      s += '<g transform="translate(' + x + ',' + y + ')"><path d="M0 0 Q-4 -40 4 -78" stroke="#8A5B32" stroke-width="8" fill="none"/>' +
+        '<g fill="#5FA85A" transform="translate(4,-78)"><path d="M0 0 Q-30 -12 -46 0 Q-22 -6 0 6Z"/><path d="M0 0 Q30 -12 46 0 Q22 -6 0 6Z"/><path d="M0 0 Q-14 -30 -20 -46 Q-4 -26 2 2Z"/><path d="M0 0 Q14 -30 20 -46 Q4 -26 -2 2Z"/></g></g>';
+    }); return s;
+  }
+  function palmClusterTall() {
+    let s = ''; [[70, 240], [330, 520], [80, 820], [330, 1100], [90, 1360]].forEach(([x, y]) => {
+      s += '<g transform="translate(' + x + ',' + y + ')"><path d="M0 0 Q-4 -34 4 -66" stroke="#8A5B32" stroke-width="7" fill="none"/>' +
+        '<g fill="#5FA85A" transform="translate(4,-66)"><path d="M0 0 Q-26 -10 -40 0 Q-18 -6 0 6Z"/><path d="M0 0 Q26 -10 40 0 Q18 -6 0 6Z"/><path d="M0 0 Q-12 -26 -18 -40 Q-2 -22 2 2Z"/></g></g>';
+    }); return s;
   }
 
-  function celebrate(g, i) {
-    if (g.classList.contains('g3-reduced')) return;
-    const [x, y] = TRAIL[i] || [640, 380];
-    const cols = ['#F2C230', '#3FBF9E', '#E4586F', '#2F8FD6', '#EF8A24', '#FFDD6B'];
-    for (let k = 0; k < 26; k++) {
-      const c = raw('div', 'g3-confetti');
-      const col = cols[k % cols.length];
-      const ang = rnd() * Math.PI * 2, dist = 60 + rnd() * 140;
-      const dx = Math.cos(ang) * dist, dy = Math.sin(ang) * dist - 40;
-      c.style.cssText = 'left:' + x + 'px;top:' + y + 'px;background:' + col +
-        ';transform:translate(-50%,-50%);opacity:1;transition:transform 1.1s cubic-bezier(.2,.7,.3,1),opacity 1.1s ease';
+  /* open a place → the ORIGINAL lesson (reachable), or an explore prompt */
+  function openPlace(list, i) {
+    const it = list[i], L = it.L;
+    const open = reachable(list, i), done = Progress.isDone(L.id);
+    if (open || done) { launchLesson(L, i); return; }
+    A.soft && A.soft();
+    const g = overlay;
+    /* Hudhud: "finish the previous mission first" — but still allow exploring */
+    const m = raw('div', 'w2-modal');
+    const d = el('div', { class: 'w2-dialog' }, [
+      el('div', { class: 'w2-dg-ic', text: '🪄' }),
+      el('h3', { text: L.ar }),
+      el('p', { text: 'أكْمِلِ المُهِمَّةَ السَّابِقَةَ لِيُضيءَ هذا المَكانُ. وَيُمْكِنُكَ الآنَ الدُّخولُ لِلاسْتِطْلاعِ دونَ تَسْجيلِ إنْجازٍ.' }),
+      el('div', { class: 'w2-dg-btns' }, [
+        el('button', { class: 'w2-btn', type: 'button', text: 'ادْخُلْ لِلاسْتِطْلاعِ', onclick: () => { m.remove(); launchLesson(L, i); } }),
+        el('button', { class: 'w2-btn ghost', type: 'button', text: 'العَوْدَةُ', onclick: () => m.remove() }),
+      ]),
+    ]);
+    m.appendChild(d); m.addEventListener('click', e => { if (e.target === m) m.remove(); }); g.appendChild(m);
+  }
+  function launchLesson(L, i) {
+    A.light && A.light();
+    W._adv.returnTo = 'g2s2world';
+    /* ping on the active terrain place */
+    const portrait = window.matchMedia('(max-aspect-ratio:1/1)').matches;
+    const t = document.querySelector('.w2-terrain.' + (portrait ? 'tall' : 'wide'));
+    if (t) { const p = t.querySelector('.w2-place[data-i="' + i + '"]'); if (p) { const ping = raw('div', 'w2-ping'); ping.style.setProperty('--x', p.style.getPropertyValue('--x')); ping.style.setProperty('--y', p.style.getPropertyValue('--y')); t.appendChild(ping); setTimeout(() => ping.remove(), 1000); } }
+    setTimeout(() => { removeOverlay(); _go('lesson', { id: L.id }); }, 240);
+  }
+
+  function celebrate(terrain, i, g) {
+    const place = terrain.querySelector('.w2-place[data-i="' + i + '"]');
+    const gw = guideEl(); gw.style.cssText = 'left:auto;inset-inline-start:14px;bottom:16px;position:absolute'; g.appendChild(gw);
+    const sp = speak(g, 'auto', 'auto', 'رائِعٌ! فُتِحَ الطَّريقُ إلى المُهِمَّةِ التَّالِيَةِ.'); sp.style.cssText = 'inset-inline-start:118px;bottom:60px;position:absolute';
+    setTimeout(() => { gw.remove(); sp.remove(); }, 3400);
+    if (rm() || !place) { A.good && A.good(); return; }
+    const r = place.getBoundingClientRect();
+    const cols = ['#F7C948', '#37C7B4', '#E4586F', '#2F8FD6', '#EF8A24', '#FFE79A'];
+    for (let k = 0; k < 24; k++) {
+      const c = raw('div', 'w2-confetti'); const col = cols[k % cols.length];
+      const ang = seedRnd() * Math.PI * 2, dist = 50 + seedRnd() * 120, dx = Math.cos(ang) * dist, dy = Math.sin(ang) * dist - 30;
+      c.style.cssText = 'left:' + r.left + 'px;top:' + (r.top + r.height / 2) + 'px;background:' + col + ';transition:transform 1.1s cubic-bezier(.2,.7,.3,1),opacity 1.1s ease';
       g.appendChild(c);
-      requestAnimationFrame(() => {
-        c.style.transform = 'translate(' + (dx - 6) + 'px,' + dy + 'px) rotate(' + (rnd() * 540) + 'deg)';
-        c.style.opacity = '0';
-      });
+      requestAnimationFrame(() => { c.style.transform = 'translate(' + dx + 'px,' + dy + 'px) rotate(' + (seedRnd() * 540) + 'deg)'; c.style.opacity = '0'; });
       setTimeout(() => c.remove(), 1200);
     }
-    try { A.good && A.good(); } catch (e) {}
-  }
-
-  function confirmReset(ctx) {
-    const g = document.querySelector('.g3'); if (!g) return;
-    const modal = raw('div', 'g3-modal');
-    const card = raw('div', 'g3-card');
-    card.appendChild(el('div', { class: 'g3-card-emoji', text: '↺' }));
-    card.appendChild(el('h3', { text: 'إعادَةُ الرِّحْلَةِ' }));
-    card.appendChild(el('p', { text: 'سَيُعادُ ضَبْطُ تَقَدُّمِكَ في هذا العالَمِ (المَراحِلُ المُضاءَةُ). مَشاريعُكَ المَحْفوظَةُ لا تَتَأَثَّرُ. هل تُريدُ المُتابَعَةَ؟' }));
-    card.appendChild(el('div', { class: 'g3-card-btns' }, [
-      el('button', { class: 'g3-btn2 ghost', type: 'button', text: 'إلْغاءٌ', onclick: () => modal.remove() }),
-      el('button', {
-        class: 'g3-btn2', type: 'button', text: 'نَعَمْ، أعِدْ',
-        onclick: () => {
-          try { lessons().forEach(l => store.clearLesson(l.id)); } catch (e) {}
-          G.seen = 0; modal.remove(); ctx.go('hub');
-        },
-      }),
-    ]));
-    modal.appendChild(card);
-    modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
-    g.appendChild(modal);
-  }
-
-  /* =========================================================================
-   * SVG ART — islands, trail, structures
-   * ======================================================================= */
-  function islandTokenSVG(w, dim) {
-    const h = w * 0.83;
-    const sand = dim ? '#8f9ab8' : '#F0D49A', sand2 = dim ? '#7c86a2' : '#D9AE63';
-    const grass = dim ? '#5a7a67' : '#5FB86A';
-    return '<svg viewBox="0 0 360 300" width="' + w + '" height="' + h + '">' +
-      '<defs><radialGradient id="gi' + (dim ? 'd' : 'a') + '" cx="50%" cy="30%" r="70%">' +
-      '<stop offset="0%" stop-color="' + grass + '"/><stop offset="55%" stop-color="' + (dim ? '#4a6657' : '#57A85E') + '"/>' +
-      '<stop offset="100%" stop-color="' + (dim ? '#3c5348' : '#3E8C49') + '"/></radialGradient></defs>' +
-      /* water ring */
-      '<ellipse cx="180" cy="238" rx="168" ry="48" fill="' + (dim ? 'rgba(120,140,180,.35)' : 'rgba(63,191,158,.35)') + '"/>' +
-      '<ellipse cx="180" cy="232" rx="140" ry="40" fill="' + (dim ? 'rgba(140,160,200,.4)' : 'rgba(90,205,180,.45)') + '"/>' +
-      /* sand base */
-      '<path d="M40 232 Q60 190 180 186 Q300 190 320 232 Q300 262 180 264 Q60 262 40 232Z" fill="' + (dim ? '#9aa4bf' : sand) + '"/>' +
-      '<path d="M64 226 Q90 196 180 194 Q270 196 296 226 Q270 210 180 208 Q90 210 64 226Z" fill="' + (dim ? '#8791ac' : sand2) + '"/>' +
-      /* green hill */
-      '<path d="M96 210 Q120 120 180 116 Q240 120 264 210 Q220 196 180 196 Q140 196 96 210Z" fill="url(#gi' + (dim ? 'd' : 'a') + ')"/>' +
-      (dim ? '' :
-        '<g><path d="M180 120 Q176 84 182 60" stroke="#8A5B32" stroke-width="6" fill="none" stroke-linecap="round"/>' +
-        '<g fill="#4FA85A"><path d="M182 60 Q158 50 146 60 Q166 56 182 66Z"/><path d="M182 60 Q206 50 218 60 Q198 56 182 66Z"/>' +
-        '<path d="M182 62 Q180 40 184 26 Q188 42 184 64Z"/></g></g>') +
-      '</svg>';
-  }
-
-  /* the full island field behind the trail (sea + big landmass) */
-  function islandFieldSVG() {
-    return '<svg class="g3-fill" viewBox="0 0 1280 760" preserveAspectRatio="none">' +
-      '<defs><linearGradient id="g3seaV" x1="0" y1="0" x2="0" y2="1">' +
-      '<stop offset="0%" stop-color="#1E4E86"/><stop offset="100%" stop-color="#0E2C55"/></linearGradient>' +
-      '<radialGradient id="g3land" cx="50%" cy="42%" r="66%">' +
-      '<stop offset="0%" stop-color="#F3DBA6"/><stop offset="60%" stop-color="#E5C078"/><stop offset="100%" stop-color="#CFA25C"/></radialGradient>' +
-      '<linearGradient id="g3falaj" x1="0" y1="0" x2="1" y2="0">' +
-      '<stop offset="0%" stop-color="#7FDCCF"/><stop offset="100%" stop-color="#2F9E92"/></linearGradient></defs>' +
-      '<rect x="0" y="150" width="1280" height="610" fill="url(#g3seaV)"/>' +
-      /* soft wave lines */
-      '<g stroke="rgba(255,255,255,.10)" stroke-width="3" fill="none">' +
-      '<path d="M0 210 Q160 196 320 210 T640 210 T960 210 T1280 210"/>' +
-      '<path d="M0 260 Q160 246 320 260 T640 260 T960 260 T1280 260"/></g>' +
-      /* island landmass */
-      '<path d="M120 470 Q90 300 300 250 Q520 210 640 236 Q820 200 1010 262 Q1200 320 1160 500 Q1120 690 700 700 Q300 700 120 470Z" fill="url(#g3land)"/>' +
-      '<path d="M150 470 Q130 330 320 288 Q520 252 640 276 Q820 246 1000 300 Q1160 356 1130 496 Q1096 650 700 662 Q320 660 150 470Z" fill="#EBCB90" opacity=".7"/>' +
-      /* falaj channel snaking through */
-      '<path d="M1110 560 Q900 520 760 566 Q600 612 470 566 Q320 520 210 560" stroke="url(#g3falaj)" stroke-width="10" fill="none" stroke-linecap="round" opacity=".85"/>' +
-      '<path d="M1110 560 Q900 520 760 566 Q600 612 470 566 Q320 520 210 560" stroke="#CFF6EE" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/>' +
-      '</svg>';
-  }
-
-  /* the dotted winding trail joining the nodes */
-  function trailPathSVG(list) {
-    let d = 'M' + TRAIL[0][0] + ' ' + TRAIL[0][1];
-    for (let i = 1; i < TRAIL.length; i++) {
-      const [px, py] = TRAIL[i - 1], [x, y] = TRAIL[i];
-      const mx = (px + x) / 2, my = (py + y) / 2;
-      d += ' Q' + px + ' ' + py + ' ' + mx + ' ' + my;
-      d += ' Q' + ((mx + x) / 2) + ' ' + ((my + y) / 2) + ' ' + x + ' ' + y;
-    }
-    return '<svg class="g3-trailsvg" viewBox="0 0 1280 760" preserveAspectRatio="none">' +
-      '<path d="' + d + '" fill="none" stroke="rgba(11,16,48,.35)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>' +
-      '<path d="' + d + '" fill="none" stroke="#FFF4E2" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"' +
-      ' stroke-dasharray="2 20" opacity=".85"/></svg>';
-  }
-
-  function structure(pos, svgInner, label, fn) {
-    const s = raw('div', 'g3-struct'); s.style.cssText = pos;
-    s.setAttribute('role', 'button'); s.setAttribute('tabindex', '0');
-    s.setAttribute('aria-label', label);
-    s.appendChild(raw('div', 'g3-struct-ico', svgInner));
-    s.appendChild(el('span', { class: 'g3-struct-t', text: label }));
-    s.addEventListener('click', fn);
-    s.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(); } });
-    return s;
-  }
-  function workshopSVG() {
-    return '<svg viewBox="0 0 96 96"><rect x="14" y="40" width="68" height="46" rx="6" fill="#E5C078"/>' +
-      '<path d="M10 44 L48 18 L86 44Z" fill="#C97F35"/><rect x="40" y="58" width="18" height="28" fill="#7A4A1E"/>' +
-      '<circle cx="48" cy="34" r="7" fill="#3FBF9E"/><rect x="22" y="52" width="14" height="12" fill="#9FE3D6"/>' +
-      '<rect x="62" y="52" width="14" height="12" fill="#9FE3D6"/></svg>';
-  }
-  function towerSVG() {
-    return '<svg viewBox="0 0 96 96"><rect x="34" y="26" width="28" height="60" fill="#E5C078"/>' +
-      '<path d="M30 26 L48 8 L66 26Z" fill="#9C6BC9"/><circle cx="48" cy="20" r="4" fill="#FFDD6B"/>' +
-      '<rect x="42" y="40" width="12" height="14" fill="#7A4A1E"/><rect x="42" y="60" width="12" height="14" fill="#7A4A1E"/></svg>';
-  }
-  function gateSVG() {
-    return '<svg viewBox="0 0 96 96"><path d="M20 86 V40 Q48 14 76 40 V86Z" fill="#D9AE63"/>' +
-      '<path d="M34 86 V48 Q48 30 62 48 V86Z" fill="#5A3A18"/><circle cx="48" cy="38" r="6" fill="#F2C230"/></svg>';
+    A.good && A.good();
   }
 
 })(window.WADI);
