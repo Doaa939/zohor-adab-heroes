@@ -1,0 +1,117 @@
+{
+  "name": "منصة واحة التقنية",
+  "nameEn": "Wahat Al-Taqnia Interactive ICT Platform",
+  "version": "1.0.0",
+  "release": "public-release-final",
+  "buildDate": "2026-08-12",
+  "serviceWorkerCache": "v1.0.0-public-release-final-2026-08-12",
+  "author": "الأستاذة دعاء الجرواني",
+  "authorEn": "Ustatha Doaa Al-Jarwani",
+  "copyright": "© 2026 الأستاذة دعاء الجرواني — جميع الحقوق محفوظة",
+  "license": "All Rights Reserved — see LICENSE_AR.md / LICENSE_EN.md",
+  "curriculumReference": "وزارة التعليم — سلطنة عُمان · منهج تقنية المعلومات",
+  "language": {
+    "primary": "ar",
+    "direction": "rtl",
+    "secondary": "en"
+  },
+  "platform": {
+    "type": "static",
+    "hosting": "Cloudflare Pages",
+    "serverRuntime": "none",
+    "buildCommand": "none",
+    "outputDirectory": "/"
+  },
+  "offlineSupport": {
+    "portal": true,
+    "entryGateway": true,
+    "gradePages": true,
+    "semesterPlatforms": true,
+    "adventure": true,
+    "note": "بوابة الدخول والواجهة الرئيسية وعالم المغامرة وصفحات الصفوف والمنصات الثماني تعمل دون اتصال بعد الزيارة الأولى واكتمال التخزين المؤقت، بما في ذلك فتح الدرس والعودة إلى المغامرة."
+  },
+  "compatibility": {
+    "browsers": [
+      "Chrome/Edge 90+",
+      "Firefox 90+",
+      "Safari 15+"
+    ],
+    "desktop": [
+      "1366x768",
+      "1920x1080",
+      "1024x768"
+    ],
+    "tablet": [
+      "768x1024",
+      "820x1180"
+    ],
+    "mobile": [
+      "360x800",
+      "375x812",
+      "390x844",
+      "412x915"
+    ],
+    "input": [
+      "mouse",
+      "keyboard",
+      "touch"
+    ],
+    "targetEnvironment": "أجهزة مدرسية بنظام Windows 10"
+  },
+  "coverage": {
+    "grades": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "semesters": [
+      1,
+      2
+    ],
+    "routes": 8,
+    "routesInstalled": 8
+  },
+  "privacy": {
+    "accounts": false,
+    "personalData": false,
+    "analytics": false,
+    "thirdPartyRequests": false,
+    "progressStorage": "localStorage, namespaced per grade/semester: waha:g{G}s{S}:"
+  },
+  "note": "هذا الملف لأغراض الصيانة فقط ولا يُستخدم في وقت التشغيل.",
+  "build": {
+    "kind": "PUBLIC RELEASE — FINAL",
+    "contains": "بوابة الدخول · الواجهة الرئيسية · عالم المغامرة ثلاثي الأبعاد · صفحات الصفوف الأربعة · المنصات الثماني · الأصول المشتركة",
+    "semesterSlots": 8,
+    "semesterPlatformsInstalled": 8,
+    "legacySemesterContent": 0,
+    "note": "مواضع الفصول الثمانية مركَّبة بالمنصات النهائية. لا صفحات محجوزة ولا محتوى فصل قديم."
+  },
+  "deviceGuidance": {
+    "desktop": "موصى به — تجربة كاملة",
+    "tablet": "موصى به — تجربة كاملة",
+    "phoneLandscape": "مناسب للتصفّح والدروس والأنشطة التي تتوافق مع مساحة الهاتف. أمّا المحاكيات التعليمية الكاملة فيُوصى باستخدامها على جهاز لوحي أو حاسوب للحصول على تجربة أفضل.",
+    "phonePortrait": "تظهر رسالة طلب التدوير إلى الوضع الأفقي"
+  },
+  "adventure": {
+    "enabled": true,
+    "renderer": "Three.js (self-hosted, local, no CDN)",
+    "worlds": 8,
+    "modes": [
+      "student",
+      "teacher"
+    ],
+    "progressIsolation": "adventure progress is recorded only inside a student adventure session",
+    "contentChanged": false,
+    "lessonsModified": 0
+  },
+  "entryPoints": {
+    "gate": "index.html",
+    "platform": "home.html",
+    "adventure": "adventure.html",
+    "teacher": "home.html?role=teacher"
+  },
+  "releaseDate": "12 August 2026",
+  "displayVersion": "الإصدار الأول • 2026"
+}

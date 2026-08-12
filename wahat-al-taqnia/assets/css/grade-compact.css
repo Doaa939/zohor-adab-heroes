@@ -1,0 +1,123 @@
+/* grade-compact.css — ضبط المقياس والتسلسل البصري لصفحات الصفوف فقط.
+   لا تغيير في الهوية أو الألوان أو معالجة الوزارة أو لغة الخلفية.
+   الهدف: ظهور الفصلين معًا داخل أول إطار عرض عند 1366×768 دون تمرير.
+   إعداد وتنفيذ الأستاذة دعاء الجرواني */
+
+/* --- الإطار العام --- */
+.page--grade .grade-main{
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  padding-block-start:clamp(56px,6.4vw,78px);
+  padding-block-end:max(12px,env(safe-area-inset-bottom,0px));
+  padding-inline:max(12px,env(safe-area-inset-left,0px)) max(12px,env(safe-area-inset-right,0px));
+}
+.page--grade main,.page--notice main{padding-block-start:clamp(56px,6.4vw,78px);}
+
+/* --- هوية الوزارة: مضغوطة أعلى الصفحة --- */
+.page--grade .ministry{inset-block-start:clamp(8px,1.2vw,14px);}
+.page--grade .ministry__card{padding:.28rem .45rem;}
+.page--grade .ministry__logo{height:clamp(24px,2.4vw,30px);}
+
+/* --- ممر العودة إلى البوابة: مضغوط --- */
+.page--grade .crumb{margin-block:clamp(.4rem,1vw,.7rem) 0;}
+.page--grade .crumb a{min-height:48px;font-size:.95rem;}
+
+/* --- منطقة عنوان الصف: أصغر، مع بوابة زخرفية مضبوطة لا فارغة ضخمة --- */
+.page--grade .gradehead{padding-block:clamp(.3rem,1vw,.7rem) 0;}
+.page--grade .gradehead__title{
+  font-size:clamp(1.55rem,1.05rem+1.9vw,2.35rem);
+  line-height:1.15;
+}
+.page--grade .gradehead__sub{
+  margin-block-start:.3rem;
+  font-size:clamp(.86rem,.8rem+.22vw,1rem);
+}
+.page--grade .eyebrow{font-size:.72rem;}
+.page--grade .gate{
+  inset-block-start:-4%;
+  width:min(210px,38vw);
+  height:clamp(88px,11vw,132px);
+}
+
+/* --- الفصلان جنبًا إلى جنب على المستوى الرأسي نفسه --- */
+.page--grade .section{padding-block:clamp(.6rem,1.4vw,1.1rem) 0;}
+.page--grade .waterline{margin-block-end:clamp(.2rem,.8vw,.5rem);}
+.page--grade .arches--pair{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(.8rem,1.8vw,1.4rem);
+  max-width:min(760px,94vw);
+  align-items:stretch;
+}
+.page--grade .arch,
+.page--grade .arches--pair .arch{
+  aspect-ratio:auto;
+  min-height:clamp(184px,27vh,256px);
+}
+.page--grade .arch__num{
+  inset-block-start:6%;
+  font-size:clamp(2.4rem,5.4vw,4rem);
+}
+.page--grade .arch__inner{
+  padding:.9rem .8rem clamp(.85rem,1.8vw,1.15rem);
+  gap:.1rem;
+}
+.page--grade .arch__title{font-size:clamp(1rem,.9rem+.4vw,1.28rem);}
+.page--grade .arch__meta{font-size:clamp(.74rem,.7rem+.16vw,.86rem);}
+.page--grade .arch__go{min-height:44px;display:inline-flex;align-items:center;gap:.4rem;}
+
+/* --- التذييل مضغوط --- */
+.page--grade .foot{padding-block:clamp(.6rem,1.4vw,1rem);margin-block-start:auto;}
+.page--grade .foot__credit{font-size:.9rem;}
+.page--grade .foot__line{font-size:.75rem;}
+
+/* --- ارتفاعات صغيرة (1366×768 وما دونه) --- */
+@media (max-height:820px){
+  .page--grade .gate{height:clamp(72px,9vw,104px);width:min(180px,34vw);}
+  .page--grade .gradehead__title{font-size:clamp(1.45rem,1rem+1.5vw,2rem);}
+  .page--grade .arch,.page--grade .arches--pair .arch{min-height:clamp(172px,24vh,224px);}
+}
+@media (max-height:660px){
+  .page--grade .gate{display:none;}
+  .page--grade .gradehead__sub{display:none;}
+  .page--grade .arch,.page--grade .arches--pair .arch{min-height:150px;}
+}
+
+/* --- الجوّال: تكديس نظيف بلا قصّ ولا بتر --- */
+@media (max-width:640px){
+  .page--grade .grade-main{padding-block-start:clamp(60px,16vw,84px);}
+  .page--grade .gate{display:none;}
+  .page--grade .gradehead{padding-block:.2rem 0;}
+  .page--grade .gradehead__title{font-size:clamp(1.45rem,1.1rem+2.4vw,1.95rem);}
+  .page--grade .arches,
+  .page--grade .arches--pair{grid-template-columns:1fr;gap:.75rem;max-width:100%;}
+  .page--grade .arch,
+  .page--grade .arches--pair .arch{min-height:132px;aspect-ratio:auto;}
+  .page--grade .arch__inner{
+    flex-direction:row;
+    align-items:center;
+    justify-content:flex-start;
+    gap:.7rem;
+    padding:.85rem 1rem;
+    text-align:start;
+  }
+  .page--grade .arch__num{
+    position:static;
+    font-size:2.1rem;
+    line-height:1;
+    flex:0 0 auto;
+    inset:auto;
+  }
+  .page--grade .arch__go{margin-inline-start:auto;min-height:48px;}
+  .page--grade .arch__title{font-size:1.05rem;}
+}
+
+/* --- لا فيض أفقي مطلقًا --- */
+.page--grade,.page--grade body,.page--grade .grade-main{overflow-x:hidden;}
+.page--grade *{min-width:0;}
+
+/* روابط التذييل القانونية — نسبة مُلكية بلا لافتات أو علامات مائية */
+.foot__line a{color:inherit;text-decoration:underline;text-underline-offset:3px;display:inline-block;min-height:44px;line-height:44px}
+.foot__line a:hover{color:#f0c98a}
+.foot__line a:focus-visible{outline:2px solid #ffdca8;outline-offset:2px}

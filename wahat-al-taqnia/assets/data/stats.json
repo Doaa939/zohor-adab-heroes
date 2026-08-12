@@ -1,0 +1,40 @@
+{
+  "_note": "مولَّد من tools/collect_stats.py — أرقام حقيقية فقط. القيمة null تُخفي البند.",
+  "items": [
+    {
+      "key": "grades",
+      "label": "صفوف دراسية",
+      "value": 4
+    },
+    {
+      "key": "semesters",
+      "label": "فصول دراسية",
+      "value": 8
+    },
+    {
+      "key": "platforms",
+      "label": "المنصات التعليمية",
+      "value": null
+    },
+    {
+      "key": "units",
+      "label": "الوحدات",
+      "value": null
+    },
+    {
+      "key": "lessons",
+      "label": "الدروس",
+      "value": null
+    },
+    {
+      "key": "activities",
+      "label": "الأنشطة التفاعلية",
+      "value": null
+    },
+    {
+      "key": "simulations",
+      "label": "المحاكيات التعليمية",
+      "value": null
+    }
+  ]
+}

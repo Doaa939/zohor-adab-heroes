@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-root="">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>منصة واحة التقنية | بوابة الدخول</title>
+<!-- ==== نسبة المُلكية والبيانات الوصفية · Ownership & metadata ====
+     © 2026 الأستاذة دعاء الجرواني — جميع الحقوق محفوظة
+     إعداد وتنفيذ الأستاذة دعاء الجرواني -->
+<meta name="author" content="الأستاذة دعاء الجرواني">
+<meta name="copyright" content="© 2026 الأستاذة دعاء الجرواني — جميع الحقوق محفوظة">
+<meta name="application-name" content="منصة واحة التقنية">
+<meta name="generator" content="Wahat Al-Taqnia Static Platform v1.0.0">
+<meta name="creator" content="الأستاذة دعاء الجرواني">
+<meta name="publisher" content="الأستاذة دعاء الجرواني">
+<meta name="description" content="بوابة الدخول إلى منصة واحة التقنية — الواجهة الرئيسية، عالم المغامرة ثلاثي الأبعاد، أو دخول المعلم. مبادرة تربوية تعليمية رقمية تهدف إلى دعم تعلم طلبة الصفوف (1–4) في مادة تقنية المعلومات.">
+<meta name="theme-color" content="#061421">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<meta name="format-detection" content="telephone=no">
+<meta property="og:type" content="website">
+<meta property="og:title" content="منصة واحة التقنية | بوابة الدخول">
+<meta property="og:description" content="مبادرة تربوية تعليمية رقمية للصفوف (1–4).">
+<meta property="og:image" content="assets/img/og-cover.jpg">
+<meta property="og:locale" content="ar_OM">
+<link rel="icon" href="assets/img/favicon-64.png" sizes="64x64">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preload" as="image" fetchpriority="high" type="image/avif"
+      href="assets/img/hero-1280.avif" imagesizes="100vw"
+      imagesrcset="assets/img/hero-640.avif 640w, assets/img/hero-960.avif 960w, assets/img/hero-1280.avif 1280w, assets/img/hero-1672.avif 1672w">
+<style>
+:root{
+  --g:#ffce6b; --g-deep:#e9a63f; --t:#4fe0d0; --ink:#f4fafd; --dim:#c2d8e4; --faint:#9bb8c8;
+  --line:rgba(255,255,255,.16); --panel:rgba(7,23,36,.72);
+  --f:"Segoe UI","Tahoma","Noto Sans Arabic",system-ui,sans-serif;
+  --sa-t:env(safe-area-inset-top,0px); --sa-b:env(safe-area-inset-bottom,0px);
+  --sa-l:env(safe-area-inset-left,0px); --sa-r:env(safe-area-inset-right,0px);
+}
+*{box-sizing:border-box}
+html{background:#04101c}
+html,body{margin:0; min-height:100%; color:var(--ink); font-family:var(--f); direction:rtl}
+body{background:transparent}
+body{
+  min-height:100dvh; display:flex; flex-direction:column; position:relative; overflow-x:hidden;
+  padding:calc(16px + var(--sa-t)) calc(16px + var(--sa-r)) calc(16px + var(--sa-b)) calc(16px + var(--sa-l));
+}
+a{color:inherit; text-decoration:none}
+button{font-family:inherit; cursor:pointer}
+button:focus-visible,a:focus-visible{outline:2px solid var(--g); outline-offset:4px; border-radius:14px}
+
+/* ---------- approved Oman/technology hero as the gateway backdrop ---------- */
+.bg{position:fixed; inset:0; z-index:-1; overflow:hidden}
+.bg picture{display:block; width:100%; height:100%}
+.bg img{width:100%; height:100%; object-fit:cover; object-position:50% 40%; opacity:.9}
+.bg::after{
+  content:""; position:absolute; inset:0;
+  background:
+    radial-gradient(120% 85% at 78% -10%, rgba(255,186,99,.16), transparent 52%),
+    radial-gradient(95% 70% at 8% 4%, rgba(63,216,203,.12), transparent 50%),
+    linear-gradient(180deg, rgba(4,16,28,.62) 0%, rgba(4,16,28,.30) 30%, rgba(4,16,28,.55) 58%, rgba(4,16,28,.88) 84%, #04101c 100%);
+}
+
+/* ---------- ministry identity: light container so the crest never sinks ---------- */
+.ministry{display:flex; justify-content:center; flex:none}
+.ministry__card{
+  display:inline-flex; align-items:center; gap:12px; padding:9px 18px 9px 14px; border-radius:999px;
+  background:linear-gradient(180deg, rgba(255,255,255,.97), rgba(238,246,251,.93));
+  border:1px solid rgba(255,255,255,.6);
+  box-shadow:0 10px 30px rgba(0,0,0,.42), 0 1px 0 rgba(255,255,255,.7) inset;
+}
+.ministry__card img{width:36px; height:auto; display:block}
+.ministry__card p{margin:0; font-size:.84rem; line-height:1.45; color:#123047; white-space:nowrap}
+.ministry__card b{color:#08202f; font-weight:800}
+
+main{
+  flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center;
+  gap:clamp(20px,3.4vh,38px); padding:clamp(20px,4vh,44px) 0;
+}
+
+/* ---------- title block ---------- */
+.head{text-align:center; max-width:62ch; display:flex; flex-direction:column; align-items:center}
+.eyebrow{
+  margin:0; font-size:clamp(.64rem,1.5vw,.74rem); letter-spacing:.3em; font-weight:800;
+  color:var(--g); text-shadow:0 2px 12px rgba(0,0,0,.6);
+}
+.rule{width:min(300px,62vw); height:10px; margin:14px 0 4px; color:var(--g); opacity:.85}
+.head h1{
+  margin:.1em 0 .26em; font-weight:800; letter-spacing:-.015em; line-height:1.12;
+  font-size:clamp(2.2rem,8vw,4.4rem);
+  text-shadow:0 6px 44px rgba(0,0,0,.62), 0 2px 6px rgba(0,0,0,.5);
+}
+.head .lede{
+  margin:0; color:var(--dim); line-height:1.8; max-width:46ch;
+  font-size:clamp(.88rem,2.2vw,1.04rem); text-shadow:0 2px 12px rgba(0,0,0,.55);
+}
+.prompt{
+  margin:16px 0 0; font-size:clamp(.78rem,2vw,.88rem); font-weight:800; color:var(--t);
+  letter-spacing:.05em; text-shadow:0 2px 10px rgba(0,0,0,.6);
+}
+
+/* ---------- the three gateways ---------- */
+.doors{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; width:min(100%,1020px)}
+.door{
+  position:relative; display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+  gap:10px; padding:30px 20px 24px; border-radius:22px; text-align:center; min-height:214px;
+  background:var(--panel); border:1px solid var(--line); color:var(--ink);
+  -webkit-backdrop-filter:blur(14px) saturate(1.1); backdrop-filter:blur(14px) saturate(1.1);
+  box-shadow:0 16px 40px rgba(0,0,0,.42), 0 1px 0 rgba(255,255,255,.08) inset;
+  transition:transform .2s cubic-bezier(.2,.9,.3,1), border-color .2s, box-shadow .2s, background .2s;
+  overflow:hidden;
+}
+.door::before{
+  content:""; position:absolute; inset-inline:0; top:0; height:3px;
+  background:linear-gradient(90deg, transparent, var(--edge,rgba(255,255,255,.5)), transparent);
+  opacity:.9;
+}
+.door:hover{transform:translateY(-6px); border-color:var(--edge,var(--g)); box-shadow:0 22px 54px rgba(0,0,0,.5)}
+.door .ic{
+  width:60px; height:60px; flex:none; display:grid; place-items:center; border-radius:18px;
+  background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.14);
+}
+.door .ic svg{width:30px; height:30px; fill:var(--edge,var(--g))}
+.door .tx{display:flex; flex-direction:column; gap:6px; align-items:center}
+.door h2{margin:0; font-size:clamp(1.04rem,2.4vw,1.22rem); font-weight:800; letter-spacing:-.01em}
+.door p{margin:0; font-size:.84rem; color:var(--dim); line-height:1.68; max-width:27ch}
+.door .go{
+  margin-top:auto; padding-top:14px; font-size:.82rem; font-weight:800; color:var(--edge,var(--g));
+}
+.door--home{--edge:#7fc4e8}
+.door--teacher{--edge:#8fd9b6}
+.door--adv{
+  --edge:var(--g);
+  background:linear-gradient(158deg, rgba(255,206,107,.24), rgba(79,224,208,.13) 60%, rgba(7,23,36,.8));
+  border-color:rgba(255,206,107,.55);
+  box-shadow:0 22px 54px rgba(0,0,0,.5), 0 0 0 1px rgba(255,206,107,.16) inset;
+}
+.door--adv .ic{background:rgba(255,206,107,.16); border-color:rgba(255,206,107,.4)}
+.door .tag{
+  position:absolute; top:14px; inset-inline-start:14px; font-size:.6rem; font-weight:800;
+  letter-spacing:.1em; padding:4px 10px; border-radius:8px;
+  background:linear-gradient(180deg,var(--g),var(--g-deep)); color:#2f1c04;
+  box-shadow:0 4px 12px rgba(0,0,0,.3);
+}
+
+/* ---------- notice + footer ---------- */
+.note{
+  margin:0; text-align:center; font-size:.79rem; color:#adc8d8; line-height:1.75;
+  max-width:62ch; padding:11px 18px; border-radius:13px;
+  background:rgba(4,16,28,.5); border:1px solid rgba(255,255,255,.09);
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+}
+footer{
+  flex:none; text-align:center; font-size:.76rem; color:var(--faint); line-height:1.85;
+  border-top:1px solid rgba(255,255,255,.1); padding-top:13px; margin-top:6px;
+}
+footer b{color:var(--dim); font-weight:800}
+footer a{color:#a8cadb}
+footer a:hover{color:var(--g)}
+footer .ver{color:#8fb0c2}
+
+/* ---------- responsive reflow (no zoom, no scale) ---------- */
+@media (max-width:900px){
+  .doors{grid-template-columns:1fr; width:min(100%,540px); gap:12px}
+  .door{
+    flex-direction:row; text-align:start; min-height:0; padding:16px 18px; gap:15px;
+    align-items:center; justify-content:flex-start;
+  }
+  .door .ic{width:50px; height:50px; border-radius:15px}
+  .door .ic svg{width:25px; height:25px}
+  .door .tx{align-items:flex-start; flex:1; min-width:0}
+  .door p{max-width:none}
+  .door .go{margin:0; padding:0; flex:none; font-size:1.2rem}
+  .door .tag{position:static; align-self:center; margin-inline-start:auto}
+  .head .lede{max-width:42ch}
+}
+@media (max-height:620px) and (orientation:landscape){
+  body{padding-top:calc(10px + var(--sa-t)); padding-bottom:calc(10px + var(--sa-b))}
+  main{gap:14px; padding:10px 0}
+  .head h1{font-size:clamp(1.6rem,5.2vw,2.3rem)}
+  .head .lede,.prompt,.rule{display:none}
+  .door{padding:12px 15px; gap:12px}
+  .door .ic{width:42px; height:42px; border-radius:12px}
+  .door .ic svg{width:21px; height:21px}
+  .door p{font-size:.76rem}
+  .note{font-size:.7rem; padding:8px 13px}
+  .ministry__card{padding:6px 14px 6px 10px}
+  .ministry__card img{width:28px}
+  .ministry__card p{font-size:.74rem}
+  footer{font-size:.68rem; padding-top:9px}
+}
+@media (max-width:420px){
+  .ministry__card p{white-space:normal; font-size:.76rem}
+  .door h2{font-size:1rem}
+  .door p{font-size:.79rem}
+}
+@media (prefers-reduced-motion:reduce){ .door{transition:none} }
+</style>
+</head>
+<body>
+
+<div class="bg" aria-hidden="true">
+  <picture>
+    <source type="image/avif" sizes="100vw"
+            srcset="assets/img/hero-640.avif 640w, assets/img/hero-960.avif 960w, assets/img/hero-1280.avif 1280w, assets/img/hero-1672.avif 1672w">
+    <source type="image/webp" sizes="100vw"
+            srcset="assets/img/hero-640.webp 640w, assets/img/hero-960.webp 960w, assets/img/hero-1280.webp 1280w, assets/img/hero-1672.webp 1672w">
+    <img src="assets/img/hero-1280.jpg"
+         srcset="assets/img/hero-640.jpg 640w, assets/img/hero-960.jpg 960w, assets/img/hero-1280.jpg 1280w, assets/img/hero-1672.jpg 1672w"
+         sizes="100vw" width="1672" height="941" fetchpriority="high" decoding="async" alt="">
+  </picture>
+</div>
+
+<header class="ministry">
+  <div class="ministry__card">
+    <img src="assets/img/moe-logo-168.png" srcset="assets/img/moe-logo-168.png 1x, assets/img/moe-logo-336.png 2x"
+         width="140" height="168" alt="شعار وزارة التعليم – سلطنة عُمان" decoding="async">
+    <p><b>وزارة التعليم</b> – سلطنة عُمان</p>
+  </div>
+</header>
+
+<main>
+  <div class="head">
+    <p class="eyebrow">مبادرة تربوية تعليمية رقمية</p>
+    <h1>منصة واحة التقنية</h1>
+    <svg class="rule" viewBox="0 0 320 10" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 5h134M186 5h134" stroke="currentColor" stroke-width="1"/>
+      <path d="M160 .8 164.6 5 160 9.2 155.4 5z" fill="currentColor"/>
+    </svg>
+    <p class="lede">مبادرة تربوية تعليمية رقمية تهدف إلى دعم تعلم طلبة الصفوف (1–4) في مادة تقنية المعلومات، من خلال بيئة تفاعلية تجمع بين التعلم والتطبيق والممارسة.</p>
+    <p class="prompt">اختر طريقة دخولك</p>
+  </div>
+
+  <nav class="doors" aria-label="بوابات الدخول">
+    <a class="door door--home" href="home.html">
+      <span class="ic" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 2.6 1.8 10.2h2.5V21h5.2v-6.1h5V21h5.2V10.2h2.5z"/></svg>
+      </span>
+      <span class="tx">
+        <h2>واحة التقنية</h2>
+        <p>الواجهة الرئيسية بكامل معلومات المشروع والصفوف والدروس.</p>
+      </span>
+      <span class="go">ادخل ←</span>
+    </a>
+
+    <a class="door door--adv" href="adventure.html">
+      <span class="tag">3D</span>
+      <span class="ic" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M7.2 6.5h9.6a5.2 5.2 0 0 1 5.1 4.2l.9 4.6a2.7 2.7 0 0 1-2.6 3.2 2.7 2.7 0 0 1-2.1-1l-1.5-1.8H7.4L5.9 17.5a2.7 2.7 0 0 1-2.1 1 2.7 2.7 0 0 1-2.6-3.2l.9-4.6a5.2 5.2 0 0 1 5.1-4.2zM6.1 9.6v1.6H4.5v1.7h1.6v1.6h1.7v-1.6h1.6v-1.7H7.8V9.6zm9.4.9a1.15 1.15 0 1 0 0 2.3 1.15 1.15 0 0 0 0-2.3zm2.5 2.5a1.15 1.15 0 1 0 0 2.3 1.15 1.15 0 0 0 0-2.3z"/></svg>
+      </span>
+      <span class="tx">
+        <h2>عالم المغامرة</h2>
+        <p>ادخل عالمًا ثلاثي الأبعاد وعش رحلة متسلسلة حتى نهاية الفصل.</p>
+      </span>
+      <span class="go">ابدأ ←</span>
+    </a>
+
+    <a class="door door--teacher" href="home.html?role=teacher">
+      <span class="ic" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M2.6 3.4h18.8v10.9H13v2.2l3.3 4.1h-2.7L12 18.1l-1.6 2.5H7.7l3.3-4.1v-2.2H2.6z"/></svg>
+      </span>
+      <span class="tx">
+        <h2>دخول المعلم</h2>
+        <p>وصول مباشر وحر إلى جميع الصفوف والفصول والدروس دون قفل.</p>
+      </span>
+      <span class="go">ادخل ←</span>
+    </a>
+  </nav>
+
+  <p class="note">مشروع تعليمي مستقل أُعدّ لأغراض تربوية وتعليمية، ولا يمثل بوابة رسمية لوزارة التعليم.</p>
+</main>
+
+<footer>
+  <p style="margin:0 0 4px">إعداد وتنفيذ <b>الأستاذة دعاء الجرواني</b> · الصفوف ١–٤</p>
+  <p style="margin:0">
+    <a href="about.html">عن المنصة</a> · <a href="LICENSE_AR.md">الرخصة</a> · <a href="TERMS_OF_USE_AR.md">شروط الاستخدام</a>
+    · <span class="ver">الإصدار الأول • 2026</span> · © 2026 جميع الحقوق محفوظة
+  </p>
+</footer>
+
+<script src="assets/js/sw-register.js" defer></script>
+<script src="assets/adv/entry.js" defer></script>
+</body>
+</html>

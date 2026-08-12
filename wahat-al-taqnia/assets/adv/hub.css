@@ -1,0 +1,456 @@
+/*!
+ * PACKAGE B · hub styles
+ * واجهة خفيفة جدًا فوق عالم 3D — الوضوح للطفل أولًا، والإبهار من العالم نفسه.
+ */
+:root{
+  --hb-gold:#ffce6b; --hb-teal:#4fe0d0; --hb-ink:#f2f8fc; --hb-dim:#b9d0dd;
+  --hb-panel:rgba(6,20,33,.6); --hb-line:rgba(255,255,255,.16);
+  --hb-font:"Segoe UI","Tahoma","Noto Sans Arabic",system-ui,sans-serif;
+  --hb-sa-t:env(safe-area-inset-top,0px); --hb-sa-b:env(safe-area-inset-bottom,0px);
+  --hb-sa-l:env(safe-area-inset-left,0px); --hb-sa-r:env(safe-area-inset-right,0px);
+}
+*{box-sizing:border-box}
+html,body{margin:0; height:100%; overflow:hidden; background:#061421; color:var(--hb-ink); font-family:var(--hb-font); direction:rtl}
+body{overscroll-behavior:none}
+button{font-family:inherit; cursor:pointer}
+button:focus-visible{outline:2px solid var(--hb-gold); outline-offset:3px}
+
+#hubCanvas{position:fixed; inset:0; width:100%; height:100%; display:block; touch-action:none}
+
+#hubBoot{
+  position:fixed; inset:0; z-index:60; display:grid; place-items:center; text-align:center;
+  background:linear-gradient(160deg,#0a2233,#061421); color:#bcd6e2; font-size:.95rem; padding:24px;
+}
+#hubBoot .sp{width:46px;height:46px;border:3px solid rgba(255,255,255,.14);border-top-color:var(--hb-gold);border-radius:50%;animation:hbs 1s linear infinite;margin:0 auto 14px}
+@keyframes hbs{to{transform:rotate(360deg)}}
+
+.glass{
+  background:var(--hb-panel); border:1px solid var(--hb-line); border-radius:15px;
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+
+/* ---------------- title (fades once a grade is chosen) ---------------- */
+#hubTitle{
+  position:fixed; top:calc(6vh + var(--hb-sa-t)); left:0; right:0; text-align:center;
+  pointer-events:none; z-index:12; transition:opacity .6s ease, transform .6s ease;
+}
+#hubTitle .e{font-size:.72rem; letter-spacing:.3em; color:var(--hb-gold); font-weight:700}
+#hubTitle h1{
+  margin:.24em 0 .1em; font-size:clamp(1.9rem,7vw,4rem); font-weight:800; letter-spacing:-.01em;
+  text-shadow:0 6px 40px rgba(0,0,0,.6);
+}
+#hubTitle p{margin:0; color:#d3e6f0; font-size:clamp(.82rem,2.3vw,1.02rem)}
+body.hub-grade #hubTitle{opacity:0; transform:translateY(-14px)}
+
+/* ---------------- grade panel (appears on grade focus) ---------------- */
+#hubPanel{
+  position:fixed; z-index:14; bottom:calc(16px + var(--hb-sa-b)); left:50%; transform:translateX(-50%) translateY(20px);
+  width:min(94vw,640px); opacity:0; visibility:hidden; pointer-events:none; transition:opacity .5s ease, transform .5s cubic-bezier(.2,.9,.3,1), visibility .5s;
+  padding:16px; text-align:center;
+}
+body.hub-grade #hubPanel{opacity:1; visibility:visible; transform:translateX(-50%) translateY(0); pointer-events:auto}
+#hubGradeName{font-size:1.05rem; font-weight:800; color:var(--hb-gold); margin-bottom:12px}
+#hubSemesters{display:grid; grid-template-columns:1fr 1fr; gap:11px}
+
+.hub-sem{
+  display:flex; flex-direction:column; gap:3px; align-items:flex-start; text-align:start;
+  background:rgba(255,255,255,.06); border:1px solid var(--hb-line); border-left:3px solid var(--c,var(--hb-gold));
+  border-radius:13px; padding:13px 15px; color:var(--hb-ink); min-height:96px; transition:.16s;
+}
+.hub-sem:hover{background:rgba(255,255,255,.12); transform:translateY(-2px); border-color:var(--c,var(--hb-gold))}
+.hub-sem-k{font-size:.68rem; color:var(--hb-dim); letter-spacing:.04em}
+.hub-sem-w{font-size:1rem; font-weight:800; color:var(--c,var(--hb-gold))}
+.hub-sem-t{font-size:.74rem; color:var(--hb-dim); line-height:1.5}
+.hub-sem-s{font-size:.72rem; margin-top:4px; color:#9fb8c6}
+.hub-sem-s.on{color:var(--hb-teal); font-weight:700}
+
+/* ---------------- chrome ---------------- */
+#hubBack{
+  position:fixed; z-index:14; top:calc(12px + var(--hb-sa-t)); inset-inline-start:calc(12px + var(--hb-sa-l));
+  display:none; align-items:center; gap:7px; padding:10px 15px; font-size:.8rem; font-weight:700;
+  color:var(--hb-ink); background:var(--hb-panel); border:1px solid var(--hb-line); border-radius:12px;
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); min-height:42px;
+}
+#hubBack:hover{border-color:var(--hb-gold)}
+
+#hubTools{
+  position:fixed; z-index:14; top:calc(12px + var(--hb-sa-t)); inset-inline-end:calc(12px + var(--hb-sa-r));
+  display:flex; gap:8px; align-items:center;
+}
+#hubRole,#hubSound{
+  padding:10px 14px; font-size:.78rem; font-weight:700; color:var(--hb-ink);
+  background:var(--hb-panel); border:1px solid var(--hb-line); border-radius:12px;
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); min-height:42px; min-width:42px;
+}
+#hubRole:hover,#hubSound:hover{border-color:var(--hb-gold)}
+
+/* quick grade list — always available, keyboard friendly */
+#hubQuick{
+  position:fixed; z-index:13; bottom:calc(48px + var(--hb-sa-b)); left:50%; transform:translateX(-50%);
+  display:flex; gap:9px; flex-wrap:wrap; justify-content:center; width:min(94vw,700px);
+  transition:opacity .4s ease;
+}
+body.hub-grade #hubQuick{opacity:0; visibility:hidden; pointer-events:none}
+.hub-quick-b{
+  padding:11px 18px; font-size:.85rem; font-weight:800; color:var(--hb-ink);
+  background:var(--hb-panel); border:1px solid var(--hb-line); border-bottom:3px solid var(--c,var(--hb-gold));
+  border-radius:13px; -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  min-height:46px; transition:.16s;
+}
+.hub-quick-b:hover{transform:translateY(-3px); border-color:var(--c,var(--hb-gold)); background:rgba(255,255,255,.12)}
+
+#hubHint{
+  position:fixed; z-index:12; bottom:calc(104px + var(--hb-sa-b)); left:0; right:0; text-align:center;
+  font-size:.7rem; color:#8fb0c1; pointer-events:none; transition:opacity .4s;
+}
+body.hub-grade #hubHint{opacity:0}
+
+/* portal dive flash */
+#hubFlash{
+  position:fixed; inset:0; z-index:40; background:#fff; opacity:0; pointer-events:none;
+  transition:opacity 1.1s ease;
+}
+#hubFlash.on{opacity:1}
+
+/* ---------------- role gate ---------------- */
+.hub-gate{
+  position:fixed; inset:0; z-index:50; display:grid; place-items:center; padding:20px;
+  background:radial-gradient(80% 60% at 50% 42%,rgba(6,20,33,.7),rgba(3,10,18,.93));
+  -webkit-backdrop-filter:blur(7px); backdrop-filter:blur(7px);
+  opacity:0; transition:opacity .3s ease; overflow-y:auto;
+}
+.hub-gate.show{opacity:1}
+.hub-gate-c{
+  position:relative; width:min(94vw,640px); max-height:92dvh; overflow-y:auto;
+  background:linear-gradient(160deg,#0f2e42,#071a27); border:1px solid var(--hb-line);
+  border-radius:22px; box-shadow:0 30px 80px rgba(0,0,0,.6); padding:clamp(22px,4vw,34px); text-align:center;
+  transform:translateY(14px); transition:transform .34s cubic-bezier(.2,.9,.3,1);
+}
+.hub-gate.show .hub-gate-c{transform:translateY(0)}
+.hub-gate-e{margin:0; font-size:.68rem; letter-spacing:.24em; color:var(--hb-gold); font-weight:700}
+.hub-gate-c h2{margin:.5em 0 .3em; font-size:clamp(1.2rem,3.6vw,1.7rem); font-weight:800}
+.hub-gate-s{margin:0 auto; max-width:44ch; color:var(--hb-dim); font-size:.9rem; line-height:1.7}
+.hub-gate-r{display:grid; grid-template-columns:1fr 1fr; gap:13px; margin-top:22px}
+.hub-gate-b{
+  display:flex; flex-direction:column; align-items:center; gap:6px; justify-content:center;
+  padding:22px 16px; border-radius:16px; background:rgba(255,255,255,.05);
+  border:1px solid var(--hb-line); color:var(--hb-ink); min-height:140px; transition:.18s;
+}
+.hub-gate-b:hover{background:rgba(255,255,255,.11); border-color:var(--hb-gold); transform:translateY(-3px)}
+.hub-gate-b.accent{
+  background:linear-gradient(155deg,rgba(255,206,107,.2),rgba(79,224,208,.12));
+  border-color:rgba(255,206,107,.5);
+}
+.hub-gate-i{font-size:2.1rem; line-height:1}
+.hub-gate-t{font-size:1.02rem; font-weight:800}
+.hub-gate-d{font-size:.78rem; color:var(--hb-dim); line-height:1.5; max-width:24ch}
+.hub-gate-n{margin:18px 0 0; font-size:.75rem; color:#7fa0b2}
+.hub-gate-x{
+  position:absolute; top:12px; inset-inline-end:12px; width:36px; height:36px; border-radius:10px;
+  background:rgba(255,255,255,.07); border:1px solid var(--hb-line); color:var(--hb-ink);
+}
+
+/* ---------------- no-WebGL fallback ---------------- */
+body.hub-nogl #hubQuick{position:static; transform:none; margin:24px auto; width:min(94vw,700px)}
+body.hub-nogl #hubTitle{position:static; margin-top:40px}
+body.hub-nogl{overflow:auto}
+
+/* ---------------- responsive reflow ---------------- */
+@media (max-width:640px){
+  #hubSemesters{grid-template-columns:1fr}
+  .hub-gate-r{grid-template-columns:1fr}
+  .hub-gate-b{flex-direction:row; text-align:start; min-height:0; padding:15px; gap:12px}
+  .hub-gate-d{max-width:none}
+  .hub-quick-b{padding:10px 14px; font-size:.8rem}
+  #hubPanel{padding:13px; bottom:calc(10px + var(--hb-sa-b))}
+  .hub-sem{min-height:0; padding:11px 13px}
+  #hubHint{display:none}
+}
+@media (max-height:520px){
+  #hubTitle{top:calc(10px + var(--hb-sa-t))}
+  #hubTitle h1{font-size:clamp(1.3rem,5vw,2rem)}
+  #hubTitle p{display:none}
+  #hubQuick{bottom:calc(8px + var(--hb-sa-b)); gap:6px}
+  #hubPanel{bottom:calc(6px + var(--hb-sa-b))}
+  .hub-quick-b{padding:8px 12px; font-size:.76rem; min-height:40px}
+  #hubSemesters{grid-template-columns:1fr 1fr}
+  .hub-sem{min-height:0; padding:9px 11px}
+  .hub-sem-t{display:none}
+  #hubPanel{padding:10px; bottom:calc(6px + var(--hb-sa-b))}
+  .hub-gate-c{padding:16px}
+  .hub-gate-b{min-height:0; padding:11px; flex-direction:row; text-align:start; gap:10px}
+  .hub-gate-n,.hub-gate-s{display:none}
+  #hubHint{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  #hubTitle,#hubPanel,#hubQuick,.hub-gate,.hub-gate-c,.hub-sem,.hub-quick-b{transition:none}
+}
+
+
+/* ============================================================ merged build
+ * هوية المشروع داخل عالم المغامرة: حاضرة وواضحة، وخفيفة كي يبقى العالم هو البطل.
+ * ==========================================================================*/
+#hubIdent{
+  position:fixed; z-index:14; top:calc(12px + var(--hb-sa-t)); inset-inline-start:calc(12px + var(--hb-sa-l));
+  display:flex; align-items:center; gap:9px; padding:8px 13px; border-radius:13px;
+  background:var(--hb-panel); border:1px solid var(--hb-line);
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  box-shadow:0 8px 24px rgba(0,0,0,.34); pointer-events:none;
+}
+#hubIdent img{width:26px; height:auto; display:block; flex:none}
+#hubIdent div{display:flex; flex-direction:column; line-height:1.35; min-width:0}
+#hubIdent b{font-size:.76rem; font-weight:800; color:var(--hb-ink)}
+#hubIdent span{font-size:.66rem; color:var(--hb-dim)}
+body.hub-grade #hubIdent{opacity:.5}
+#hubIdent{transition:opacity .5s ease}
+/* the in-world back button shares the corner with the identity chip */
+body.hub-grade #hubBack{inset-inline-start:calc(12px + var(--hb-sa-l)); top:calc(74px + var(--hb-sa-t))}
+
+#hubTools a#hubHome{
+  display:inline-flex; align-items:center; gap:6px; text-decoration:none;
+  padding:10px 14px; font-size:.78rem; font-weight:700; color:var(--hb-ink);
+  background:var(--hb-panel); border:1px solid var(--hb-line); border-radius:12px;
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); min-height:42px;
+}
+#hubTools a#hubHome:hover,#hubAbout:hover{border-color:var(--hb-gold)}
+#hubAbout{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:10px 14px; font-size:.78rem; font-weight:700; color:var(--hb-ink);
+  background:var(--hb-panel); border:1px solid var(--hb-line); border-radius:12px;
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); min-height:42px;
+}
+
+/* credit strip */
+#hubCredit{
+  position:fixed; z-index:12; bottom:calc(10px + var(--hb-sa-b)); left:0; right:0;
+  display:flex; gap:7px; justify-content:center; align-items:center; flex-wrap:wrap;
+  font-size:.66rem; color:#8fb0c1; pointer-events:none; padding:0 12px; text-align:center;
+  transition:opacity .4s ease;
+}
+#hubCredit b{color:var(--hb-dim); font-weight:700}
+#hubCredit .sep{opacity:.5}
+body.hub-grade #hubCredit{opacity:0}
+
+/* ------------------------------------------------------------ about panel */
+#hubAboutPanel{
+  position:fixed; inset:0; z-index:55; display:grid; place-items:center; padding:18px;
+  background:radial-gradient(80% 60% at 50% 42%,rgba(6,20,33,.74),rgba(3,10,18,.94));
+  -webkit-backdrop-filter:blur(7px); backdrop-filter:blur(7px); overflow-y:auto;
+}
+#hubAboutPanel[hidden]{display:none}
+.ab-card{
+  position:relative; width:min(94vw,680px); max-height:90dvh; overflow-y:auto;
+  background:linear-gradient(160deg,#0f2e42,#071a27); border:1px solid var(--hb-line);
+  border-radius:22px; box-shadow:0 30px 80px rgba(0,0,0,.6);
+  padding:clamp(20px,4vw,32px); text-align:center; color:var(--hb-ink);
+}
+.ab-x{
+  position:absolute; top:12px; inset-inline-end:12px; width:38px; height:38px; border-radius:11px;
+  background:rgba(255,255,255,.08); border:1px solid var(--hb-line); color:var(--hb-ink); font-size:.9rem;
+}
+.ab-x:hover{background:rgba(255,255,255,.16)}
+.ab-logo{display:flex; align-items:center; gap:10px; justify-content:center; margin-bottom:14px}
+.ab-logo img{width:38px; height:auto}
+.ab-logo p{margin:0; font-size:.78rem; color:var(--hb-dim)}
+.ab-logo b{color:var(--hb-ink)}
+.ab-eyebrow{margin:0; font-size:.66rem; letter-spacing:.22em; color:var(--hb-gold); font-weight:800}
+.ab-card h2{margin:.4em 0 .35em; font-size:clamp(1.3rem,4vw,1.8rem); font-weight:800}
+.ab-lede{margin:0 auto; max-width:52ch; color:#c3d9e5; font-size:.9rem; line-height:1.8}
+.ab-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:20px; text-align:start}
+.ab-box{background:rgba(255,255,255,.05); border:1px solid var(--hb-line); border-radius:14px; padding:14px 16px}
+.ab-box h3{margin:0 0 6px; font-size:.9rem; color:var(--hb-gold); font-weight:800}
+.ab-box p{margin:0; font-size:.8rem; color:#b7d2df; line-height:1.7}
+.ab-h{margin:22px 0 10px; font-size:.9rem; color:var(--hb-gold); font-weight:800}
+.ab-list{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:7px; text-align:start}
+.ab-list li{
+  font-size:.82rem; color:#b7d2df; line-height:1.65; padding-inline-start:18px; position:relative;
+}
+.ab-list li::before{content:"✦"; position:absolute; inset-inline-start:0; color:var(--hb-teal); font-size:.7rem; top:.25em}
+.ab-credit{margin-top:22px; padding:16px; border-radius:16px; background:rgba(255,255,255,.05); border:1px solid var(--hb-line)}
+.ab-role{margin:0; font-size:.68rem; letter-spacing:.14em; color:var(--hb-gold); font-weight:800}
+.ab-name{margin:.4em 0 .2em; font-size:1.05rem; font-weight:800}
+.ab-sign{width:min(180px,60%); height:auto; opacity:.9; margin:4px auto 0; display:block}
+.ab-ver{margin:.5em 0 0; font-size:.72rem; color:#8fb0c1}
+.ab-note{
+  margin:16px auto 0; max-width:52ch; font-size:.76rem; color:#93b3c4; line-height:1.7;
+  background:rgba(255,255,255,.04); border:1px dashed var(--hb-line); border-radius:11px; padding:10px 14px;
+}
+.ab-links{display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:16px}
+.ab-links a{color:var(--hb-teal); font-size:.8rem; font-weight:700; text-decoration:none}
+.ab-links a:hover{color:var(--hb-gold); text-decoration:underline}
+.ab-copy{margin:12px 0 0; font-size:.72rem; color:#7c9aab}
+
+@media (max-width:640px){
+  #hubIdent span{display:none}
+  #hubTools a#hubHome span,#hubAbout span{display:none}
+  .ab-grid{grid-template-columns:1fr}
+  #hubCredit{font-size:.6rem; gap:4px}
+  #hubCredit .sep{display:none}
+}
+
+/* phones: the identity chip keeps only the crest, and the bottom strip stacks
+   so the grade buttons never sit on top of the credit line */
+@media (max-width:560px){
+  #hubIdent{padding:7px 9px; gap:0}
+  #hubIdent div{display:none}
+  #hubTools{gap:6px}
+  #hubRole,#hubSound,#hubTools a#hubHome,#hubAbout{padding:9px 11px; font-size:.72rem}
+  #hubRole{max-width:34vw; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  #hubQuick{bottom:calc(46px + var(--hb-sa-b)); gap:7px}
+  .hub-quick-b{padding:10px 14px; font-size:.8rem}
+  #hubCredit{bottom:calc(7px + var(--hb-sa-b)); font-size:.56rem; line-height:1.45; padding:0 10px}
+  #hubHint{bottom:calc(96px + var(--hb-sa-b))}
+  #hubPanel{bottom:calc(10px + var(--hb-sa-b))}
+}
+@media (max-height:520px){
+  #hubIdent{padding:6px 10px}
+  #hubIdent div{display:none}
+  #hubCredit{display:none}
+  .ab-card{padding:16px}
+  .ab-grid,.ab-list,.ab-sign{display:none}
+  .ab-lede{font-size:.82rem}
+}
+
+
+/* ---------------- no-WebGL fallback: a complete, usable page ---------------- */
+body.hub-nogl{overflow:auto}
+body.hub-nogl #hubBoot{position:static; min-height:100dvh; align-items:start; padding:28px 18px}
+.nogl-box{width:min(96vw,760px); margin:0 auto; text-align:center}
+.nogl-t{margin:0 0 6px; font-size:1.12rem; font-weight:800; color:var(--hb-ink)}
+.nogl-s{margin:0 auto 22px; max-width:46ch; font-size:.88rem; color:var(--hb-dim); line-height:1.7}
+.nogl-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:10px; text-align:start}
+.nogl-b{
+  display:flex; flex-direction:column; gap:2px; text-decoration:none; color:var(--hb-ink);
+  background:rgba(255,255,255,.06); border:1px solid var(--hb-line); border-radius:13px;
+  padding:13px 15px; min-height:60px; justify-content:center;
+}
+.nogl-b:hover{background:rgba(255,255,255,.12); border-color:var(--hb-gold)}
+.nogl-b b{font-size:.94rem; font-weight:800}
+.nogl-b span{font-size:.76rem; color:var(--hb-dim)}
+.nogl-home{
+  display:inline-flex; align-items:center; justify-content:center; margin-top:20px;
+  text-decoration:none; color:#07202e; background:linear-gradient(180deg,#ffe08a,#ffbf4b);
+  font-weight:800; font-size:.92rem; padding:13px 24px; border-radius:13px; min-height:48px;
+}
+@media (max-width:560px){ .nogl-grid{grid-template-columns:1fr} }
+
+
+/* ============================================================================
+ * VISUAL CORRECTION PASS — readability over the 3D world
+ * Reference defects: 03 (ministry crest on dark), 04 (faint hub text),
+ * 05 (unreadable credit), 06 (semester card hierarchy).
+ * The world stays the hero: scrims and local backdrops only, never big cards.
+ * ==========================================================================*/
+
+/* top and bottom scrims give every fixed text a guaranteed ground */
+body::before,
+body::after{
+  content:""; position:fixed; left:0; right:0; z-index:11; pointer-events:none;
+}
+body::before{
+  top:0; height:clamp(150px,26vh,280px);
+  background:linear-gradient(180deg, rgba(3,10,20,.80) 0%, rgba(3,10,20,.42) 55%, transparent 100%);
+}
+body::after{
+  bottom:0; height:clamp(130px,22vh,240px);
+  background:linear-gradient(0deg, rgba(3,10,20,.86) 0%, rgba(3,10,20,.46) 55%, transparent 100%);
+}
+body.hub-nogl::before, body.hub-nogl::after{display:none}
+
+/* --- 03: Ministry identity gets a light plate so the crest reads on night sky --- */
+#hubIdent{
+  background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(236,245,250,.92));
+  border:1px solid rgba(255,255,255,.62);
+  box-shadow:0 10px 28px rgba(0,0,0,.46), 0 1px 0 rgba(255,255,255,.7) inset;
+  padding:8px 14px 8px 11px; gap:10px;
+}
+#hubIdent img{width:30px}
+#hubIdent b{color:#08202f; font-size:.78rem; font-weight:800}
+#hubIdent span{color:#2c4d63; font-size:.68rem; font-weight:600}
+body.hub-grade #hubIdent{opacity:.92}
+
+/* --- 04: initiative line, title, instruction --- */
+#hubTitle{z-index:13}
+#hubTitle .e{
+  color:#ffdd93; font-weight:800; font-size:clamp(.7rem,1.7vw,.8rem); letter-spacing:.22em;
+  text-shadow:0 2px 14px rgba(0,0,0,.9), 0 0 26px rgba(0,0,0,.7);
+}
+#hubTitle h1{text-shadow:0 6px 40px rgba(0,0,0,.85), 0 2px 8px rgba(0,0,0,.7)}
+#hubTitle p{
+  color:#e6f3fa; font-weight:600; font-size:clamp(.88rem,2.4vw,1.06rem);
+  text-shadow:0 2px 14px rgba(0,0,0,.9), 0 0 24px rgba(0,0,0,.6);
+}
+
+/* --- 04: the drag/tap instruction must never disappear into the ground --- */
+#hubHint{
+  z-index:13; color:#dcecf5; font-weight:700; font-size:.74rem;
+  text-shadow:0 2px 12px rgba(0,0,0,.95);
+}
+#hubHint::before{
+  content:""; position:absolute; inset:-8px -14px; z-index:-1; border-radius:999px;
+  background:rgba(3,12,22,.55); -webkit-backdrop-filter:blur(5px); backdrop-filter:blur(5px);
+  max-width:min(92vw,560px); margin-inline:auto;
+}
+
+/* --- 05: credit + independent-project notice, legible but not intrusive --- */
+#hubCredit{
+  z-index:13; color:#d4e6f0; font-weight:600; font-size:.72rem;
+  text-shadow:0 2px 12px rgba(0,0,0,.95);
+}
+#hubCredit b{color:#ffdd93; font-weight:800}
+
+/* --- tool chips read as controls, not decoration --- */
+#hubRole,#hubSound,#hubTools a#hubHome,#hubAbout,#hubBack{
+  background:rgba(6,20,33,.82); border-color:rgba(255,255,255,.26);
+  box-shadow:0 8px 22px rgba(0,0,0,.42);
+  color:#f2f9fd; font-weight:800;
+}
+#hubRole{border-color:rgba(255,206,107,.55)}
+
+/* --- 06: semester cards — one clear hierarchy on all eight --- */
+#hubPanel{
+  background:rgba(5,18,30,.86); border-color:rgba(255,255,255,.2);
+  box-shadow:0 18px 48px rgba(0,0,0,.6);
+}
+#hubGradeName{
+  color:#ffdd93; font-size:1.12rem; letter-spacing:.01em;
+  text-shadow:0 2px 10px rgba(0,0,0,.6);
+}
+.hub-sem{
+  background:rgba(255,255,255,.09); border:1px solid rgba(255,255,255,.2);
+  border-inline-start:4px solid var(--c,var(--hb-gold)); border-left:none;
+  padding:14px 16px; gap:5px; min-height:104px;
+}
+.hub-sem:hover{background:rgba(255,255,255,.16)}
+/* 1 · semester label — smallest, quietest */
+.hub-sem-k{
+  font-size:.66rem; font-weight:700; letter-spacing:.1em; color:#9fbccd; text-transform:none;
+}
+/* 2 · world title — the loudest line */
+.hub-sem-w{
+  font-size:1.12rem; font-weight:800; color:var(--c,var(--hb-gold)); line-height:1.3;
+  text-shadow:0 2px 10px rgba(0,0,0,.5);
+}
+/* 3 · description — supporting */
+.hub-sem-t{font-size:.78rem; color:#cfe0ea; line-height:1.6}
+/* 4 · start action — a clear call, always last */
+.hub-sem-s{
+  margin-top:8px; font-size:.76rem; font-weight:800; color:#08202f;
+  background:linear-gradient(180deg,#ffe08a,#ffbf4b); padding:7px 14px; border-radius:9px;
+  align-self:flex-start; box-shadow:0 4px 14px rgba(255,180,60,.3);
+}
+.hub-sem-s.on{
+  color:#04241a; background:linear-gradient(180deg,#8fffc4,#3fd89a);
+  box-shadow:0 4px 14px rgba(63,216,154,.3);
+}
+
+@media (max-width:560px){
+  #hubIdent img{width:26px}
+  .hub-sem-w{font-size:1.02rem}
+  #hubCredit{font-size:.62rem}
+}
+@media (max-height:520px){
+  body::before{height:96px} body::after{height:84px}
+  #hubIdent{padding:6px 10px}
+}

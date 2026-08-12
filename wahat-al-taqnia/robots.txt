@@ -1,0 +1,13 @@
+# منصة واحة التقنية — إعداد وتنفيذ الأستاذة دعاء الجرواني
+# © 2026 الأستاذة دعاء الجرواني — جميع الحقوق محفوظة
+User-agent: *
+Allow: /
+Disallow: /VERSION.json
+
+# استخراج المحتوى لتدريب نماذج الذكاء الاصطناعي غير مسموح به — راجع LICENSE_AR.md
+User-agent: GPTBot
+Disallow: /
+User-agent: CCBot
+Disallow: /
+User-agent: Google-Extended
+Disallow: /

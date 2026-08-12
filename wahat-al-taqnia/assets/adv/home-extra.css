@@ -1,0 +1,55 @@
+/*!
+ * واحة التقنية · تنسيق طبقة الربط على الواجهة الأصلية
+ * ينسجم مع الهوية الحالية ولا يعدّل أي قاعدة أصلية.
+ */
+.wh-bar{
+  position:fixed; z-index:900;
+  top:calc(10px + env(safe-area-inset-top,0px));
+  inset-inline-start:calc(10px + env(safe-area-inset-left,0px));
+  display:flex; gap:8px; align-items:center; flex-wrap:wrap; max-width:min(92vw,560px);
+}
+.wh-gate,.wh-teacher{
+  font-family:"Segoe UI","Tahoma","Noto Sans Arabic",system-ui,sans-serif;
+  font-size:.76rem; font-weight:700; line-height:1;
+  padding:10px 14px; border-radius:11px; min-height:40px;
+  display:inline-flex; align-items:center; text-decoration:none;
+  background:rgba(6,20,33,.72); color:#eaf6fb; border:1px solid rgba(255,255,255,.16);
+  -webkit-backdrop-filter:blur(9px); backdrop-filter:blur(9px);
+  box-shadow:0 8px 20px rgba(0,0,0,.3);
+}
+.wh-gate:hover{border-color:#ffce6b; color:#fff}
+.wh-teacher{background:rgba(255,206,107,.16); border-color:rgba(255,206,107,.5); color:#ffdfa0}
+
+/* the adventure entry inside the original page */
+.wh-adv{
+  display:flex; align-items:center; gap:14px; text-decoration:none;
+  width:min(94%,560px); margin:26px auto 0; padding:15px 20px; border-radius:18px;
+  background:linear-gradient(150deg,rgba(255,206,107,.22),rgba(79,224,208,.13));
+  border:1px solid rgba(255,206,107,.5); color:#f4fbff;
+  -webkit-backdrop-filter:blur(9px); backdrop-filter:blur(9px);
+  box-shadow:0 14px 36px rgba(0,0,0,.36), 0 0 0 1px rgba(255,206,107,.12) inset;
+  font-family:"Segoe UI","Tahoma","Noto Sans Arabic",system-ui,sans-serif;
+  transition:transform .18s ease, box-shadow .18s ease;
+  position:relative; z-index:5;
+}
+.wh-adv:hover{transform:translateY(-3px); box-shadow:0 18px 44px rgba(0,0,0,.44)}
+.wh-adv:focus-visible{outline:2px solid #ffce6b; outline-offset:3px}
+.wh-adv-i{font-size:1.9rem; line-height:1; flex:none; filter:drop-shadow(0 3px 10px rgba(255,206,107,.45))}
+.wh-adv-t{display:flex; flex-direction:column; gap:3px; min-width:0; flex:1}
+.wh-adv-t b{font-size:1rem; font-weight:800; line-height:1.35}
+.wh-adv-t span{font-size:.78rem; color:#cfe3ee; line-height:1.55}
+.wh-adv-go{font-size:1.3rem; color:#ffce6b; flex:none; font-weight:800}
+
+@media (max-width:560px){
+  .wh-adv{margin-top:20px; padding:13px 16px; gap:11px; width:min(94%,460px)}
+  .wh-adv-i{font-size:1.6rem}
+  .wh-adv-t b{font-size:.92rem}
+  .wh-adv-t span{font-size:.72rem}
+  .wh-bar{max-width:calc(100vw - 20px)}
+  .wh-teacher{font-size:.7rem; padding:9px 11px}
+}
+@media (max-height:520px){
+  .wh-adv{margin-top:14px; padding:10px 14px}
+  .wh-adv-t span{display:none}
+}
+@media (prefers-reduced-motion:reduce){ .wh-adv{transition:none} }

@@ -1,0 +1,416 @@
+/*!
+ * waha-adventure · style
+ * HUD مدمج فوق عالم ثلاثي الأبعاد. إعادة ترتيب حقيقية لكل الأجهزة.
+ * لا تصغير كسول · لا تمرير للصفحة · احترام safe-area.
+ */
+.adv-root{
+  --adv-gold:#ffce6b; --adv-teal:#4fe0d0; --adv-ink:#eaf6fb; --adv-dim:#a8c4d2;
+  --adv-panel:rgba(6,20,33,.62); --adv-line:rgba(255,255,255,.15);
+  --adv-good:#57e39a; --adv-warn:#ffcf6b; --adv-bad:#ff7a7a;
+  --adv-sa-t:env(safe-area-inset-top,0px); --adv-sa-b:env(safe-area-inset-bottom,0px);
+  --adv-sa-l:env(safe-area-inset-left,0px); --adv-sa-r:env(safe-area-inset-right,0px);
+  --adv-font:"Segoe UI","Tahoma","Noto Sans Arabic",system-ui,sans-serif;
+  --adv-mono:"Consolas","SFMono-Regular",monospace;
+  position:fixed; inset:0; z-index:2147483000;
+  font-family:var(--adv-font); direction:rtl; color:var(--adv-ink);
+  overflow:hidden; contain:strict;
+}
+.adv-root.adv-off{display:none}
+html.adv-on{overflow:hidden}
+html.adv-on body{overflow:hidden}
+
+.adv-canvas{position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:none}
+
+.adv-root .glass{
+  background:var(--adv-panel); border:1px solid var(--adv-line); border-radius:14px;
+  -webkit-backdrop-filter:blur(9px); backdrop-filter:blur(9px);
+  box-shadow:0 8px 24px rgba(0,0,0,.35);
+}
+.adv-root button{font-family:inherit; cursor:pointer}
+.adv-root button:focus-visible,.adv-root select:focus-visible{outline:2px solid var(--adv-gold); outline-offset:2px}
+
+/* ---- cinematic: fade chrome during camera moves ---- */
+.adv-root.cine .adv-top,.adv-root.cine .adv-list,.adv-root.cine .adv-dock,
+.adv-root.cine .adv-tools,.adv-root.cine .adv-modechip{opacity:.18; pointer-events:none}
+.adv-top,.adv-list,.adv-dock,.adv-tools,.adv-modechip{transition:opacity .45s ease}
+
+/* ------------------------------------------------------------ top bar */
+.adv-top{
+  position:absolute; top:calc(10px + var(--adv-sa-t));
+  inset-inline:calc(10px + var(--adv-sa-r)) calc(10px + var(--adv-sa-l));
+  display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+  pointer-events:none;
+}
+.adv-world{display:flex; align-items:center; gap:10px; padding:9px 13px; pointer-events:auto; max-width:min(60vw,340px)}
+.adv-mark{
+  width:30px; height:30px; flex:none; display:grid; place-items:center; border-radius:50%;
+  border:2px solid var(--adv-gold); color:var(--adv-gold); font-size:.9rem; font-weight:800;
+}
+.adv-wt{display:flex; flex-direction:column; min-width:0}
+.adv-wt b{font-size:.95rem; line-height:1.3}
+.adv-wt span{font-size:.7rem; color:var(--adv-dim); line-height:1.35; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+
+.adv-prog{padding:9px 13px; text-align:center; pointer-events:auto; flex:none}
+.adv-prog-l{font-size:.82rem; font-weight:800; color:var(--adv-gold); font-variant-numeric:tabular-nums}
+.adv-pips{display:flex; gap:5px; margin-top:7px; justify-content:center; flex-wrap:wrap; max-width:190px}
+.adv-pip{width:12px; height:12px; border-radius:4px; background:rgba(255,255,255,.16); border:1px solid var(--adv-line); transition:.35s}
+.adv-pip.cur{background:var(--adv-gold); box-shadow:0 0 10px var(--adv-gold)}
+.adv-pip.done{background:var(--adv-teal)}
+
+/* ------------------------------------------------------------ mode chip */
+.adv-modechip{
+  position:absolute; top:calc(70px + var(--adv-sa-t)); inset-inline-start:calc(10px + var(--adv-sa-l));
+  padding:8px 13px; font-size:.78rem; font-weight:700; color:var(--adv-ink);
+  min-height:38px;
+}
+
+/* ------------------------------------------------------------ stage list */
+.adv-list{
+  position:absolute; inset-inline-end:calc(10px + var(--adv-sa-r));
+  top:calc(96px + var(--adv-sa-t));
+  width:min(310px,34vw);
+  max-height:calc(100dvh - 230px - var(--adv-sa-t) - var(--adv-sa-b));
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.adv-list-h{
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  padding:10px 13px; border-bottom:1px solid var(--adv-line); flex:none;
+  font-size:.82rem; font-weight:800; color:var(--adv-gold);
+}
+.adv-listbtn{
+  background:transparent; border:1px solid var(--adv-line); color:var(--adv-ink);
+  width:34px; height:34px; border-radius:9px; font-size:.8rem; line-height:1;
+}
+/* the ONLY scrollable region in the whole experience */
+.adv-list-b{overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; padding:8px; display:flex; flex-direction:column; gap:6px}
+.adv-list.collapsed .adv-list-b{display:none}
+.adv-list-b::-webkit-scrollbar{width:8px}
+.adv-list-b::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2); border-radius:8px}
+
+.adv-row{
+  display:flex; align-items:flex-start; gap:9px; width:100%; text-align:start;
+  background:rgba(255,255,255,.05); border:1px solid var(--adv-line); border-radius:11px;
+  padding:9px 11px; color:var(--adv-ink); min-height:44px; transition:.18s;
+}
+.adv-row:hover{background:rgba(255,255,255,.11); border-color:var(--adv-gold)}
+.adv-row-i{flex:none; width:22px; text-align:center; font-size:.9rem; line-height:1.5}
+.adv-row-t{display:flex; flex-direction:column; min-width:0; flex:1}
+/* full lesson name — wraps, never truncated */
+.adv-row-n{font-size:.83rem; line-height:1.5; white-space:normal; overflow-wrap:anywhere}
+.adv-row-s{font-size:.68rem; color:var(--adv-dim); margin-top:2px}
+.adv-row.done{border-color:rgba(79,224,208,.45)}
+.adv-row.done .adv-row-i{color:var(--adv-teal)}
+.adv-row.cur{background:rgba(255,206,107,.16); border-color:var(--adv-gold)}
+.adv-row.cur .adv-row-i{color:var(--adv-gold)}
+.adv-row.locked{opacity:.5; cursor:not-allowed}
+.adv-row.locked:hover{background:rgba(255,255,255,.05); border-color:var(--adv-line)}
+
+/* ------------------------------------------------------------ dock */
+.adv-dock{
+  position:absolute; bottom:calc(14px + var(--adv-sa-b)); left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  width:min(92vw,540px); pointer-events:none;
+}
+.adv-stage{
+  font-size:.85rem; padding:8px 16px; min-height:34px; border-radius:999px; pointer-events:auto;
+  max-width:100%; text-align:center; line-height:1.5; overflow-wrap:anywhere;
+}
+.adv-play{
+  pointer-events:auto; border:0; font-weight:800; font-size:1rem; color:#07202e;
+  background:linear-gradient(180deg,#ffe08a,#ffbf4b); padding:13px 28px; border-radius:14px;
+  box-shadow:0 10px 26px rgba(255,180,60,.42),0 0 0 1px rgba(255,255,255,.28) inset;
+  display:flex; align-items:center; gap:9px; min-height:48px; transition:transform .12s;
+}
+.adv-play:hover{transform:translateY(-2px)}
+.adv-play:active{transform:translateY(0)}
+.adv-play-i{font-size:1.1rem}
+
+/* ------------------------------------------------------------ tools */
+.adv-tools{
+  position:absolute; bottom:calc(14px + var(--adv-sa-b)); inset-inline-start:calc(10px + var(--adv-sa-l));
+  display:flex; gap:7px; align-items:center; flex-wrap:nowrap; max-width:none;
+}
+.adv-chip{
+  display:inline-flex; align-items:center; gap:6px; padding:8px 12px; font-size:.76rem;
+  color:var(--adv-ink); min-height:40px; border-radius:11px;
+}
+.adv-select{
+  background:#08202f; color:var(--adv-ink); border:1px solid var(--adv-line);
+  border-radius:11px; padding:9px 10px; font-size:.76rem; min-height:40px; font-family:inherit;
+}
+
+/* ------------------------------------------------------------ perf */
+.adv-perf{
+  position:absolute; top:calc(120px + var(--adv-sa-t)); inset-inline-start:calc(10px + var(--adv-sa-l));
+  display:none; padding:11px 13px; font-family:var(--adv-mono); font-size:.72rem; line-height:1.65;
+  background:rgba(3,12,20,.85); border:1px solid var(--adv-line); border-radius:12px;
+  pointer-events:none; min-width:172px;
+}
+.adv-perf.on{display:block}
+.adv-perf b{color:var(--adv-gold); font-family:var(--adv-font); display:block; margin-bottom:4px}
+.adv-perf-k{color:var(--adv-dim)}
+.adv-ok{color:var(--adv-good)} .adv-warn{color:var(--adv-warn)} .adv-bad{color:var(--adv-bad)}
+
+/* ------------------------------------------------------------ intro */
+.adv-intro{
+  position:absolute; inset:0; display:grid; place-items:center; text-align:center;
+  background:radial-gradient(80% 60% at 50% 45%,rgba(4,14,24,.05),rgba(4,14,24,.62));
+  transition:opacity 1s ease; padding:20px;
+}
+.adv-intro.adv-hide{opacity:0; pointer-events:none}
+.adv-intro-e{font-family:var(--adv-mono); font-size:.7rem; letter-spacing:.24em; color:var(--adv-gold)}
+.adv-intro-b h1{font-size:clamp(1.8rem,6.5vw,3.4rem); margin:.22em 0; font-weight:800; text-shadow:0 4px 30px rgba(0,0,0,.55)}
+.adv-intro-b p{margin:0; color:#cfe3ee; font-size:clamp(.85rem,2.4vw,1rem)}
+
+/* ------------------------------------------------------------ toast */
+.adv-toast{
+  position:absolute; top:calc(76px + var(--adv-sa-t)); left:50%;
+  transform:translateX(-50%) translateY(-12px); opacity:0; pointer-events:none;
+  background:linear-gradient(180deg,rgba(87,227,154,.96),rgba(40,180,120,.96)); color:#04241a;
+  font-weight:800; font-size:.88rem; padding:10px 20px; border-radius:12px;
+  box-shadow:0 10px 26px rgba(0,0,0,.34); transition:.34s; max-width:88vw; text-align:center;
+}
+.adv-toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+.adv-toast.warn{background:linear-gradient(180deg,rgba(255,207,107,.96),rgba(230,160,40,.96)); color:#3a2400}
+
+/* ------------------------------------------------------------ modal card */
+.adv-modal{
+  position:absolute; inset:0; display:none; place-items:center; padding:18px;
+  background:rgba(3,12,20,.5); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px);
+}
+.adv-modal.show{display:grid; animation:advFade .3s ease}
+@keyframes advFade{from{opacity:0}to{opacity:1}}
+.adv-card{
+  width:min(92vw,430px); max-height:86dvh; overflow-y:auto; padding:24px; text-align:center;
+  background:linear-gradient(160deg,#0d2838,#081b28); border:1px solid var(--adv-line);
+  border-radius:20px; box-shadow:0 24px 60px rgba(0,0,0,.55);
+}
+.adv-card-b{font-family:var(--adv-mono); font-size:.64rem; letter-spacing:.14em; color:var(--adv-gold); text-transform:uppercase}
+.adv-card h2{margin:.45em 0 .25em; font-size:1.22rem; line-height:1.4}
+.adv-card p{margin:0; color:#b7d2df; font-size:.92rem; line-height:1.7}
+.adv-card-n{
+  margin-top:11px; font-size:.75rem; color:#7fa0b2; background:rgba(255,255,255,.05);
+  border:1px dashed var(--adv-line); border-radius:10px; padding:8px 12px;
+}
+.adv-card-r{display:flex; gap:9px; margin-top:18px; justify-content:center; flex-wrap:wrap}
+.adv-btn{
+  border:1px solid var(--adv-line); background:rgba(255,255,255,.08); color:var(--adv-ink);
+  font-weight:700; font-size:.88rem; padding:11px 18px; border-radius:12px; min-height:44px;
+}
+.adv-btn.primary{background:linear-gradient(180deg,#8fffc4,#3fd89a); color:#04241a; border:0}
+.adv-btn:hover{transform:translateY(-1px)}
+
+/* ============================================================ RESPONSIVE
+ * Real reflow: the side list becomes a bottom sheet; chrome shrinks in
+ * sensible steps; nothing is scaled down to hide layout problems.
+ * ==========================================================================*/
+
+/* --- narrow / portrait: list moves under the world as a sheet --- */
+@media (max-width: 900px), (orientation: portrait) {
+  .adv-list{
+    inset-inline:calc(8px + var(--adv-sa-r)) calc(8px + var(--adv-sa-l));
+    width:auto; top:auto;
+    bottom:calc(176px + var(--adv-sa-b));
+    max-height:min(26dvh,200px);
+  }
+  .adv-list.collapsed{max-height:none}
+  .adv-tools{max-width:none; bottom:calc(10px + var(--adv-sa-b))}
+  .adv-dock{width:min(96vw,520px); bottom:calc(58px + var(--adv-sa-b))}
+  .adv-perf{top:auto; bottom:calc(176px + var(--adv-sa-b))}
+}
+
+/* --- tablets & small laptops: keep tools compact so the dock never meets them --- */
+@media (max-width: 1100px) {
+  .adv-chip-t{display:none}
+  .adv-tools{max-width:none}
+  .adv-dock{width:min(78vw,480px)}
+}
+
+/* --- phones --- */
+@media (max-width: 560px) {
+  .adv-world{max-width:56vw; padding:8px 11px}
+  .adv-wt b{font-size:.85rem}
+  .adv-wt span{display:none}
+  .adv-prog{padding:8px 11px}
+  .adv-pips{max-width:120px}
+  .adv-pip{width:10px; height:10px}
+  .adv-modechip{top:calc(64px + var(--adv-sa-t)); font-size:.72rem; padding:7px 11px}
+  .adv-chip-t{display:none}          /* icon-only tools, still 40px targets */
+  .adv-chip{padding:9px 11px}
+  .adv-play{font-size:.94rem; padding:12px 22px}
+  .adv-stage{font-size:.78rem; padding:6px 13px}
+  .adv-list{max-height:min(24dvh,180px)}
+  .adv-row-n{font-size:.8rem}
+}
+
+/* --- landscape phones: very short viewports --- */
+@media (max-height: 480px) and (orientation: landscape) {
+  .adv-list{
+    top:calc(66px + var(--adv-sa-t));
+    bottom:calc(64px + var(--adv-sa-b));
+    inset-inline-start:auto; inset-inline-end:calc(8px + var(--adv-sa-r));
+    width:min(240px,30vw); max-height:none;
+  }
+  .adv-modechip{
+    top:auto; bottom:calc(56px + var(--adv-sa-b));
+    inset-inline-start:calc(8px + var(--adv-sa-l));
+  }
+  .adv-prog .adv-pips{display:none}
+  .adv-dock{
+    bottom:calc(8px + var(--adv-sa-b)); left:auto; transform:none;
+    inset-inline-end:calc(8px + var(--adv-sa-r));
+    flex-direction:row; align-items:center; width:auto; gap:8px;
+  }
+  .adv-chip-t{display:none}
+  .adv-stage{min-height:34px; display:flex; align-items:center}
+  .adv-play{padding:9px 18px; font-size:.86rem; min-height:42px}
+  .adv-stage{font-size:.72rem; padding:5px 11px; max-width:38vw}
+  .adv-tools{bottom:calc(8px + var(--adv-sa-b))}
+  .adv-intro-b h1{font-size:clamp(1.4rem,5vw,2.2rem)}
+  .adv-perf{display:none}
+  .adv-perf.on{display:block; top:calc(52px + var(--adv-sa-t)); bottom:auto; font-size:.66rem; min-width:150px}
+}
+
+/* --- very short (e.g. 320×568 landscape-ish / small tablets split) --- */
+@media (max-height: 400px) {
+  .adv-top{top:calc(6px + var(--adv-sa-t))}
+  .adv-world,.adv-prog{padding:6px 10px}
+  .adv-pips{display:none}
+  .adv-list{max-height:calc(100dvh - 104px - var(--adv-sa-t) - var(--adv-sa-b))}
+}
+
+/* --- large desktops: a touch more presence --- */
+@media (min-width: 1600px) {
+  .adv-list{width:340px}
+  .adv-play{font-size:1.05rem; padding:15px 32px}
+}
+
+/* --- accessibility --- */
+@media (prefers-reduced-motion: reduce) {
+  .adv-root *,.adv-root *::before,.adv-root *::after{animation-duration:.01ms!important; transition-duration:.01ms!important}
+}
+
+
+/* ============================================================ merged build
+ * While the 3D world is on screen it provides its own portrait layout, so the
+ * platform's portrait banner/blocker is suppressed. It returns the instant a
+ * lesson opens, so lesson-level rotation gates keep working untouched.
+ * ==========================================================================*/
+html.adv-world-visible #waha-rotate,
+html.adv-world-visible .g4-rotate-hint{ display:none !important; }
+
+/* While the 3D world is on screen the adventure owns navigation, so the
+   platform's own exit button is suppressed — no duplicate return control and
+   no collision with the world badge. It returns the moment a lesson opens,
+   keeping «العودة إلى صفحة الصف» exactly as approved inside the platforms. */
+html.adv-world-visible #waha-exit{ display:none !important; }
+
+/* ------------------------------------------------ resume / restart dialog */
+.advres{
+  position:fixed; inset:0; z-index:2147483600; display:grid; place-items:center; padding:20px;
+  background:radial-gradient(80% 60% at 50% 42%,rgba(6,20,33,.74),rgba(3,10,18,.94));
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  font-family:"Segoe UI","Tahoma","Noto Sans Arabic",system-ui,sans-serif; direction:rtl;
+  opacity:0; transition:opacity .28s ease; overflow-y:auto;
+}
+.advres.show{opacity:1}
+.advres-c{
+  width:min(94vw,470px); max-height:92dvh; overflow-y:auto; text-align:center;
+  background:linear-gradient(160deg,#0e2b3d,#071a27); border:1px solid rgba(255,255,255,.15);
+  border-radius:20px; box-shadow:0 26px 70px rgba(0,0,0,.6); padding:clamp(20px,4vw,30px); color:#eaf6fb;
+}
+.advres-e{margin:0; font-size:.66rem; letter-spacing:.2em; color:#ffce6b; font-weight:800}
+.advres-c h2{margin:.5em 0 .3em; font-size:1.24rem; font-weight:800}
+.advres-s{margin:0; color:#b7d2df; font-size:.92rem; line-height:1.7}
+.advres-r{display:flex; flex-direction:column; gap:10px; margin-top:20px}
+.advres-b{
+  border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.07); color:#eaf6fb;
+  font-family:inherit; font-weight:800; font-size:.95rem; padding:13px 18px; border-radius:13px;
+  min-height:48px; cursor:pointer; transition:.15s;
+}
+.advres-b:hover{background:rgba(255,255,255,.13)}
+.advres-b.accent{background:linear-gradient(180deg,#ffe08a,#ffbf4b); color:#07202e; border:0}
+.advres-b.danger{background:linear-gradient(180deg,#ff9d9d,#e35d5d); color:#3a0a0a; border:0}
+.advres-n{margin:14px 0 0; font-size:.74rem; color:#7fa0b2; line-height:1.6}
+@media (prefers-reduced-motion:reduce){ .advres{transition:none} }
+
+
+/* ============================================================================
+ * VISUAL CORRECTION PASS — in-world HUD readability (reference defect 07)
+ * Worlds range from bright desert to night city, so panels need a dependable
+ * ground and every label needs weight. Geometry and camera are untouched.
+ * ==========================================================================*/
+
+/* the cinematic dip must never make the HUD unreadable */
+.adv-root.cine .adv-top,.adv-root.cine .adv-list,.adv-root.cine .adv-dock,
+.adv-root.cine .adv-tools,.adv-root.cine .adv-modechip{opacity:.45}
+
+/* panels: darker, more opaque ground so text works over sky OR sand */
+.adv-root .glass{
+  background:rgba(5,18,30,.82);
+  border-color:rgba(255,255,255,.22);
+  box-shadow:0 10px 30px rgba(0,0,0,.5);
+}
+
+/* world identity */
+.adv-wt b{font-size:1rem; text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.adv-wt span{color:#cbdfeb; font-weight:600}
+.adv-mark{border-color:var(--adv-gold); color:var(--adv-gold); background:rgba(255,206,107,.14)}
+
+/* progress */
+.adv-prog-l{color:#ffdd93; font-size:.88rem; text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.adv-pip{background:rgba(255,255,255,.24); border-color:rgba(255,255,255,.3)}
+
+/* stage list — the most-read text in the world */
+.adv-list-h{color:#ffdd93; font-size:.86rem}
+.adv-row{background:rgba(255,255,255,.09); border-color:rgba(255,255,255,.2)}
+.adv-row-n{color:#f2f9fd; font-weight:700; font-size:.85rem}
+.adv-row-s{color:#a9c6d6; font-weight:600}
+.adv-row.cur{background:rgba(255,206,107,.24); border-color:var(--adv-gold)}
+.adv-row.cur .adv-row-n{color:#fff3d8}
+.adv-row.done{background:rgba(79,224,208,.13); border-color:rgba(79,224,208,.5)}
+.adv-row.locked{opacity:.62}
+.adv-row.locked .adv-row-n{color:#c3d6e2}
+
+/* current-stage label + controls */
+.adv-stage{
+  background:rgba(5,18,30,.86); border-color:rgba(255,255,255,.24);
+  color:#f2f9fd; font-weight:700;
+}
+.adv-chip{color:#f2f9fd; font-weight:700}
+.adv-modechip{color:#f2f9fd; font-weight:800; border-color:rgba(255,206,107,.5)}
+
+/* the intro card sits over every kind of sky */
+.adv-intro{background:radial-gradient(80% 60% at 50% 45%,rgba(4,14,24,.35),rgba(4,14,24,.78))}
+.adv-intro-e{color:#ffdd93; text-shadow:0 2px 12px rgba(0,0,0,.9)}
+.adv-intro-b h1{text-shadow:0 6px 40px rgba(0,0,0,.9), 0 2px 8px rgba(0,0,0,.7)}
+.adv-intro-b p{color:#e6f3fa; font-weight:600; text-shadow:0 2px 12px rgba(0,0,0,.9)}
+
+/* the way back is a real control, never a whisper */
+.adv-return{border:1px solid rgba(255,255,255,.3) !important}
+
+/* ==========================================================================
+   نداء التدوير داخل عالم المغامرة.
+   يعرض الهاتف في الوضع الرأسي نداءً بملء الشاشة، وتُخفي طبقة التكامل معه
+   زرّ العودة — فيبقى التلميذ بلا مخرج إن رفض التدوير. داخل عوالم المغامرة
+   وحدها نُعيد الزر فوق النداء. لا يمسّ هذا محاكيات المنصّات ولا دروسها.
+   ========================================================================== */
+html.adv-world-visible[data-waha-simrot="1"] #waha-exit{
+  display:inline-flex !important;
+  position:fixed !important;
+  inset-block-end:calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+  inset-inline-start:calc(12px + env(safe-area-inset-left, 0px)) !important;
+  inset-block-start:auto !important;
+  inset-inline-end:auto !important;
+  margin:0 !important;
+  z-index:2147483600 !important;
+}
+
+/* المخرج من العالم: رقاقة مميّزة كي تُقرأ فورًا كطريق عودة، لا كإعداد. */
+.adv-exitchip{
+  background:rgba(255,214,132,.16) !important;
+  border-color:rgba(255,206,107,.55) !important;
+  color:#ffe6ac !important;
+  font-weight:800 !important;
+}
+.adv-exitchip:hover{ background:rgba(255,214,132,.26) !important; }

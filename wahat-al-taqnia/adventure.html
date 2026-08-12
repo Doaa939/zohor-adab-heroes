@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-root="">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>منصة واحة التقنية | عالم المغامرة</title>
+<!-- ==== نسبة المُلكية والبيانات الوصفية · Ownership & metadata ====
+     © 2026 الأستاذة دعاء الجرواني — جميع الحقوق محفوظة
+     إعداد وتنفيذ الأستاذة دعاء الجرواني -->
+<meta name="author" content="الأستاذة دعاء الجرواني">
+<meta name="copyright" content="© 2026 الأستاذة دعاء الجرواني — جميع الحقوق محفوظة">
+<meta name="application-name" content="منصة واحة التقنية">
+<meta name="generator" content="Wahat Al-Taqnia Static Platform v1.0.0">
+<meta name="creator" content="الأستاذة دعاء الجرواني">
+<meta name="publisher" content="الأستاذة دعاء الجرواني">
+  <meta name="description" content="عالم المغامرة ثلاثي الأبعاد في منصة واحة التقنية — مبادرة تربوية تعليمية رقمية للصفوف (1–4) تعمل دون إنترنت.">
+  <meta name="theme-color" content="#061421">
+  <meta name="color-scheme" content="dark">
+  <meta name="referrer" content="no-referrer">
+  <meta name="format-detection" content="telephone=no">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="منصة واحة التقنية | عالم المغامرة">
+  <meta property="og:description" content="عالم تعليمي ثلاثي الأبعاد للصفوف (1–4).">
+  <meta property="og:image" content="assets/img/og-cover.jpg">
+  <meta property="og:locale" content="ar_OM">
+  <link rel="icon" href="assets/img/favicon-64.png" sizes="64x64">
+  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="assets/adv/hub.css">
+</head>
+<body>
+
+  <canvas id="hubCanvas" aria-hidden="true"></canvas>
+
+  <div id="hubBoot"><div><div class="sp"></div>جارٍ بناء الواحة…</div></div>
+
+  <!-- هوية المشروع: حاضرة دائمًا، وخفيفة كي لا تزاحم العالم -->
+  <header id="hubIdent">
+    <img src="assets/img/moe-logo-168.png" srcset="assets/img/moe-logo-168.png 1x, assets/img/moe-logo-336.png 2x"
+         width="140" height="168" alt="شعار وزارة التعليم – سلطنة عُمان" decoding="async">
+    <div>
+      <b>وزارة التعليم</b>
+      <span>سلطنة عُمان</span>
+    </div>
+  </header>
+
+  <header id="hubTitle">
+    <p class="e">مبادرة تربوية تعليمية رقمية · الصفوف ١–٤</p>
+    <h1>واحة التقنية</h1>
+    <p>اختر صفك من منارات الواحة</p>
+  </header>
+
+  <button id="hubBack" type="button">→ العودة إلى الواحة</button>
+
+  <div id="hubTools">
+    <a id="hubHome" href="home.html" title="العودة إلى واحة التقنية">🏛️ <span>واحة التقنية</span></a>
+    <button id="hubAbout" type="button" title="عن واحة التقنية">ℹ️ <span>عن المنصة</span></button>
+    <button id="hubRole" type="button" title="نوع المستخدم">🎒 طالب</button>
+    <button id="hubSound" type="button" title="الصوت" aria-label="الصوت">🔈</button>
+  </div>
+
+  <p id="hubHint">اسحب للدوران حول الواحة · اضغط منارة الصف للدخول</p>
+
+  <nav id="hubQuick" aria-label="اختيار الصف"></nav>
+
+  <section id="hubPanel" class="glass" aria-live="polite">
+    <div id="hubGradeName"></div>
+    <div id="hubSemesters"></div>
+  </section>
+
+  <!-- شريط الاعتماد أسفل الشاشة -->
+  <footer id="hubCredit">
+    <span>إعداد وتنفيذ <b>الأستاذة دعاء الجرواني</b></span>
+    <span class="sep">·</span>
+    <span>مشروع تعليمي مستقل، ولا يمثل بوابة رسمية لوزارة التعليم</span>
+  </footer>
+
+  <!-- لوحة «عن واحة التقنية» -->
+  <div id="hubAboutPanel" hidden>
+    <div class="ab-card" role="dialog" aria-modal="true" aria-labelledby="abTitle">
+      <button class="ab-x" type="button" aria-label="إغلاق">✕</button>
+      <div class="ab-logo">
+        <img src="assets/img/moe-logo-168.png" width="140" height="168" alt="شعار وزارة التعليم – سلطنة عُمان" decoding="async">
+        <p><b>وزارة التعليم</b> – سلطنة عُمان</p>
+      </div>
+      <p class="ab-eyebrow">عن المنصة</p>
+      <h2 id="abTitle">واحة التقنية</h2>
+      <p class="ab-lede">مبادرة تربوية تعليمية رقمية تهدف إلى دعم تعلم طلبة الصفوف (1–4) في مادة تقنية المعلومات، من خلال بيئة تفاعلية تجمع بين التعلم والتطبيق والممارسة.</p>
+
+      <div class="ab-grid">
+        <div class="ab-box">
+          <h3>الرؤية</h3>
+          <p>أن تكون واحة التقنية مرجعًا رقميًا متميزًا لدعم تعليم تقنية المعلومات، وتنمية مهارات الإبداع والتعلم الذاتي لدى الطلبة.</p>
+        </div>
+        <div class="ab-box">
+          <h3>الرسالة</h3>
+          <p>توفير بيئة تعليمية تفاعلية تجمع بين التقنية والمحاكاة والتجربة العملية، بما يعزز جودة تعلم الطلبة ويدعم المعلم داخل الصف.</p>
+        </div>
+      </div>
+
+      <h3 class="ab-h">ما يميّز المنصة</h3>
+      <ul class="ab-list">
+        <li>محاكاة تعليمية واقعية داخل نماذج تحاكي البرامج الحقيقية.</li>
+        <li>تعلم تفاعلي: كل خطوة عملية تتطلب تفاعلًا حقيقيًا حتى تُحتسب.</li>
+        <li>المرجع المنهجي: وزارة التعليم – سلطنة عُمان · منهج تقنية المعلومات للصفوف (1–4).</li>
+        <li>أنشطة جاهزة للعرض والتطبيق داخل الحصة دون إعداد إضافي.</li>
+        <li>تعمل على أجهزة المدرسة والحاسوب المحمول واللوحي والهاتف.</li>
+        <li>تبقى متاحة للاستكمال داخل الصف حتى لو انقطع الاتصال.</li>
+      </ul>
+
+      <div class="ab-credit">
+        <p class="ab-role">فكرة وتصميم وتطوير وتنفيذ</p>
+        <p class="ab-name">الأستاذة دعاء الجرواني</p>
+        <img class="ab-sign" src="assets/img/signature-white.png" width="1002" height="334" alt="توقيع الأستاذة دعاء الجرواني" decoding="async">
+        <p class="ab-ver">الإصدار الأول • 2026</p>
+      </div>
+
+      <p class="ab-note">مشروع تعليمي مستقل أُعدّ لأغراض تربوية وتعليمية، ولا يمثل بوابة رسمية لوزارة التعليم.</p>
+
+      <div class="ab-links">
+        <a href="about.html">التفاصيل الموسعة</a>
+        <a href="LICENSE_AR.md">الرخصة</a>
+        <a href="TERMS_OF_USE_AR.md">شروط الاستخدام</a>
+      </div>
+      <p class="ab-copy">© 2026 الأستاذة دعاء الجرواني — جميع الحقوق محفوظة</p>
+    </div>
+  </div>
+
+  <div id="hubFlash"></div>
+
+  <script src="assets/adv/three.min.js" defer></script>
+  <script src="assets/adv/waha-adventure.js" defer></script>
+  <script src="assets/adv/hub.js" defer></script>
+  <script src="assets/js/sw-register.js" defer></script>
+</body>
+</html>
